@@ -1,0 +1,48 @@
+/* Copyright 2015 The Vanadium Authors. All rights reserved. */
+/* Use of this source code is governed by a BSD-style */
+/* license that can be found in the LICENSE file. */
+
+@import "constants";
+
+& {
+  overflow-y: auto;
+  background-color: @color-grey-100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  height: @header-height;
+  padding-left: @gutter;
+}
+
+.items {
+  padding: @gutter-half 0;
+}
+
+a {
+  display: block;
+  padding: @gutter-quarter @gutter-half;
+  color: @color-text-primary;
+  font-size: 14px;
+  font-weight: 400;
+
+  &.active {
+    background-color: @color-blue-grey-100;
+    font-weight: 500;
+  }
+}
+
+nav {
+  overflow: hidden;
+
+  a {
+    padding: 6px;
+    padding-left: @gutter;
+    font-size: 13px;
+  }
+
+  nav a {
+    padding-left: calc(@gutter + @gutter-half);
+  }
+}

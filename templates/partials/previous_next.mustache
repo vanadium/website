@@ -1,0 +1,24 @@
+<nav class="previous-next">
+  {{# page.previous }}
+  <a href="{{ url }}" class="previous">
+    <div class="icon"><i class="material-icons">arrow_back</i></div>
+    <div class="text-wrapper">
+      <small>Previous</small>
+      <div class="text">
+        <span>{{ title }}</span>
+      </div>
+    </div>
+  </a>
+  {{/ page.previous }}
+  {{# page.next }}
+  <a href="{{ url }}" class="next">
+    <div class="text-wrapper">
+      <small>Next</small>
+      <div class="text">
+        <span>{{ title }}</span>
+      </div>
+    </div>
+    <div class="icon"><i class="material-icons">arrow_forward</i></div>
+  </a>
+  {{/ page.next }}
+</nav>

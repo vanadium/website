@@ -1,0 +1,199 @@
+/* Copyright 2015 The Vanadium Authors. All rights reserved. */
+/* Use of this source code is governed by a BSD-style */
+/* license that can be found in the LICENSE file. */
+
+@import "constants";
+@import "code";
+@import "icon";
+
+*,
+:before,
+:after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  position: relative;
+  margin: 0;
+  min-height: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 1.2em 0 0.4em;
+}
+h4, h5, h6 {
+  font-weight: 500;
+}
+h1 {
+  font-size: 34px;
+}
+h2 {
+  font-size: 24px;
+}
+h3 {
+  font-size: 20px;
+}
+h4 {
+  font-size: 16px;
+}
+h5 {
+  font-size: 14px;
+}
+h6 {
+  font-size: 12px;
+}
+
+p {
+  margin: 1em 0;
+}
+
+a {
+  color: @color-cyan-700;
+  text-decoration: none;
+
+  &:hover,
+  &:active {
+    color: @color-cyan-800;
+  }
+}
+
+blockquote {
+  background-color: @color-grey-100;
+  margin: 0 -@gutter-half;
+  padding: 0 @gutter-half;
+  overflow: hidden;
+  font-style: normal;
+
+  /* Undo the effects of MDL. */
+  &:before,
+  &:after {
+    position: static;
+    content: "";
+    margin: 0;
+  }
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  margin: @gutter-quarter 0;
+  color: @color-blue-grey-500;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th, td {
+  border: 1px solid @color-grey-100;
+  padding: @gutter-half;
+}
+
+th {
+  font-weight: bold;
+}
+
+/* Page components ************************************************************/
+
+header {
+  @import "header";
+
+  z-index: 3;
+}
+
+/* The logo element appears in the header and in the sidebar. */
+.logo {
+  font-size: 20px;
+}
+
+main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-top: @header-height;
+  margin-left: @sidebar-width;
+
+  @media @small-screen {
+    margin-left: 0;
+  }
+}
+
+h1.title {
+  color: @color-cyan-700;
+  font-size: 40px;
+}
+
+/* Prevents headings from being obscured by the header for #heading urls. */
+main *[id]:before {
+  display: block;
+  content: "";
+  margin-top: calc(-1 * (@header-height + @gutter-half));
+  height: calc(@header-height + @gutter-half);
+  visibility: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: 0 calc(@gutter + @gutter-half) @gutter;
+  max-width: @main-max-width;
+}
+
+.note {
+  @import "note";
+}
+
+.previous-next {
+  @import "previous-next";
+}
+
+.sidebar-data {
+  display: none;
+}
+
+.sidebar {
+  @import "sidebar";
+
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: @sidebar-width;
+  z-index: 2;  /* below header */
+
+  @media @small-screen {
+    top: 0;
+    z-index: 5;  /* above mdl-layout__obfuscator */
+    transform: translateX(-@sidebar-width);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &.is-visible {
+      transform: translateX(0);
+    }
+  }
+}
+
+.toc {
+  @import "toc";
+
+  @media (min-width: 1100px) {
+    position: fixed;
+    top: @header-height;
+    right: 0;
+    bottom: 0;
+    width: @sidebar-width;
+  }
+}

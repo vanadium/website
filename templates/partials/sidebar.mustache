@@ -1,0 +1,81 @@
+<div class="sidebar"></div>
+<!-- TODO(sadovsky): Transmit data as JSON, not HTML. -->
+<div class="sidebar-data">
+  <a href="/">Overview</a>
+  <a href="/installation.html">Installation</a>
+
+  <a href="#" class="nav">Tutorials</a>
+  <nav>
+    <a href="/tutorials/hello-world.html">Hello World</a>
+    <a href="/tutorials/basics.html">Client/Server Basics</a>
+
+    <a href="#" class="nav">Security</a>
+    <nav>
+      <a href="/tutorials/security/">Overview</a>
+      {{# content.tutorials.security }}
+      <a href="{{ url }}">{{ title }}</a>
+      {{/ content.tutorials.security }}
+    </nav>
+
+    <a href="#" class="nav">Naming</a>
+    <nav>
+      <a href="/tutorials/naming/">Overview</a>
+      {{# content.tutorials.naming }}
+      <a href="{{ url }}">{{ title }}</a>
+      {{/ content.tutorials.naming }}
+    </nav>
+
+    <a href="#" class="nav">Java</a>
+    <nav>
+      <a href="/tutorials/java/">Overview</a>
+      {{# content.tutorials.java }}
+      <a href="{{ url }}">{{ title }}</a>
+      {{/ content.tutorials.java }}
+    </nav>
+
+    <a href="#" class="nav">JavaScript</a>
+    <nav>
+      <a href="/tutorials/javascript/">Overview</a>
+      {{# content.tutorials.javascript }}
+      <a href="{{ url }}">{{ title }}</a>
+      {{/ content.tutorials.javascript }}
+    </nav>
+
+    <a href="/tutorials/faq.html">Tutorial FAQ</a>
+  </nav>
+
+  <a href="#" class="nav">Concepts</a>
+  <nav>
+    {{# content.concepts }}
+    <a href="{{ url }}">{{ title }}</a>
+    {{/ content.concepts }}
+  </nav>
+
+  <a href="/example-apps.html">Example Apps</a>
+  <a href="/api-reference.html">API Reference</a>
+
+  <a href="#" class="nav">Community</a>
+  <nav>
+    {{# content.community }}
+    <a href="{{ url }}">{{ title }}</a>
+    {{/ content.community }}
+  </nav>
+
+  <a href="#" class="nav">Tools</a>
+  <nav>
+    {{# content.tools }}
+    <a href="{{ url }}">{{ title }}</a>
+    {{/ content.tools }}
+  </nav>
+
+  <a href="#" class="nav">Design Docs</a>
+  <nav>
+    {{# content.designdocs }}
+    <a href="{{ url }}">{{ title }}</a>
+    {{/ content.designdocs }}
+  </nav>
+
+  <a href="/glossary.html">Glossary</a>
+  <a href="/faq.html">FAQ</a>
+  <a href="/tos.html">Terms of Service</a>
+</div>

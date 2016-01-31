@@ -1,0 +1,56 @@
+/* Copyright 2015 The Vanadium Authors. All rights reserved. */
+/* Use of this source code is governed by a BSD-style */
+/* license that can be found in the LICENSE file. */
+
+@import "constants";
+
+& {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: @color-cyan-800;
+}
+
+a {
+  &,
+  &:hover,
+  &:active {
+    color: @color-white;
+    text-decoration: none;
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: 0 @gutter;
+  height: @header-height;
+
+  .icon {
+    display: none;
+
+    @media @small-screen {
+      display: block;
+      margin: 0 @gutter-half 0 calc(12px - @gutter);
+      padding: 12px;
+    }
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
+nav {
+  a {
+    display: inline-block;
+    line-height: @header-height;
+    padding: 0 @gutter-half;
+    font-size: 13px;
+    text-transform: uppercase;
+  }
+
+  @media @small-screen {
+    display: none;
+  }
+}

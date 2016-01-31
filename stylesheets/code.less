@@ -1,0 +1,51 @@
+/* Copyright 2015 The Vanadium Authors. All rights reserved. */
+/* Use of this source code is governed by a BSD-style */
+/* license that can be found in the LICENSE file. */
+
+@import "constants";
+
+pre, code {
+  font-family: "Source Code Pro", monospace;
+  font-size: 12px;
+}
+
+code {
+  background-color: @color-grey-100;
+  padding: 0 4px;
+}
+
+pre {
+  margin: 0 -@gutter-half;
+  width: @pre-width;
+
+  /* Include <pre> because clipboard buttons are in <pre>, not <code>. */
+  &, & code, & .hljs {
+    &:not(.noclipboard) {
+      background-color: @color-amber-50;
+    }
+  }
+
+  & code, & .hljs {
+    display: block;
+    padding: @gutter-half;
+    overflow-x: auto;
+  }
+}
+
+.clipboard {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  .status {
+    color: @color-cyan-700;
+    font-family: "Roboto", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .icon {
+    color: @color-cyan-700;
+  }
+}

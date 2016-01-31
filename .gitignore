@@ -1,0 +1,6 @@
+/.jiri
+/build
+/node_modules
+/public/**/bundle.*
+/public/sh
+/public/tutorials
