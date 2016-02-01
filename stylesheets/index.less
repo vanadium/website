@@ -137,13 +137,21 @@ h1.title {
   font-size: 40px;
 }
 
-/* Prevents headings from being obscured by the header for #heading urls. */
-main *[id]:before {
-  display: block;
-  content: "";
-  margin-top: calc(-1 * (@header-height + @gutter-half));
-  height: calc(@header-height + @gutter-half);
-  visibility: hidden;
+/* Prevent headings from being obscured by the <header> for #heading urls. */
+main {
+  h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
+    /* Prevent the :before block from obscuring the element above. */
+    position: relative;
+    z-index: -1;
+
+    &:before {
+      display: block;
+      content: "";
+      margin-top: calc(-1 * (@header-height + @gutter-half));
+      height: calc(@header-height + @gutter-half);
+      visibility: hidden;
+    }
+  }
 }
 
 .content {
