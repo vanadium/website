@@ -23,12 +23,12 @@ The scenario and roles from the [Security Tutorials] will be replicated here:
 
 * Alice hosts a fortune service and has blessings `alice`
 * Bob is a friend of Alice (friends can get fortunes, but not add them) and
-has blessings `alice/friends/bob`.
+has blessings `alice:friends:bob`.
 * Carol is a family member of Alice (family can both add and get fortunes) and
-has blessings `alice/family/sister`.
+has blessings `alice:family:sister`.
 * Diane is given blessings by Carol with an expiry caveat so until the
 expiration takes effect Diane can act as a family member of Carol through
-the blessings `alice/family/sister/guest/diane`.
+the blessings `alice:family:sister:guest:diane`.
 
 However, there are a few modifications for the JavaScript tutorials. In
 addition to the blessings above, each person with have an additional blessing
@@ -333,10 +333,10 @@ function createFortuneAuthorizer() {
   var acl = new Map();
   var access = vanadium.security.access;
   acl.set(access.Read, {
-    in: ['alice/family', 'alice/friends']
+    in: ['alice:family', 'alice:friends']
   });
   acl.set(access.Write, {
-    in: ['alice/family']
+    in: ['alice:family']
   });
   return new access.permissionsAuthorizer(acl, access.Tag);
 }
@@ -349,9 +349,9 @@ function askUserForBlessings(blessings) {
   // helpfully suggest the correct suffix to bless them with.
   var suggestion = '';
   if (blessings[0].indexOf('19102') !== -1) {
-    suggestion = 'friends/bob';
+    suggestion = 'friends:bob';
   } else if (blessings[0].indexOf('19103') !== -1) {
-    suggestion = 'family/sister';
+    suggestion = 'family:sister';
   }
   return window.prompt(
     'Received blessing request from peer with remote blessings: ' +
@@ -402,7 +402,7 @@ EOF
 ```
 
 ### Bob
-Bob is a friend of Alice and will be given a `alice/friends/bob` blessing that
+Bob is a friend of Alice and will be given a `alice:friends:bob` blessing that
 enables read-only access to fortunes. In order to get this blessing, he needs
 to contact Alice's blessing granter service.
 
@@ -546,7 +546,7 @@ EOF
 ```
 
 ### Carol
-Carol operates nearly identically to Bob, except that she uses `alice/family/sister`
+Carol operates nearly identically to Bob, except that she uses `alice:family:sister`
 blessing that allows read / write access. In addition, Carol has functionality
 to grant Diane a blessing with caveats.
 
@@ -673,7 +673,7 @@ cat - <<EOF >$V_TUT/browser/carol.html
   <br><b>Peer Blessings:</b></br>
   <br><ul id="peer-blessings"></ul></br>
   <br>Status: <span id="status">Initializing...</span></br>
-  <br><button id="send-grant">Send Grant</button> to <input id="grantee" value="---"></input> with suffix <input id="grant-suffix" value="guest/diane"></input> expiration time (seconds): <input id="grant-expiration" value="10"></input></br>
+  <br><button id="send-grant">Send Grant</button> to <input id="grantee" value="---"></input> with suffix <input id="grant-suffix" value="guest:diane"></input> expiration time (seconds): <input id="grant-expiration" value="10"></input></br>
   <br></br>
   <br><input id="fortune-to-add" value="Fortune to Add"></input><button id="add-fortune">Add Fortune</button></br>
   <br><button id="get-fortune">Get Fortune</button></br>
@@ -686,7 +686,7 @@ EOF
 ```
 
 ### Diane
-Diane gets the blessing `family/sister/guest/diane` from Carol with an expiry
+Diane gets the blessing `family:sister:guest:diane` from Carol with an expiry
 caveat.
 
 #### Diane code
@@ -910,7 +910,7 @@ Click "Bless" on each of the tabs.
 The page will prompt you with a dialog entitled "The page at 127.0.0.1:19101 says".
 
 This occurs because Bob and Carol are asking for blessings. The prompt prefills
-the input section with "friends/bob" (for :19102) and "family/sister" (for :19103).
+the input section with "friends:bob" (for :19102) and "family:sister" (for :19103).
 
 In practice, Alice would use this opportunity to verify that she is indeed
 allowing Bob and Carol to receive a blessing from her.
@@ -934,7 +934,7 @@ indicating failure because he is only a friend. In contrast, Carol's request
 should succeed because she is family. The fortune should appear on Alice's display.
 
 Now let's give Diane a blessing. Go to Carol's iframe and Press the "Grant"
-button. This sends a blessing to Diane (alice/family/sister/guest/diane).
+button. This sends a blessing to Diane (alice:family:sister:guest:diane).
 
 Until the designated expiration time (default 10s),
 Diane should be able to both add and get a fortune, as if she were family.

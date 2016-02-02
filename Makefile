@@ -63,7 +63,7 @@ lint: banned_words node_modules
 	jshint .
 
 # A list of case-sensitive banned words.
-BANNED_WORDS := Javascript node.js
+BANNED_WORDS := Javascript node.js Oauth
 .PHONY: banned_words
 banned_words:
 	@for WORD in $(BANNED_WORDS); do \
