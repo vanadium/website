@@ -105,9 +105,8 @@ the statement
 > <code>P<sub>tv</sub></code> can use the name
 > <code>alice:devices:hometv</code>
 
-Blessing names are thus hierarchical, with
-slashes used to distinguish the blesser (`alice`) from the blessee
-(`devices:hometv`).
+Blessing names are thus hierarchical, with colons used to distinguish the
+blesser (`alice`) from the blessee (`devices:hometv`).
 
 # Caveats
 

@@ -210,7 +210,7 @@ func main() {
   ctx, shutdown := v23.Init()
   defer shutdown()
 
-  _, _, err := v23.WithNewServer(ctx, *name, &myDispatcher{*root})
+  _, _, err := v23.WithNewDispatchingServer(ctx, *name, &myDispatcher{*root})
   if err != nil {
     log.Panic("Failure creating server: ", err)
   }

@@ -382,7 +382,7 @@ continue to work - until you revoke the blessing.
 
 ## Revoke the blessing
 
-Visit [dev.v.io/auth], and click __YOUR BLESSINGS__.
+Visit [dev.v.io/auth], and click __SHOW BLESSINGS__.
 
 Find the blessing you created in the
 [Seek a Blessing](#seek-a-blessing) step above, and click its
@@ -415,7 +415,7 @@ The record of the revoked blessing at [dev.v.io/auth] will eventually
 be removed from Google's servers. Its not possible to un-revoke it, so
 there's no reason to keep it.
 
-If you wish to revoke the [Oauth] access you gave to Vanadium (it was
+If you wish to revoke the [OAuth] access you gave to Vanadium (it was
 only needed to create a blessing for this tutorial), visit your
 [Google settings], click on __Vanadium__, and click __Revoke access__.
 

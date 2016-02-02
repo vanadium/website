@@ -320,7 +320,7 @@ $V_BIN/principal get \
    forpeer prophInc | \
        $V_BIN/principal bless \
          --v23.credentials $V_TUT/cred/cassandra \
-         --with=- --for=24h $V_TUT/cred/alice intern:allie |\
+         --with=- --for=24h $V_TUT/cred/alice intern:alice |\
                $V_BIN/principal set \
                   --v23.credentials $V_TUT/cred/alice \
                   forpeer - prophInc

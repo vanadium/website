@@ -9,7 +9,7 @@ then issues a blessing with that email address. For example, after determining
 that the user is `alice@university.edu` (using OAuth2), this service will issue
 the blessing `dev.v.io:u:alice@university.edu` (where `dev.v.io` is
 the namespace for which the public key of the identity service is considered
-authoriative).  The blessing may also contain specific caveats per the user's
+authoritative).  The blessing may also contain specific caveats per the user's
 request.
 
 Broadly, this identity service consists of two main components:
@@ -27,7 +27,7 @@ Broadly, this identity service consists of two main components:
 One additional service enables revocation of the blessings granted by the
 blessing service:
 
-- **Vanadium Discharge Service**: This is a Vanadium RPC service enables
+- **Vanadium Discharge Service**: This is a Vanadium RPC service that enables
   revocation. The service issues [discharges][discharge] for a revocation
   [caveat] if the blessing has not been revoked by the user. The discharges are
   valid for 15 minutes.
