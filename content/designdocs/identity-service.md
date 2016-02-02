@@ -38,7 +38,7 @@ Blessing service) and managing macaroons, we also provide a command-line tool -
 [`principal`] - that talks to both of the services and obtains a blessing for
 the principal that the tool is running as.
 
-## Preliminaries
+# Preliminaries
 
 Before diving into the details of [`identityd`]'s design, some prerequisites:
 
@@ -61,7 +61,7 @@ Before diving into the details of [`identityd`]'s design, some prerequisites:
   macaroon was an allusion to [this
   paper](http://research.google.com/pubs/archive/41892.pdf).
 
-## Service interfaces
+# Service interfaces
 
 The HTTPS Authentication Service runs at https://dev.v.io/auth and uses the
 Google OAuth2 [web service flow] for authenticating users.  It has a specific
@@ -86,7 +86,7 @@ type MacaroonBlesser interface {
 }
 ```
 
-## Blessing flow
+# Blessing flow
 
 The [`principal`] command-line tool is used to orchestrate the process of
 obtaining a macaroon from the HTTPS Authentication Service and exchanging it
@@ -173,7 +173,7 @@ Steps 5 and 6 exchange that macaroon for a blessing.
    - Records the creation of this blessing in a database which can be queried via
      `https://dev.v.io/auth/google/listblessings`.
 
-## Supported caveats
+# Supported caveats
 
 The caveat addition form presented to the user in step 4 supports a few types
 of caveats:
@@ -184,7 +184,7 @@ of caveats:
 - [_Revocation_]: Which allows the user to revoke the blessing at any time in
   the future by visiting https://dev.v.io/auth/google/listblessings.
 
-### Revocation
+## Revocation
 
 The revocation caveat that is (at the user's request) added to the blessing is
 a third-party caveat with a unique 16-byte ID and the object name of the

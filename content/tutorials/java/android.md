@@ -706,7 +706,7 @@ There are a few things to note:
 [endpoint]: /glossary.html#endpoint
 [gradle]: http://gradle.org/
 [gradleinstall]: https://docs.gradle.org/current/userguide/installation.html
-[installation]: /installation.html
+[installation]: /installation/
 [name]: /glossary.html#object-name
 [service]: http://developer.android.com/guide/components/services.html
 [studio]: https://developer.android.com/sdk/index.html

@@ -1,8 +1,8 @@
 = yaml =
 title: Raspberry Pi
 author: ashankar@
-sort: 3
 toc: true
+sort: 3
 = yaml =
 
 Vanadium can be used to write software for [RaspberryPi]s. This page details

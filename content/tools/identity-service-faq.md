@@ -15,7 +15,7 @@ described in [this document][design-doc].
 
 Some frequently asked questions about this service follow.
 
-### What information is stored by the service?
+# What information is stored by the service?
 
 In order to obtain a blessing from this service, one must sign-in using their
 Google Account. For each blessing created by this service, the following is
@@ -33,7 +33,7 @@ not yet been revoked).
 All user-information stored by this service is accessible to the owner of the
 Google Account at https://dev.v.io/auth/google/listblessings
 
-### Why is the default caveat a revocation caveat?
+# Why is the default caveat a revocation caveat?
 
 When creating a blessing of the form `dev.v.io/users/<email_address>` (after
 using Google OAuth to determine the email address), the user is asked to select
@@ -56,7 +56,7 @@ as the default for two reasons:
 
 This choice of default may be revisited based on user feedback.
 
-### What information is provided to this service on discharge requests?
+# What information is provided to this service on discharge requests?
 
 Use of the revocation caveat implies that the granted blessing is valid only
 when accompanied with a [discharge] issued by the identity service. This means
@@ -65,13 +65,13 @@ order to obtain the discharge. This request to obtain a discharge only
 sends information about the caveat, no information on why the discharge is
 being requested is sent to this service.
 
-### What are the terms of service for using the Vanadium Identity Service?
+# What are the terms of service for using the Vanadium Identity Service?
 
 Use of this service (including obtaining a blessing from it or listing
 blessings obtained from it) is subject to the [terms of service] of all cloud
 services hosted at v.io.
 
-### Where can I find the code that backs this service?
+# Where can I find the code that backs this service?
 
 https://github.com/vanadium/go.ref/services/identity/identityd/main.go
 

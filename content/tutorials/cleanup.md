@@ -6,7 +6,7 @@ toc: false
 enumerable: false
 = yaml =
 
-Delete the tutorial directory.
+Delete the tutorial workspace directory.
 
 Might be used in tests, tutorial preparation, etc.
 

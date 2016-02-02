@@ -3,7 +3,7 @@ title: Glossary
 toc: true
 = yaml =
 
-## Access list
+# Access list
 
 An access list describes which [blessing names](#blessing-name) should be
 granted access to a particular object or method.
@@ -20,7 +20,7 @@ list {`alice:family:uncle`} is matched by principals with blessing names
 See also: [Blessing patterns](#blessing-pattern) for the semantics of pattern
 matching, [Security Concepts].
 
-## Agent
+# Agent
 
 Agent is a utility for serving [credentials](#credentials) to applications
 analogous to an [ssh-agent]. The agent is used to protect private keys from
@@ -33,7 +33,7 @@ the agent process over inter-process communication channels.
 
 See also: [Security Concepts].
 
-## Blessing
+# Blessing
 
 A blessing is a binding of a human-readable [name](#blessing-name) to a [principal](#principal),
 valid under some [caveats](#caveat), given by another principal.
@@ -70,7 +70,7 @@ blessing.
 
 See also: [Security Concepts].
 
-## Blessing name
+# Blessing name
 
 A blessing name is the _human readable_ name extracted from a
 [blessing](#blessing).  Principals are typically authorized based on the
@@ -92,7 +92,7 @@ private key.
 
 See also: [Security Concepts].
 
-## Blessing pattern
+# Blessing pattern
 
 A blessing pattern is a "pattern" that is matched by either a specific
 [blessing name](#blessing-name) or the blessing name and all its
@@ -109,7 +109,7 @@ would be matched only by the exact blessing name `alice:houseguest`.
 
 See also: [Security Concepts].
 
-## Blessing root
+# Blessing root
 
 The root of a blessing is the public key of the first certificate in the
 certificate chain of the blessing.
@@ -127,7 +127,7 @@ names](#blessing-name).
 
 See also: [Security Concepts].
 
-## Caveat
+# Caveat
 
 Caveats are conditions placed on a [blessing](#blessing) to restrict the
 validity of a [blessing name](#blessing-name). For example, caveats may restrict
@@ -150,7 +150,7 @@ caveat from the third party.
 
 See also: [Security Concepts].
 
-## Certificate
+# Certificate
 
 A certificate is an object consisting of a human-readable string name,
 a public key, a list of [caveats](#caveat), and a digital signature over
@@ -166,12 +166,12 @@ the public key mentioned in the previous certificate in the chain.
 
 See also: [Security Concepts].
 
-## Client
+# Client
 
 A client is the caller-side of an [RPC](#remote-procedure-call-rpc-).  Clients
 invoke methods on [servers](#server).
 
-## Credentials
+# Credentials
 
 Credentials encompass a [principal](#principal) (i.e., a public-private key
 pair), the set of [blessings](#blessing) bound to that principal, and the set
@@ -181,7 +181,7 @@ An application process retrieves its credentials from a directory containing
 this data, or from an [agent](#agent) that holds this data (including the
 private key of the principal) safely.
 
-## Discharge
+# Discharge
 
 A discharge is a proof of validity of a [third-party
 caveat](#third-party-caveat) issued by the third party mentioned in the
@@ -197,7 +197,7 @@ a discharge.
 Discharges may expire, but the expiration time is typically broad
 enough to allow for clock skew.
 
-## Discharger
+# Discharger
 
 A server that must be consulted to mint a [discharge](#discharge) for
 a caveat. A blessing is valid only if _all_ of its
@@ -205,13 +205,13 @@ a caveat. A blessing is valid only if _all_ of its
 
 See also: [Security Concepts].
 
-## Endpoint
+# Endpoint
 
 An Endpoint is an encoding of all the information required to securely contact
 a [server](#server).  Among other things, this includes the network address of
 the server, e.g.,`<IP address>:<port>` (tcp), or `<MAC address>` (bluetooth).
 
-## Identity provider
+# Identity provider
 
 An identity provider is a [principal](#principal) that signs [root
 certificates](#certificate) of [blessings](#blessing) with a fixed name.
@@ -244,7 +244,7 @@ corporation.
 
 See also: [Security Concepts].
 
-## Mount table
+# Mount table
 
 A mount table is a [server](#server) that associates [object
 names](#object-name) with ([endpoint](#endpoint), [suffix](#suffix)) pairs.
@@ -261,14 +261,14 @@ mount points. This allows for the creation of a hierarchy of names, a
 
 See also: [Naming Concepts][naming-concepts].
 
-## Namespace
+# Namespace
 
 A directed graph made up of [mount tables](#mount-table) that create a
 hierarchy of [object names](#object-name).
 
 A namespace may contain loops (it is not a DAG).
 
-## Object name
+# Object name
 ###### Also called: Name
 
 An object name is a human-readable name of an object that exports methods on
@@ -286,7 +286,7 @@ invoked to manage Alice's calendar.
 
 See also: [Naming Concepts][naming-concepts].
 
-## Permissions
+# Permissions
 
 Permissions are maps from string tags (like "Read" or "Admin") to [Access
 Lists](#access-list) specifying the blessings required to invoke methods with
@@ -294,7 +294,7 @@ that tag.
 
 See also: [Security Concepts].
 
-## Principal
+# Principal
 
 A principal is a public and private [key pair].
 
@@ -310,7 +310,7 @@ Only public keys and [blessings](#blessing) should be transmitted. Multiple
 
 See also: [Security Concepts].
 
-## Remote Procedure Call (RPC)
+# Remote Procedure Call (RPC)
 
 Remote procedure calls enable communications between processes by presenting
 an API based on function calls. The caller of an RPC is known as the
@@ -320,7 +320,7 @@ identified by its [object name](#object-name).
 
 See also: [RPC concepts][rpc-concepts].
 
-## Self-blessing
+# Self-blessing
 
 A [blessing](#blessing) who's certificate chain has only one certificate,
 necessarily self-signed, since if it had been signed by another
@@ -329,7 +329,7 @@ principal it would not be a single entry chain.
 A self-blessing is the starting point to issuing blessings to other
 principals.
 
-## Server
+# Server
 
 A server is the receiver-side of an [RPC](#remote-procedure-call-rpc-).
 Servers implement methods that are invoked by [clients](#client).
@@ -337,7 +337,7 @@ Servers implement methods that are invoked by [clients](#client).
 The term server is also used to refer to the process that hosts objects and
 dispatches RPC requests to the methods implemented by those objects.
 
-## Suffix
+# Suffix
 
 A suffix is the trailing portion of an [object name](#object-name) used to
 identify the object within a server.
@@ -348,7 +348,7 @@ that case, the [RPC](#remote-procedure-call-rpc-)
 `alice/calendar/today.AddAppointment()` will be directed to this server and the
 suffix `today` will be used by the server to identify the object.
 
-## Third-party caveat
+# Third-party caveat
 
 _Third-party caveats_ are [caveats](#caveat) wherein the burden of validation
 is pushed to a specific _third party_ that is different from the request
@@ -372,18 +372,18 @@ discharges for as long as they are valid.
 
 See also: [Security Concepts].
 
-## v23
+# v23
 
 The [atomic number of Vanadium][vanadium-element] is 23, which is the
 inspiration behind the `v23` shorthand for Vanadium.
 
-## vrpc
+# vrpc
 
 The `vrpc` command line tool sends and receives
 [RPCs](#remote-procedure-call-rpc-).  It is used as a generic [client](#client)
 to interact with any [server](#server).
 
-## Vanadium Definition Language (VDL)
+# Vanadium Definition Language (VDL)
 
 VDL describes the API for interfaces provided by objects. This includes the set
 of methods that can be invoked via an [RPC](#remote-procedure-call-rpc-), their
@@ -392,7 +392,7 @@ arguments and return types.  These interfaces are described in `.vdl` files. The
 
 See also: [VDL specification][vdl-spec].
 
-## Vanadium Object Marshaling (VOM)
+# Vanadium Object Marshaling (VOM)
 
 VOM is the data serialization format used in Vanadium.  It enables the
 encoding and decoding of typed values across different programming languages,
@@ -400,7 +400,7 @@ e.g. Go, Java, and JavaScript.
 
 See also: [VOM specification][vom-spec].
 
-## WebSocket Proxy (WSPR)
+# WebSocket Proxy (WSPR)
 
 A server (usually called WSPR, pronounced *whisper*) allows JavaScript
 running in a web browser or Node.js to communicate with a Vanadium system.

@@ -1,54 +1,46 @@
 = yaml =
-title: Quick Install
+title: Quick Installation
 toc: false
-sort: 2
 = yaml =
 
-Vanadium is currently targetted to Linux and OS X based systems.
+Vanadium can be installed on Linux or OS X.
+<!-- TODO(sadovsky): This is confusing for Android/iOS devs. -->
 
-Please <a href="/sh/vanadium_install.sh" download="vanadium_install.sh">
-download this script</a> then [source] it:
+To install Vanadium, <a href="/sh/vanadium-install.sh"
+download="vanadium-install.sh">download this script</a>, then [source] it:
 <!-- @doInstallManually -->
 ```
-source ~/Downloads/vanadium_install.sh
+source ~/Downloads/vanadium-install.sh
 ```
 
 {{# helpers.hidden}}
 Please [source] this script:
 <!-- @doInstallViaCurl -->
 ```
-source /dev/stdin <<< "$(curl -s https://v.io/sh/vanadium_install.sh)"
+source /dev/stdin <<< "$(curl -f -s https://v.io/sh/vanadium-install.sh)"
 ```
 {{/ helpers.hidden}}
 
+This script checks for prerequisites, then attempts to install Vanadium. It
+takes about five minutes to run.
 
-The script checks for prerequisites and attempts installation.
-It takes about five minutes.
-
-* If the script reports no errors, you're ready to try the
-[tutorials]!
-
-* If it complains, please follow the
-[detailed installation instructions][details].
-
+* If the script reports no errors, you're ready to try the [tutorials]!
+* If it complains, please follow the [step-by-step instructions].
 
 # What does the script do?
 
-The script checks for prerequisites, sets the `V23_RELEASE` environment
-variable to `$HOME/v23_release`, wipes `$V23_RELEASE`, and fills it with
-fresh Vanadium.
+It runs all the steps from the [step-by-step instructions].
 
-The tutorials depend on `V23_RELEASE` to find Vanadium, but Vanadium itself
-doesn't use the variable.
+In particular, it checks for prerequisites, sets the `JIRI_ROOT` and
+`V23_RELEASE` environment variables to `$HOME/v23_root` and
+`$JIRI_ROOT/release/go` respectively, and installs Vanadium to the `JIRI_ROOT`
+directory using the `bootstrap.sh` script.
 
-If you keep Vanadium, you may want to edit your preferred environment
-configuration "dot file" to add `$V23_RELEASE/bin` to your `PATH` variable. This
-step, however, isn't necessary for the tutorials.
+The tutorials depend on `V23_RELEASE` to find the Vanadium installation, but
+Vanadium itself doesn't depend on this variable.
 
-Feel free to move `v23_release` somewhere else if you like, and
-redefine `V23_RELEASE` accordingly.
+Feel free to move `JIRI_ROOT` and `V23_RELEASE` elsewhere if you like.
 
-
-[details]: /installation/details.html
-[tutorials]: /tutorials/hello-world.html
 [source]: /tutorials/faq.html#why-source-
+[tutorials]: /tutorials/hello-world.html
+[step-by-step instructions]: /installation/step-by-step.html

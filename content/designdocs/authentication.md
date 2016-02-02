@@ -11,7 +11,7 @@ then used to authorize RPCs.  This document describes:
 - the current implementation that provides these properties
 - the reasons behind various design choices in a question-and-answer format.
 
-## Principals & blessings
+# Principals & blessings
 
 A [principal] is defined by a unique (public, private) key pair `(P, S)` and a
 set of blessings in the form of certificate chains that bind a name to `P`.
@@ -21,7 +21,7 @@ Within the Go codebase, the set of blessings is encapsulated within the
 [`v.io/v23/security.Blessings`] type. The principal and all private key
 operations are encapsulated in the [`v.io/v23/security.Principal`] type.
 
-## Authentication
+# Authentication
 
 Communication between two processes takes place after they establish a
 confidential, authenticated connection. Encryption with keys derived from an
@@ -36,7 +36,7 @@ exchange the blessings in a way that provides the following properties:
    the two processes cannot determine the set of blessings presented by the initiator of
    the connection (the "Client").
 
-## Current implementation
+# Current implementation
 
 As of April 2015, the reference implementation of the Vanadium networking stack
 in [`v.io/x/ref/runtime/internal/rpc/stream`] provides confidential,
@@ -61,13 +61,13 @@ Where:
 - If the Client is not happy with the blessing names presented by the Server,
   it can abort the connection without ever revealing its blessings.
 
-### Correctness Proof
+## Correctness Proof
 
 The protocol along with the guarantees that it makes has been formalized in
 [ProVerif] to provide a proof of correctness. This formalization is available
 at https://github.com/vanadium/docs/tree/master/proofs/authentication
 
-### Code pointers
+## Code pointers
 
 Pointers to code in the reference implementation of the Vanadium APIs:
 - Session encryption is encapsulated in the [`Crypter`](https://github.com/vanadium/go.ref/blob/master/profiles/internal/rpc/stream/crypto/crypto.go) interface
@@ -77,7 +77,7 @@ Pointers to code in the reference implementation of the Vanadium APIs:
   `AuthenticateAsServer` functions in
   [`v.io/x/ref/runtime/internal/rpc/stream/vc/auth.go`](https://github.com/vanadium/go.ref/blob/master/profiles/internal/rpc/stream/vc/auth.go).
 
-## Questions
+# Questions
 
 - *Why don't the the Client and Server send their blessings in parallel,
   instead of Server first?*

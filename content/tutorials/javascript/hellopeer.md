@@ -83,7 +83,6 @@ in the future.
 
 The extension can be installed from its page on the Chrome web store:
 https://chrome.google.com/webstore/detail/jcaelnibllfoobpedofhlaobfcoknpap
-.
 
 For more information, see: [Vanadium Chrome extension Overview](/tools/vanadium-chrome-extension.html)
 
@@ -394,7 +393,7 @@ Then, run the WebDriver test with maven.
 # Run the maven test.
 TMPDIR=/tmp xvfb-run -s '-ac -screen 0 1024x768x24' \
   mvn test \
-  -f=$JIRI_ROOT/www/test/ui/pom.xml \
+  -f=$JIRI_ROOT/website/test/ui/pom.xml \
   -Dtest=HelloPeerUITest \
   -DchromeDriverBin=$CHROME_WEBDRIVER \
   -DhtmlReportsRelativePath=htmlReports \

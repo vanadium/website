@@ -3,39 +3,39 @@ title: Coding Guidelines
 toc: true
 = yaml =
 
-## Code organization
+# Code organization
 
 Vanadium is spread across multiple [git repositories]. The [contributor
-installation] process arranges these repositories as follows:
+installation] process arranges these repositories as follows (some repositories
+omitted, for brevity):
 
 ```
  $JIRI_ROOT
-   devtools          # Contributor tools
-   environment       # Platform dependent configuration
-   .manifest         # Multi-repo control data
+   .manifest         # Multi-repo configuration data
+   devtools          # Contributor tool binaries
+   environment       # Platform-dependent configuration
    release           # Source code
      go/src/v.io/v23 # Interfaces
      go/src/v.io/x   # Implementation
-       devtools      # Contributor tool source
+       devtools      # Contributor tool source code
        lib           # Developer libs
        ref           # Reference implementation of v23
-     javascript      # JS compatibility
+     javascript      # JS interfaces and implementation
      projects        # Example apps
-       playground    # Write/build/run v23 code on web
+       playground    # Write/build/run v23 code on the web
        browser       # Vanadium namespace browser
        chat          # Chat program
-   scripts           # Contributor scripts
-   third_party       # Third party code
-   www               # Source for this site
+   third_party       # Third-party code
+   website           # Source for this site
 ```
 
-Each repository has a `README` file summarizing its purpose. The `devtools`
-directory isn't a repository, but rather a top level directory where
-contributor tools are placed during installation. The `.manifest` repository
-contains the configuration that describes this repository arrangement.
+Each repository has a `README.md` file summarizing its purpose. The `devtools`
+directory isn't a repository, but rather a top-level directory where contributor
+tools are placed during installation. The `.manifest` repository contains the
+configuration that describes this repository arrangement.
 
-Things move around, so its best to examine your local installation for
-the latest arrangement.
+Things move around, so its best to examine your local installation for the
+latest arrangement.
 
 <!--
 TODO:
@@ -43,18 +43,18 @@ TODO:
 - Using optional arguments: variadic functions / varargs vs. Options structs.
 -->
 
-## Go
+# Go
 
 Use [gofmt] and suggestions from [Effective Go].
 
-### Interfaces
+## Interfaces
 
 Vanadium interfaces are defined in the [`go/src/v.io/v23`][v23 code]
 tree in files named `model.go`.  For example, the file
 [`security/model.go`][security model] holds security interface
 definitions.
 
-### Testing
+## Testing
 
 A test for package `foo` should be in package `foo_test`. This way, tests can
 depend on anything they like without introducing cycles or affecting non-test
@@ -79,7 +79,7 @@ debugging failing tests. For example:
 <!-- TODO: Describe dependency management (apis vs. impls, what can depend on
 what). -->
 
-## VDL
+# VDL
 
 The `devtools/bin/vdl` tool uses VDL files to generate files
 containing [RPC] stub code for various languages - Go, JavaScript,
@@ -95,13 +95,13 @@ project like Vanadium, the simplest way to accomplish this is to place
 VDL source files into the `go/src` tree at the location that the
 generated Go should be placed.
 
-## JavaScript
+# JavaScript
 
 Follow the [Node.js Style Guide]. Use our [.jshintrc].
 
 <!-- TODO: Documentation generation (jsdoc). -->
 
-## Shell
+# Shell
 
 We prefer Go programs over shell scripts for jobs traditionally given
 to shell scripts.

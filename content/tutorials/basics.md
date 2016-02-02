@@ -635,7 +635,7 @@ kill_tut_process TUT_PID_SERVER
 * You were introduced to the generic client `vrpc`.
 
 [hello world tutorial]: /tutorials/hello-world.html
-[install]: /installation.html
+[install]: /installation/
 [default-auth]: /tutorials/security/principals-and-blessings.html#default-authorization-policy
 [vanadium-definition-language]: /glossary.html#vanadium-definition-language-vdl-
 [blessing]: /glossary.html#blessing

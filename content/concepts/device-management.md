@@ -6,7 +6,7 @@ toc: true
 
 Vanadium targets a broad range of compute devices and environments. Vanadium's device management system securely integrates physical devices and software applications available in the system.
 
-## Devices and applications
+# Devices and applications
 
 A __device__ abstracts a system running Vanadium software, although the device need not be exclusively for Vanadium apps - for example, the system could be running natively installed applications alongside Vanadium applications. Typically, a device is a physical computing device, but a device could also be a virtual machine or a browser environment.
 
@@ -28,7 +28,7 @@ Matching apps with devices based on profiles is also how our build system ensure
 
 Application binaries, scripts, docker images, or related data resources (e.g. images, style sheets) are stored in a __binary repository service__. The binary service allows uploading and downloading arbitrary binary blobs identified by their object name.
 
-## Device manager service
+# Device manager service
 
 Vanadium provides remote management APIs to manage devices and apps.
 
@@ -78,14 +78,14 @@ other methods that the application may chose to expose. The app cycle manager
 service allows the device manager process to communicate with each app it runs
 for operations such as cleanly shutting down the app.
 
-## Security and identities
+# Security and identities
 
 The __security model__ revolves around which principals are allowed to perform
 which management operations, and around what capabilities an app is given on a
 device (see [Security Concepts][vanadium-security] for an overview of
 security primitives).
 
-### Device and application identities
+## Device and application identities
 
 Each device is owned by the identity of the principal who claims it. All
 permissions are initially restricted to the owner, who may update the
@@ -98,7 +98,7 @@ When a client asks the device manager to start an application instance, the
 client principal must provide the application instance with a blessing which
 becomes the default blessing for the principal of the application instance.
 
-### Application permissions
+## Application permissions
 
 Applications come signed by a publisher's identity which is verified by the
 device before installing the application.

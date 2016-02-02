@@ -7,7 +7,7 @@ toc: true
 The Vanadium naming system enables discovery of devices, regardless of their
 physical locations - with or without an internet connection.
 
-## Object names
+# Object names
 
 Vanadium names, usually abbreviated to "_names_" refer to objects.
 
@@ -28,7 +28,7 @@ containing the named object prior to invoking methods on the object. The service
 that implements name resolution consists of servers, called _mount tables_, and
 a client library called the _namespace_ library.
 
-## Mount tables and namespaces
+# Mount tables and namespaces
 
 Mount tables are similar to [DNS][DNS] servers and the namespace library to the
 DNS resolver. Similar to DNS and the [Unix filesystem][Unix filesystem], mount
@@ -121,7 +121,7 @@ handled by limiting the number of iterations the resolution algorithm will
 execute. That is, regardless of whether cycles are present, the
 resolution algorithm will bound the number of iterations it executes.
 
-## Mount entries
+# Mount entries
 
 Our examples above have shown mount tables pointing to other mount tables or to
 leaf servers but we haven't said what those pointers are.  They are a set of

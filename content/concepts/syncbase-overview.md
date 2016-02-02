@@ -4,7 +4,7 @@ sort: 5
 toc: true
 = yaml =
 
-## Overview
+# Overview
 
 Syncbase is a storage system for developers that makes it easy to synchronize
 app data between devices. It works even when devices are not connected to the
@@ -33,7 +33,7 @@ adopters - it is suitable for prototyping, but not for production applications.
 This document presents an overview of the system. It is very light on
 implementation details. Subsequent docs will contain those details.
 
-## Background
+# Background
 
 There are many storage systems that synchronize data between mobile devices, but
 most such systems are cloud-centric rather than peer-to-peer, and the few that
@@ -43,7 +43,7 @@ configurable conflict resolution we want. In summary, we're trying to solve a
 bunch of problems simultaneously whereas those other systems each solve a subset
 of those problems.
 
-## Data Model
+# Data Model
 
 Syncbase holds blob data and two types of structured data. The data is organized
 by the following hierarchy:
@@ -69,7 +69,7 @@ by the following hierarchy:
     blobs and synchronization. We recognize that there are certain apps that
     stretch the limits of the NoSQL data model.
 
-### Blobs
+## Blobs
 
 Both SQL and NoSQL databases have strong support for blobs. Blobs support a
 streaming upload/download API rather than the all-at-once operations of the
@@ -78,7 +78,7 @@ data, making it possible to implement automatic caching and garbage collection
 of the blobs. Blob references implicitly grant access to blobs in a manner
 similar to a capability (see [blob references](#references)).
 
-### Batches
+## Batches
 
 A batch is a group of read and write operations that are logically related. When
 an app uses Syncbase without synchronization, a batch is equivalent to an ACID
@@ -121,14 +121,14 @@ Batches are not limited to the data within a syncgroup (see below). If a batch
 contains data from multiple syncgroups, peers will receive only the parts of the
 batch for which they are a member.
 
-### Access Control
+## Access Control
 
 Syncbase enables collaboration between multiple users, so it is important for it
 to have fine grained access control. Syncbase uses the [Vanadium security model]
 for identification and authentication. The mechanisms for authorization vary by
 database type.
 
-#### NoSQL ACLs
+### NoSQL ACLs
 
 Developers specify ACLs with a key prefix. If there are multiple prefixes for a
 row, the longest prefix wins. This behavior makes it easy to set an ACL on
@@ -166,17 +166,17 @@ it efficient to find all of the comments for the post. Comments on comments (row
     <post uuid>                 -> {<author>: Read, Write, Admin; <friends>: Read}
     <post uuid>/comments/       -> {<author>: Read, Write, Admin; <friends>: Read, Insert}
     <post uuid>/comments/<uuid> -> {<friend>: Read, Write, Admin; <friends>: Read}
-### SQL ACLs
+## SQL ACLs
 
 *Lots TBD here. We're thinking that the developer would use a query to specify
 the ACL. This would mean that the ACL is dependent on the properties of the data
 (e.g. salesperson can see all customer data where Location = "CA").*
 
-### Blob ACLs
+## Blob ACLs
 
 See [blob references](#references).
 
-## Synchronization
+# Synchronization
 
 The sync protocol is peer-to-peer whereas most other sync systems (e.g.
 Firebase) require a centralized server. We believe that despite internet
@@ -204,9 +204,9 @@ We define a _syncgroup_ as a set of data that is synchronized within a set of
 devices. The following sections describe which data and which devices make up a
 syncgroup.
 
-### Which data?
+## Which data?
 
-#### NoSQL
+### NoSQL
 
 A database can have multiple syncgroups each specified by a set of (table, row
 prefix) pairs. We expect apps to typically have a single database and splice in
@@ -232,11 +232,11 @@ lists in folders, it can sync a folder one way and sync the lists within it in
 another way. Note that the keys are fully copied regardless of the syncgroup; it
 is not possible to "mount" a syncgroup with a different key prefix.
 
-#### SQL
+### SQL
 
 *The SQL database similarly represents a syncgroup with a query. Lots TBD.*
 
-#### ACLs
+### ACLs
 
 The sync protocol respects the ACLs on the data. That means that if a peer is
 not in the ACL for a row, that row is not sent to that peer. This makes conflict
@@ -251,7 +251,7 @@ receivers automatically verify the signatures. Public key encryption is
 computationally expensive, so it is up to the developer to determine which rows
 require signatures.
 
-#### Example Apps
+### Example Apps
 
 We examined 10 apps in detail to understand what granularity of access control
 and syncing was appropriate. For some apps like a news reader or a brokerage,
@@ -281,14 +281,14 @@ syncgroup (i.e. "folder1/folder2").
 We recognize that these hierarchical folders are not a perfect fit for the NoSQL
 data model. Our goal is that the SQL database handles this much better.
 
-### Which devices?
+## Which devices?
 
 Our primary goal is to make it simple to sync data between a single user's
 devices. Our secondary goal is to synchronize data between multiple users'
 devices. For both of these, we use the ACL Group Server to represent this list
 of devices.
 
-### Resolving Conflicts
+## Resolving Conflicts
 
 The majority of apps would benefit greatly from simple, automatic conflict
 resolution policies (e.g. last-one-wins, min, max), some apps would benefit from
@@ -306,7 +306,7 @@ enough level that they can do whatever they want in application code. We believe
 that API should provide access to a tuple of (local version, peer version,
 common ancestor version).
 
-### Pluggable Sync
+## Pluggable Sync
 
 Syncbase provides an escape hatch for apps that do not fit entirely into the
 storage and synchronization model. For example, some apps have existing,
@@ -317,7 +317,7 @@ reasons, Syncbase makes it easy to plug custom code into the sync protocol.
 *Lots of details TBD at this point. The need for this feature is clear, but we
 need to look at the detailed requirements.*
 
-### Blobs
+## Blobs
 
 The synchronization policy for blobs is different than the policy for structured
 data. All structured data in the syncgroup is synchronized to all devices in the
@@ -327,14 +327,14 @@ network. As a result, there might be a reference from structured storage to a
 blob that is not present on the local device. Apps need to function even when
 some blobs are not present.
 
-#### Versions
+### Versions
 
 A blob is immutable once created, so blobs are not versioned. The blob API
 allows the app to efficiently create a new blob based on the content of another
 blob (e.g. edit the ID3 tags of an MP3). The new blob must be referenced by an
 entry in the structured data so that other devices learn of the new blob.
 
-#### References
+### References
 
 The structured data contains references to the blobs by storing a BlobRef in a
 field. There is an API for apps to specify per-device caching policies so that
@@ -349,7 +349,7 @@ access the blob. A BlobRef can be copied into another row, table, database, or
 even app. However, the BlobRef only works on the Syncbase from which it came
 (i.e. sending a BlobRef over RPC to another device is not useful).
 
-#### Durability
+### Durability
 
 Syncbase ensures that not all peers will simultaneously evict a blob because
 that would result in data loss. The sync protocol keeps track of which peers
@@ -366,27 +366,27 @@ reference to the blob. The durable peer can then look at the history of the
 structured data to detect when all peers have deleted their references and the
 blob itself can be safely deleted.
 
-## Data Encryption
+# Data Encryption
 
 *It is important that the data be encrypted at rest. We should also figure out
 if we can have peers that replicate the data but are not allowed to see the
 contents. Lots of details TBD.*
 
-## Multiple Implementations
+# Multiple Implementations
 
 Syncbase needs to work on a variety of devices and configurations. Not only does
 it need to work well on phones, tablets, desktops, and other networked devices,
 app developers also need a multi-tenant deployment they can provide to their
 users for durability and ease of use. We plan the following implementations:
 
-### Mobile
+## Mobile
 
 We need an implementation that works well on mobile devices. It should be aware
 of performance constraints of mobile flash devices. It needs to be aware of
 battery and network usage too. This implementation does not need to scale to
 huge sizes nor to high throughput.
 
-### Cloud
+## Cloud
 
 This version of Syncbase acts as a cloud peer.
 

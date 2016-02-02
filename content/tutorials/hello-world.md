@@ -238,7 +238,7 @@ kill_tut_process TUT_PID_SERVER
 All of the above and more will be covered in detail in subsequent
 tutorials.
 
-[install]: /installation.html
+[install]: /installation/
 [default-auth]: /tutorials/security/principals-and-blessings.html#default-authorization-policy
 [vanadium-definition-language]: /glossary.html#vanadium-definition-language-vdl-
 [mount table tutorial]: /tutorials/naming/mount-table.html

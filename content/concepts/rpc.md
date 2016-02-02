@@ -9,7 +9,7 @@ between processes by presenting an API based on local function calls.  Function
 calls are a familiar model to developers, and the API hides low-level details
 like the underlying network transport and data serialization protocols.
 
-## Basics
+# Basics
 
 There are two participants in RPC-based communication.  The caller of an RPC is
 known as the **client** and the receiver that implements the RPC is known as the
@@ -50,7 +50,7 @@ for other use cases.
 The RPC system takes care of the underlying protocols necessary for all of these
 forms of communication.
 
-## VDL
+# VDL
 
 The Vanadium Definition Language (VDL) enables interoperability between
 software components executing in different computing environments. For
@@ -107,7 +107,7 @@ error MissingIngredients(ingredientName string) {
 
 For more details see the [VDL specification].
 
-## VOM
+# VOM
 
 The Vanadium Object Marshalling (VOM) format is the underlying serialization
 format used by the RPC system.  VOM supports serialization of all types

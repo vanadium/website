@@ -23,7 +23,7 @@ All network communication is always mutually authenticated and
 encrypted.  The model is heavily influenced by the work on [Simple
 Distributed Security Infrastructure] by Ronald Rivest and Butler Lampson.
 
-## Principals & blessings
+# Principals & blessings
 
 The security model is centered around the concepts of _principals_ and
 _blessings_. A _principal_ in the Vanadium framework is a public and
@@ -74,7 +74,7 @@ Platform Module) or an agent process and will not be held in memory of the
 application process to protect against leakage. Private keys are never sent on
 the network and are used only for digital signing operations.
 
-## Mutual authentication
+# Mutual authentication
 
 Clients and servers in a Vanadium remote procedure call (RPC) always act on
 behalf of a principal, and mutually authenticate each other via blessings bound
@@ -86,7 +86,7 @@ established between the client and server for performing the RPC.
 [Forward-secrecy] safe protocols (like [TLS] with [ECDHE] key exchanges or a
 [NaCl box] with ephemerel keys) are used for setting up the encrypted channel.
 
-## Delegation
+# Delegation
 
 The authorizations associated with a principal are determined solely by the
 blessings bound to the principal.  Delegation of authority across principals is
@@ -109,7 +109,7 @@ Blessing names are thus hierarchical, with
 slashes used to distinguish the blesser (`alice`) from the blessee
 (`devices:hometv`).
 
-## Caveats
+# Caveats
 
 In practice, delegation of authority is never unconditional and this is
 supported by the security model. Blessings can carry caveats that restrict the
@@ -136,7 +136,7 @@ This includes, among other things, the time the request is being made, whether
 the blessing wielder is a client or a server, the communication protocol being
 used and the method being invoked.
 
-### Third-party caveats
+## Third-party caveats
 
 Validation of some caveats may involve expensive computation or I/O or
 information not accessible to the authorizing service. In such cases, the
@@ -159,7 +159,7 @@ By using such _third-party caveats_, the burden of making the network calls to
 obtain a discharge and the burden of any computation or I/O to validate the
 restrictions are moved to the wielder of the blessing and to the third-party respectively, away from the end at which the authorization decision is being made.
 
-## Validating blessings
+# Validating blessings
 
 A blessing is considered valid in the context of an RPC if and only if
 - the blessing is cryptographically valid, i.e., each certificate in the
@@ -182,7 +182,7 @@ All Vanadium applications are configured to consider certain blessing roots as
 authoritative for certain names, and this configuration may vary across
 applications.
 
-## Authorization
+# Authorization
 
 In a remote procedure call, two authorization decisions need to be made:
 
@@ -217,7 +217,7 @@ not by the name `bob` or `alice:colleague` or prefixes of the pattern (i.e.
 `alice`).  On the other hand, the pattern `alice:houseguest:$` would be matched
 exactly by the name `alice:houseguest`.
 
-### Selecting a blessing
+## Selecting a blessing
 
 A principal may have collected multiple blessings and may need to choose which
 subset of them to present when authenticating with a peer. It could present
@@ -239,7 +239,7 @@ will see the `alice:houseguest:bob` blessing when Bob makes requests to them,
 but any other servers that Bob communicates with will not know that he has this
 blessing from Alice.
 
-## FAQs
+# FAQs
 
 - **What is the plan for storing keys and blessings?**
 

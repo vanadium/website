@@ -1,52 +1,52 @@
 = yaml =
 title: Linux Prerequisites
-author: jregan@
+toc: true
 sort: 1
 = yaml =
 
-You need curl, git and Go. (JavaScript developers also need node.)
+You need to install Git, curl, and Go.
 
-The following example commands should work on a Debian-based Linux distribution.
-Other distributions might require use of `yum` instead of `apt-get`. Adapt them
-as needed.
+The following commands should work on a Debian-based Linux distribution. Other
+distributions might require use of `yum` instead of `apt-get`. Adapt as needed.
+
+This document assumes that you are using the Bash shell.
+
+# Git
+
+Vanadium code is managed using Git. Learn more about Git setup on [GitHub].
 
 ```
-# Vanadium is currently deployed by git cloning.
 sudo apt-get install git
+```
 
-# Curl is used to download other components.
+# Curl
+
+The install script uses curl to download some prerequisites.
+
+```
 sudo apt-get install curl
+```
 
-# Fill $HOME/go with Go binaries.
-( gosite=https://storage.googleapis.com/golang
-  curl $gosite/go1.5.linux-amd64.tar.gz | tar -C $HOME -xzf - )
+# Go
 
-# Modify your `.profile` file or its equivalent to faciliate Go usage.
-cat - <<"EOF" >> $HOME/.profile
+Vanadium is mostly implemented in Go. Learn more about Go installation on the
+[Go website].
+
+```
+# Install the Go binaries in $HOME/go.
+curl -f https://storage.googleapis.com/golang/go1.5.linux-amd64.tar.gz | tar -C $HOME -xzf -
+
+# Modify your `.bashrc` file or its equivalent to faciliate Go usage.
+cat - <<"EOF" >> $HOME/.bashrc
 export GOROOT=$HOME/go
 export PATH=$PATH:$GOROOT/bin
 EOF
-
-# (Optional) Node.js is a JavaScript runtime environment.
-( site=http://nodejs.org/dist
-  curl $site/v0.12.2/node-v0.12.2-linux-x64.tar.gz |
-    tar -C $HOME -xzf - )
-
-# Modify your `.profile` file or its equivalent to facilitate node usage.
-cat - <<"EOF" >> $HOME/.profile
-export PATH=$PATH:$HOME/node-v0.12.2-linux-x64/bin
-EOF
 ```
 
-Read more about git setup at [github].
+# You're all set
 
-Read more about Go installation at the [Go site].
+Return to the [Vanadium installation instructions][installation].
 
-Read more about the optional Node.js installation at the [Node site].
-
-Return to the [Vanadium installation instructions][install].
-
-[install]: /installation/index.html
-[Go site]: http://golang.org/doc/install
-[Node site]: http://nodejs.org/download/
-[github]:   https://help.github.com/articles/set-up-git
+[GitHub]: https://help.github.com/articles/set-up-git
+[Go website]: http://golang.org/doc/install
+[installation]: /installation/

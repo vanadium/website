@@ -2,13 +2,8 @@ SHELL := /bin/bash -euo pipefail
 PATH := node_modules/.bin:$(PATH)
 MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 
-# FIXME(sadovsky):
-# - Consolidate installation setup, per doc
-#
 # TODO(sadovsky):
-# - Add favicon
 # - Add "site-test" unit tests
-# - Populate "Example Apps", "API Reference"
 # - Add Syncbase video
 # - "identity" subdir (needed by identity service?)
 # - deploy-production rule
@@ -44,7 +39,7 @@ public/js/bundle.js: browser/index.js $(shell find browser) node_modules
 ################################################################################
 # Build and serve
 
-build: node_modules hljs mdl public/css/bundle.css public/js/bundle.js gen-scripts
+build: $(MDRIP) node_modules hljs mdl public/css/bundle.css public/js/bundle.js gen-scripts
 	haiku build --helpers helpers.js --build-dir $@
 
 .PHONY: serve
@@ -77,8 +72,8 @@ banned_words:
 ################################################################################
 # Tutorial script generation and tests
 
-install_md = installation/details.md
-install_sh = public/sh/vanadium_install.sh
+install_md = installation/step-by-step.md
+install_sh = public/sh/vanadium-install.sh
 
 tutSetup       = tutorials/setup
 tutCheckup     = tutorials/checkup
@@ -133,11 +128,15 @@ setupScripts = \
 # This target builds the hosted web assets for the JavaScript tutorials.
 jsTutorialResults := public/tutorials/javascript/results
 
+# Install mdrip if needed.
+$(MDRIP):
+	jiri go install github.com/monopole/mdrip
+
 # Vanadium install script.
 # This can be run as a prerequisite for tutorial setup.
 $(install_sh): content/$(install_md) | $(MDRIP)
 	mkdir -p $(@D)
-	$(MDRIP) --preambled 2 test $^ > $@
+	$(MDRIP) --preambled 3 test $^ > $@
 
 # Targets of the form $(scenario)-{x}-setup.sh create scripts that are meant to
 # be run by a user as an argument to 'source', so that they modify the user's
@@ -339,19 +338,19 @@ test: test-tutorials-core test-tutorials-js-node test-tutorials-java
 # This is the target to run to see if the tutorials work against Vanadium
 # changes that have not been checked in.
 #
-# Called from release/go/src/v.io/x/devtools/v23/internal/test/www.go.
+# Called from v.io/x/devtools/jiri-test/internal/test/website.go.
 # This test fails if JIRI_ROOT isn't defined.
 # This test defines V_TUT (a tutorial variable) appropriately in terms of
 # JIRI_ROOT.
 .PHONY: test-tutorials-core
-test-tutorials-core: $(MDRIP)
+test-tutorials-core: build
 	jiri go install v.io/v23/... v.io/x/ref/...
 	$(MDRIP) --subshell --blockTimeOut 1m test content/testing.md $(depsOneBigCoreTutorialTest)
 
 
 # Test Java tutorials.
 .PHONY: test-tutorials-java
-test-tutorials-java: $(MDRIP)
+test-tutorials-java: build
 	$(MDRIP) --blockTimeOut 5m --subshell test $(depsOneBigJavaTutorialTest)
 
 # Test JS tutorials against an existing development install.
@@ -363,12 +362,12 @@ test-tutorials-java: $(MDRIP)
 # portion of the test in order to achieve some amount of test coverage without
 # having to introduce additional dependencies.
 #
-# Called from release/go/src/v.io/x/devtools/v23/internal/test/www.go.
+# Called from v.io/x/devtools/jiri-test/internal/test/website.go.
 # This test fails if JIRI_ROOT isn't defined.
 # This test defines V_TUT (a tutorial variable) appropriately in terms of
 # JIRI_ROOT.
 .PHONY: test-tutorials-js-node
-test-tutorials-js-node: $(MDRIP)
+test-tutorials-js-node: build
 	jiri go install v.io/v23/... v.io/x/ref/...
 	$(MDRIP) --blockTimeOut 2m --subshell test content/testing.md $(depsOneBigJsTutorialTest)
 
@@ -379,18 +378,21 @@ test-tutorials-js-node: $(MDRIP)
 #
 # However, it uses the live version of the Vanadium extension.
 #
-# Called from release/go/src/v.io/x/devtools/v23/internal/test/www.go.
+# Used to be called from v.io/x/devtools/jiri-test/internal/test/website.go.
 # This test fails if JIRI_ROOT isn't defined.
 #
 # This test also takes additional env vars (typically temporary):
 # - GOOGLE_BOT_USERNAME and GOOGLE_BOT_PASSWORD (to sign into Google/Chrome)
 # - CHROME_WEBDRIVER (the path to the Chrome WebDriver)
-# - WORKSPACE (optional, defaults to $JIRI_ROOT/www)
+# - WORKSPACE (optional, defaults to $JIRI_ROOT/website)
 #
-# In addition, this test requires maven and Xvfb and xvfb-run to be installed.
-# An HTML report is written to $JIRI_ROOT/www/htmlReports.
+# In addition, this test requires Maven and Xvfb and xvfb-run to be installed.
+# An HTML report is written to $JIRI_ROOT/website/htmlReports.
+#
+# NOTE(sadovsky): This test does not currently work, is omitted from continuous
+# integration testing, and will likely be decommissioned soon.
 .PHONY: test-tutorials-js-web
-test-tutorials-js-web: $(MDRIP)
+test-tutorials-js-web: build
 	jiri go install v.io/v23/... v.io/x/ref/...
 	$(MDRIP) --subshell --blockTimeOut 3m testui content/testing.md $(depsOneBigJsTutorialTest)
 
@@ -398,19 +400,20 @@ test-tutorials-js-web: $(MDRIP)
 #
 # This runs an install from v.io, then runs the tutorials against that install,
 # exactly as an external user would run them. Local changes of Vanadium have no
-# impact on this test. This test does not require definition JIRI_ROOT. It uses
-# V23_RELEASE instead, per installation instruction on the external site.
+# impact on this test. This test does not require definition of JIRI_ROOT; it
+# uses V23_RELEASE instead, per the installation instructions on the external
+# site.
 .PHONY: test-tutorials-external
-test-tutorials-external: $(MDRIP)
+test-tutorials-external: build
 	$(MDRIP) --subshell --blockTimeOut 10m test content/$(install_md) $(depsOneBigCoreTutorialTest)
 
-# Test tutorials without install. Assumes V23_RELEASE is defined.
+# Test tutorials without install. Assumes JIRI_ROOT and V23_RELEASE are defined.
 #
 # This runs tests without first doing any installation step, and assumes
-# V23_RELEASE properly defined. It's a time saver if you are happy with your
-# installation and are just debugging tutorial code.
+# JIRI_ROOT and V23_RELEASE are properly defined. It's a time saver if you are
+# happy with your installation and are just debugging tutorial code.
 .PHONY: test-tutorials-no-install
-test-tutorials-no-install: $(MDRIP)
+test-tutorials-no-install: build
 	$(MDRIP) --subshell test $(depsOneBigCoreTutorialTest)
 
 # The files needed to build JS tutorial output.

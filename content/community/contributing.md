@@ -3,14 +3,14 @@ title: Contributing
 toc: true
 = yaml =
 
-## Reporting issues
+# Reporting issues
 
 We use GitHub for tracking Vanadium issues:
 https://github.com/vanadium/issues/issues
 
-## Contributor setup
+# Contributor setup
 
-### Vanadium installation
+## Vanadium installation
 
 Follow the [installation instructions] to set up a `JIRI_ROOT` directory and
 fetch all Vanadium repositories.
@@ -24,7 +24,7 @@ and have added `$JIRI_ROOT/devtools/bin` to your `PATH`:
 
 Recommended: Add the lines above to your `~/.bashrc` or similar.
 
-### Contributor license agreement (CLA)
+## Contributor license agreement (CLA)
 
 Before patches can be accepted, contributors must sign the Google Individual
 [Contributor License Agreement (CLA)][cla], which can be done online. The CLA is
@@ -38,7 +38,7 @@ Contributions made by corporations are covered by a different agreement than the
 one above, the [Software Grant and Corporate Contributor License
 Agreement][corp-cla].
 
-### Credentials
+## Credentials
 
 To send code reviews and commit changes, you must create an account on
 vanadium.googlesource.com:
@@ -49,13 +49,13 @@ vanadium.googlesource.com:
 2. Go to https://vanadium-review.googlesource.com and log in with your identity.
    This will create an account for you in the code review system.
 
-### Proposing a change
+## Proposing a change
 
 Before starting work on a large change, we recommend that you [file an
 issue][issue tracker] with your idea so that other contributors and authors can
 provide feedback and guidance. (For small changes, this is not necessary.)
 
-### Making a change
+## Making a change
 
 All of the individual Vanadium projects use [Git] for version control. The
 "master" branch of each local repository is reserved for tracking the remote
@@ -70,7 +70,7 @@ To submit a change for review you will need to squash your feature branch into a
 single commit and send the patch to [Gerrit] for code review. The [jiri] tool,
 in particular the `jiri cl` command, simplifies this process.
 
-#### Creating a change
+### Creating a change
 
 1. Sync the master branch to the latest version of the project.
 
@@ -92,7 +92,7 @@ in particular the `jiri cl` command, simplifies this process.
 
 6. Repeat steps 3-5 as necessary.
 
-#### Syncing a change to the latest version of the project
+### Syncing a change to the latest version of the project
 
 1. Update all of the local master branches using the `jiri` command.
 
@@ -111,7 +111,7 @@ in particular the `jiri cl` command, simplifies this process.
    * Stage the resolved files for a commit with `git add <pathspec>...`.
    * Commit the resolved files with `git commit`.
 
-#### Requesting a review
+### Requesting a review
 
 1. Switch to the branch that corresponds to the change in question.
 
@@ -128,7 +128,7 @@ Our team periodically scans for unassigned CLs and a reviewer will be added to
 your CL. If you would rather not wait, feel free to let us know about your
 change by filing an issue on GitHub.
 
-#### Reviewing a change
+### Reviewing a change
 
 1. Follow the link you received in an email notifying you about a review
    request.
@@ -136,7 +136,7 @@ change by filing an issue on GitHub.
 3. When you are finished, click on the "Reply" button to submit your comments,
    selecting the appropriate score.
 
-#### Addressing review comments
+### Addressing review comments
 
 1. Switch to the branch that corresponds to the change in question
 
@@ -151,7 +151,7 @@ change by filing an issue on GitHub.
 
         jiri cl mail
 
-#### Submitting a change
+### Submitting a change
 
 1. Work with your reviewers to receive "+2" score. If your change no longer
    applies cleanly due to upstream changes, the reviewer may ask you to rebase
@@ -166,7 +166,7 @@ change by filing an issue on GitHub.
         git checkout master
         jiri cl cleanup <branch>
 
-#### Useful shortcuts
+### Useful shortcuts
 
 There are several useful shortcuts you can use for quick access to changes and
 issues.
@@ -177,7 +177,7 @@ issues.
 *  [v.io/review](https://v.io/review): Takes you to your review dashboard.
 *  v.io/c/[num]: Takes you to the review for a specific change.
 
-[installation instructions]: ../installation.html
+[installation instructions]: ../installation/
 [cla]: https://cla.developers.google.com/about/google-individual?csw=1
 [corp-cla]: https://cla.developers.google.com/about/google-corporate?csw=1
 [issue tracker]: https://github.com/vanadium/issues/issues

@@ -9,38 +9,38 @@ VDL is an interface definition language for describing Vanadium components.  It 
 
 Communication in Vanadium is based on remote procedure calls.  The main concepts in VDL map closely to concepts in general-purpose languages used to specify interfaces and communication protocols.
 
-## Goals
+# Goals
 There are three main goals for VDL.  These goals form the core of what a VDL user is trying to accomplish, and also inform tradeoffs in language design and features.  VDL tries to make accomplishing these goals simple.
 
-### Specify the wire format
+## Specify the wire format
 The main reason to write VDL is to define the wire format between different components.  This is a prerequisite for interoperability; in order to implement a server that may be called by any client in any language, the wire format between the components needs to be defined.
 
 VDL defines its own type and value system, with well-defined semantics.  The VOM (Vanadium Object Marshalling) protocol defines mappings from values of every VDL type to a wire format.  The combination of VDL and VOM enables a simple yet powerful mechanism to specify wire protocols.
 
-### Specify the API
+## Specify the API
 Once a common wire format has been established between components, we need an API to access the functionality in our desired programming environment.  E.g. a JavaScript frontend that needs to invoke methods on a Go backend needs a standard way to access that functionality.
 
 APIs are specified by compiling VDL to your target environment.  The VDL compiler converts VDL concepts into idiomatic native constructs in your target environment.
 
-### Usage is optional
+## Usage is optional
 The last goal is to ensure the usage of VDL is optional.  Users have a choice to forgo VDL if it doesn't adequately benefit their usage scenario.  E.g. two JavaScript components may choose to communicate directly as full-fledged Vanadium components, without using VDL at all.
 
-## Syntax
+# Syntax
 The VDL syntax is based on the Go language, which has a compact and regular grammar.
 
-### Comments
+## Comments
 There are two forms of comments:
 1. Line comments start with the character sequence `//` and stop at the end of the line.  A line comment acts like a newline.
 2. General comments start with the character sequence `/*` and continue through the character sequence `*/`.  A general comment containing one or more newlines acts like a newline, otherwise it acts like a space.
 
 Comments do not nest.
 
-### Semicolons
+## Semicolons
 The grammar uses semicolons `;` as terminators in many productions.  Idiomatic VDL omits most of these semicolons using the following two rules:
 1. When the input is broken into tokens, a semicolon is automatically inserted into the token stream at the end of a non-blank line if the line's final token is an identifier, literal (string_lit, integer_lit, rational_lit, or imaginary_lit), or closing fence (`)`, `]`, `}` or `>`).
 2. A semicolon may be omitted before a closing `)` or `}`.
 
-### Identifiers
+## Identifiers
 Identifiers name entities such as types and methods.  An identifier is a sequence of one or more ASCII letters and digits.  The first character of an identifier must be a letter.  We intentionally restrict to ASCII to more naturally support common generated languages.
 ```
 identifier = [A-Za-z][A-Za-z0-9_]*
@@ -64,7 +64,7 @@ const enum error import interface map package
 set stream struct type typeobject union
 ```
 
-### Built-in identifiers
+## Built-in identifiers
 The following identifiers are built-in, and used to bootstrap the language to make it useful.  All built-in identifiers are available for use within other packages.
 ```
 // Built-in types
@@ -78,7 +78,7 @@ uint16 uint32 uint64
 false true nil
 ```
 
-### Example
+## Example
 Here is a simplified example of two single-file VDL packages that showcase most of the main concepts.
 ```
 // File: example/bignum/bignum.vdl
@@ -141,7 +141,7 @@ type Advanced interface {
 error DivByZero() {"en": "divide by zero"}
 ```
 
-## Packages
+# Packages
 VDL is organized into packages, where a package is a collection of one or more source files.  The files in a package collectively define the types, constants, interfaces and errors belonging to the package.  Those elements may in turn be used in another package.
 
 Each source file consists of a package clause, followed by a (possibly empty) set of imports, followed by a (possibly empty) set of definitions.
@@ -157,7 +157,7 @@ A package clause begins each source file, and defines the package to which the f
 package bignum
 ```
 
-## Standard packages
+# Standard packages
 
 VDL comes with a collection of standard packages, which define common types and
 interfaces that may be used by all applications. E.g. the [time
@@ -170,7 +170,7 @@ packages](https://github.com/vanadium/go.v23/blob/master/vdlroot) is small, and
 will grow over time to provide more standardized representations of core
 concepts.
 
-## Imports
+# Imports
 An import states that the source file containing the import depends on the imported package, and enables access to the exported identifiers of that package.  Cyclic dependencies are not allowed.  The PackageName is used as the first component of a QualifiedName, and is used to access identifiers of that package within the importing source file.  If the PackageName is omitted, it defaults to the identifier specified in the PackageClause of the imported package.
 ```
 Import = "import" ImportSpec
@@ -187,7 +187,7 @@ import "time"
 import big "example/bignum"
 ```
 
-## Types
+# Types
 A type specifies a set of valid values.  The set of valid types is partitioned into different kinds, where each kind of type specifies its own rules determining the valid set of values.
 ```
 // Built-in scalar type kinds
@@ -273,7 +273,7 @@ type Status struct {
 }
 ```
 
-## Constants
+# Constants
 A constant represents an immutable value.  Constants may be typed or untyped.  There are six categories of constants, representing various typed and untyped combinations.  Typed constants may represent any valid value for their kind of type.  Untyped integer, rational and complex constants are collectively called numerics, and have "infinite" precision; they do not overflow or underflow.
 
 ```
@@ -295,7 +295,7 @@ true:  Untyped boolean constant
 nil:   Represents non-existent optional value
 ```
 
-## Literals
+# Literals
 There are four categories of scalar literals: string, integer, rational and imaginary.  Each literal represents its respective untyped constant, where the imaginary literal represents an untyped complex constant with real part zero.
 ```
 string_lit    = /* e.g. "abc" `def` */
@@ -338,7 +338,7 @@ const (
 )
 ```
 
-## Operators
+# Operators
 Logical, bitwise, comparison and arithmetic operators are supported.  Not all operators support all constants.  The following table shows the operators and the supported constant categories.
 ```
 // Unary operator (boolean)
@@ -371,7 +371,7 @@ Logical, bitwise, comparison and arithmetic operators are supported.  Not all op
 
 Binary operators are of the form `x op y`.  If x and y are both typed constants, their types must be identical.  If either x or y (or both) are untyped constants, the values are implicitly converted to a common type before performing the operation.
 
-## Conversions
+# Conversions
 Implicit conversions of untyped constants obey the following rules:
 ```
 implicit conversion                   details
@@ -434,7 +434,7 @@ map -> struct          Only if fields with matching keys
 					   [unknown fields ignored]
 ```
 
-## Evaluation and definition
+# Evaluation and definition
 Named constants are defined using the const keyword.  Named consts and method tags are fully evaluated to a final value.  Intermediate results of const expressions may remain untyped, but final const values must be typed.  This restriction ensures const expression evaluation always occurs within the VDL compiler, and all generated code uses identical const values.  Otherwise we'd be at the mercy of the compilers / interpreters for the generated languages, which has a wide variance in expression evaluation semantics.
 ```
 ConstDef  = "const" ConstSpec
@@ -467,7 +467,7 @@ const (
 )
 ```
 
-## Interfaces
+# Interfaces
 An interface represents a set of methods.  Every interface has an InterfaceName.  Interfaces can embed other interfaces by referring to their InterfaceName.  This adds all methods of the embedded interface to the set of methods in the embedding interface.  Duplicate names are allowed, but only if the method signatures are identical.  Code generation for some languages may add additional semantics; e.g. object-oriented languages may use embedding as a signal for an inheritance relationship.
 
 Every method is named and contains optional InArgs, InStream and OutStream types, OutArgs and Tags.  The InArgs and OutArgs are positional, and arg names idiomatically start with a lowercase letter.  A single underscore "_" may be used as the InStream or OutStream type, which means there is no respective in or out stream type.  Idiomatic usage only uses the underscore if there is no InStream, but there is an OutStream type.
@@ -508,7 +508,7 @@ type Advanced interface {
 }
 ```
 
-## Errors
+# Errors
 An error represents an exceptional condition.  VDL defines a built-in `error` type which enables interoperability of error creation and checking across computing environments.  E.g. VDL errors are generated as error values in Go, while they're generated as exceptions in Java.  The core libraries allow you to check for occurrences of specific errors, even if the error was generated in a different process, or a different programming language.
 
 The wire format of the VDL `error` looks like this:
@@ -555,7 +555,7 @@ error (
 )
 ```
 
-## Config files
+# Config files
 Config files are a mechanism to specify configuration information to a program.  E.g. a command line program may need to be configured with directory paths for input or output.  Since VDL already has syntax to represent types and constants, it is natural to use the same syntax to represent configuration information.
 
 A config file exports a single constant, and may contain one or more imports and constants.  All constants representable in regular VDL are representable in config files, using the same syntax.
@@ -590,5 +590,6 @@ Config files that use more than the built-in types need to import the packages d
 
 All valid config files must start with "config".  However "config" is not itself a keyword in the grammar; it may be used as a regular identifier.
 
-### vdl.config
+## vdl.config
+
 The vdl tool is an example of a command-line program that requires configuration; e.g. there are options for code generation in each native language.  Each vdl package directory may contain a special `vdl.config` file, representing the configuration for that vdl package.  The `vdl.config` file is written in the generic VDL config file syntax, exporting a constant with type [vdltool.Config](https://github.com/vanadium/go.v23/blob/master/vdlroot/vdltool/config.vdl).  An example is the [vdl.config file](https://github.com/vanadium/go.v23/blob/master/vdlroot/time/vdl.config) for the standard time package.

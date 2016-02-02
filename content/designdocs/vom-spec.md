@@ -19,7 +19,7 @@ system might use VOM to encode user-provided values into its log files.
 Specific fields of the data may be indexed for fast lookups, and the log files
 may be decoded even if the original encoding program no longer exists.
 
-## Binary format
+# Binary format
 
 VOM is a byte-based binary format, consisting of a sequence of messages.  Each
 message is either a type definition (`TypeMsg`) or a value definition
@@ -28,7 +28,7 @@ message is either a type definition (`TypeMsg`) or a value definition
 The format starts with a single version byte, which must be `0x80` for the
 initial version of VOM.
 
-### Grammar
+## Grammar
 The format is described by the following grammar:
 
 ```
@@ -85,7 +85,7 @@ All rules in the above grammar terminate in primitive values; the entire VOM
 encoding comprises combinations of primitives.  The encoding of primitive values
 is in turn based on a single concept called var128.
 
-### Var128
+## Var128
 
 The basis for VOM encoding is var128, a variable-length unsigned integer with a
 maximum size of 128 bits (16 bytes).  This is a byte-based encoding.  Values in
@@ -122,7 +122,7 @@ addition of the control entries.  This format strikes a balance between size and
 speed; we try not to be wasteful of space, but still keep the format simple and
 fast to encode and decode.
 
-### Control entries
+## Control entries
 
 The var128 control entries are used to represent special properties in the VOM
 encoding.  We take advantage of the fact that control entries may appear at the
@@ -138,7 +138,7 @@ Most control entries are currently unused, but reserved for future expansion.
 </tbody>
 </table>
 
-### Primitives
+## Primitives
 
 Primitives types are encoded using either var128 or raw bytes.
 
@@ -155,7 +155,7 @@ Primitives types are encoded using either var128 or raw bytes.
 * String: Encoded as a var128 containing the byte length, followed by that many
   raw bytes.
 
-### Built-in types
+## Built-in types
 
 A fixed set of built-in types are used to bootstrap the encoding format, and are
 assumed to be known by both the encoder and decoder.  Each built-in type has a
@@ -200,7 +200,7 @@ fixed type ID.  The semantics of the built-in types are defined by the
 </tbody>
 </table>
 
-### Wire types
+## Wire types
 
 User defined types are described in values of type `WireType`, and encoded into
 `TypeMsg` just like regular values.  Unlike the regular encoding process,

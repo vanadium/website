@@ -11,7 +11,7 @@ apps can run only in the Chrome desktop browser with the [Vanadium Chrome
 extension][] installed.  Mobile browsers and non-Chrome browsers will be
 supported in the future.
 
-## Overview
+# Overview
 
 The Vanadium codebase is written mostly in [Go][].  In order to make the Go
 libraries accessible to a JavaScript web app, the Vanadium Go code is compiled
@@ -39,7 +39,7 @@ Isolating the Vanadium libraries inside a NaCl plugin has the added benefit
 that no JavaScript web app ever sees any private keys.  All cryptographic
 operations are performed within the extension's NaCl sandbox.
 
-## Vanadium Chrome extension details
+# Vanadium Chrome extension details
 
 The Vanadium extension has two main components:
   * a [content script][] that runs on each tab, and

@@ -543,7 +543,7 @@ Then, run the WebDriver test with maven.
 # Run the maven test.
 TMPDIR=/tmp xvfb-run -s '-ac -screen 0 1024x768x24' \
   mvn test \
-  -f=$JIRI_ROOT/www/test/ui/pom.xml \
+  -f=$JIRI_ROOT/website/test/ui/pom.xml \
   -Dtest=FortuneUITest \
   -DchromeDriverBin=$CHROME_WEBDRIVER \
   -DhtmlReportsRelativePath=htmlReports \

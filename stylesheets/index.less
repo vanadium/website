@@ -33,7 +33,7 @@ h4, h5, h6 {
   font-weight: 500;
 }
 h1 {
-  font-size: 34px;
+  font-size: 30px;
 }
 h2 {
   font-size: 24px;
@@ -140,7 +140,14 @@ h1.title {
 /* Prevent headings from being obscured by the <header> for #heading urls. */
 main {
   h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
-    /* Prevent the :before block from obscuring the element above. */
+    /**
+     * Prevent the :before block from obscuring the element above. Note: The
+     * meaning of "obscuring" here is subtle. The "visibility: hidden" rule
+     * makes it so the :before block doesn't visually obscure anything, but it
+     * does still obscure certain UI behaviors. For example, if there's a code
+     * block with a horizontal scrollbar directly above a heading element,
+     * hovering over that scrollbar doesn't bring it into focus.
+     */
     position: relative;
     z-index: -1;
 
