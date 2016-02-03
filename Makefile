@@ -4,7 +4,6 @@ MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 
 # TODO(sadovsky):
 # - Add "site-test" unit tests
-# - Add Syncbase video
 # - "identity" subdir (needed by identity service?)
 # - deploy-production rule
 
@@ -331,7 +330,10 @@ depsOneBigJavaTutorialTest = \
 	content/$(tutJavaAndroid).md
 
 .PHONY: test
-test: test-tutorials-core test-tutorials-js-node test-tutorials-java
+test: test-site test-tutorials-core test-tutorials-js-node test-tutorials-java
+
+.PHONY: test-site
+test-site: build
 
 # Test core tutorials against an existing development install.
 #

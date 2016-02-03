@@ -4,11 +4,13 @@ sort: 5
 toc: true
 = yaml =
 
-# Overview
-
 Syncbase is a storage system for developers that makes it easy to synchronize
 app data between devices. It works even when devices are not connected to the
 Internet.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2cHzd8pBYmU" frameborder="0" allowfullscreen></iframe>
+
+# Why use Syncbase?
 
 - Synchronization between one user's devices is trivial to configure; multiple
   users can synchronize specific data too
