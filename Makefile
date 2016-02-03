@@ -24,14 +24,11 @@ node_modules: package.json
 	npm install
 	touch $@
 
-.PHONY: hljs
-hljs: node_modules
-	cp node_modules/highlight.js/styles/github.css public/css
-
-.PHONY: mdl
-mdl: node_modules
-	cp node_modules/material-design-lite/material*css* public/css
-	cp node_modules/material-design-lite/material*js* public/js
+# NOTE(sadovsky): Some files under public/{css,js} were copied over from the
+# node_modules directory as follows:
+# cp node_modules/highlight.js/styles/github.css public/css
+# cp node_modules/material-design-lite/material*css* public/css
+# cp node_modules/material-design-lite/material*js* public/js
 
 # NOTE(sadovsky): Newer versions of postcss-cli and autoprefixer use JavaScript
 # Promises, which doesn't work with Vanadium's old version of node, 0.10.24.
