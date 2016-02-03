@@ -53,10 +53,10 @@ V23_CREDENTIALS="" "${V_BIN}/deviced" start
 ```
 
 Check that the device manager service is mounted in the mount table. This
-should print `/:24000/devmgr`:
+should print `/localhost:24000/devmgr`:
 <!-- @globMountTable @test -->
 ```
-"${V_BIN}/namespace" glob "/:$PORT_MT/*"
+"${V_BIN}/namespace" glob "/localhost:$PORT_MT/*"
 ```
 
 # Claim the device manager
@@ -70,7 +70,7 @@ as `tutorial/hal`:
 
 <!-- @claimDeviceManager @test -->
 ```
-DEVICE_NAME=/:$PORT_MT/devmgr
+DEVICE_NAME=/localhost:$PORT_MT/devmgr
 "${V_BIN}/device" claim "${DEVICE_NAME}/device" hal
 "${V_BIN}/vrpc" identify "${DEVICE_NAME}/device"
 ```
@@ -104,7 +104,7 @@ echo "Instantiated and started: ${INSTANCE_NAME}"
 Verify that the fortune server app runs with the expected blessing name, `tutorial/fortune`:
 <!-- @identifyFortune @test -->
 ```
-"${V_BIN}/vrpc" identify "/:$PORT_MT/myFortunes"
+"${V_BIN}/vrpc" identify "/localhost:$PORT_MT/myFortunes"
 ```
 
 At this point, you can look at the log files from your server. To see what log files are available:
@@ -126,7 +126,7 @@ As in the [basics tutorial], use the client to make a call to the server:
 
 <!-- @fortuneClient @test -->
 ```
-"${V_TUT}/bin/client" --server "/:$PORT_MT/myFortunes"
+"${V_TUT}/bin/client" --server "/localhost:$PORT_MT/myFortunes"
 ```
 
 # Cleanup

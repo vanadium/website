@@ -53,7 +53,7 @@ program can report its [VDL interface][mounttable interface]:
 
 <!-- @queryMountTable @test -->
 ```
-$V_BIN/vrpc signature /:$PORT_MT
+$V_BIN/vrpc signature /localhost:$PORT_MT
 ```
 
 It also means that the mount table has a [principal] - it must run
@@ -90,7 +90,7 @@ tables.  The following mounts the server at the name `fortuneAlpha`.
 <!-- @mountFortune @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT \
+    --v23.namespace.root /localhost:$PORT_MT \
     mount fortuneAlpha `cat $V_TUT/s1.txt` 100m
 ```
 
@@ -112,7 +112,7 @@ names:
 <!-- @queryMountTable @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT \
+    --v23.namespace.root /localhost:$PORT_MT \
     glob -l '*'
 ```
 
@@ -130,7 +130,7 @@ When a name is known, and you just want to resolve it to an
 <!-- @resolveFortune @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT \
+    --v23.namespace.root /localhost:$PORT_MT \
     resolve fortuneAlpha
 ```
 
@@ -156,7 +156,7 @@ Now you can use the name `fortuneAlpha` instead:
 <!-- @fortuneWithTable @test -->
 ```
 $V_TUT/bin/client \
-    --v23.namespace.root /:$PORT_MT \
+    --v23.namespace.root /localhost:$PORT_MT \
     --server fortuneAlpha
 ```
 
@@ -186,7 +186,7 @@ Ommiting the flag will trigger use the following shell variable:
 
 <!-- @setNamespace @test -->
 ```
-export V23_NAMESPACE=/:$PORT_MT
+export V23_NAMESPACE=/localhost:$PORT_MT
 ```
 
 Now a fortune retrieval is as simple as:

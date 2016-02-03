@@ -185,7 +185,7 @@ $V_BIN/mounttabled \
     --v23.credentials $V_TUT/cred/prophInc \
     --v23.tcp.address :$PORT_MT &
 TUT_PID_MT=$!
-export V23_NAMESPACE=/:$PORT_MT
+export V23_NAMESPACE=/localhost:$PORT_MT
 ```
 
 Add the fortune server to the mount table at the name `prophInc`:

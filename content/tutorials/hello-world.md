@@ -213,7 +213,7 @@ Run the client to get a hello:
 ```
 $V_TUT/bin/client \
     --v23.credentials $V_TUT/cred/basics \
-    --server /:$PORT_HELLO
+    --server /localhost:$PORT_HELLO
 ```
 
 That's it - you've built and run your first Vanadium apps.

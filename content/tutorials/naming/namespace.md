@@ -48,7 +48,7 @@ below, call it `television`:
 <!-- @mountFortune @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     mount television `cat $V_TUT/server.txt` 2h
 ```
 
@@ -72,8 +72,8 @@ Mount it in table `HOME` at the name `meters`:
 <!-- @tableInATable @test -->
 ```
 $V_BIN/mounttable \
-    --v23.namespace.root /:$PORT_MT_HOME \
-    mount meters /:$PORT_MT_METERS 2h M
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
+    mount meters /localhost:$PORT_MT_METERS 2h M
 ```
 
 The trailing `M` sets a bit in the mount table noting that this
@@ -92,7 +92,7 @@ The `HOME` table now has two entries, `meters` and `television`:
 <!-- @firstGlobOfHome @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     glob '*'
 ```
 
@@ -109,14 +109,14 @@ Mount the services as `gas` and `electric` in the `METERS` table:
 <!-- @mountGas @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_METERS \
+    --v23.namespace.root /localhost:$PORT_MT_METERS \
     mount gas `cat $V_TUT/server.txt` 2h
 ```
 
 <!-- @mountElectricFortune @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_METERS \
+    --v23.namespace.root /localhost:$PORT_MT_METERS \
     mount electric `cat $V_TUT/server.txt` 2h
 ```
 
@@ -130,7 +130,7 @@ stead of `*`, try `...` as an argument to `namespace glob`:
 <!-- @queryTableInATable @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     glob '...'
 ```
 
@@ -144,7 +144,7 @@ the `gas` meter via the `HOME` table:
 <!-- @fortuneNestedInTable @test -->
 ```
 $V_TUT/bin/client \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     --server meters/gas
 ```
 
@@ -167,7 +167,7 @@ alternative to the command used above (__don't do this now!__):
 <!-- @mountElectricFortune @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     mount meters/gas `cat $V_TUT/server.txt` 2h
 ```
 
@@ -201,8 +201,8 @@ Now mount your `METERS` in it, at a particular account number
 <!-- @mountMetersInUtility @test -->
 ```
 $V_BIN/mounttable \
-    --v23.namespace.root /:$PORT_MT_UTILITY \
-    mount 12345 /:$PORT_MT_METERS 5h M
+    --v23.namespace.root /localhost:$PORT_MT_UTILITY \
+    mount 12345 /localhost:$PORT_MT_METERS 5h M
 ```
 
 The utility company can see the table you call `METERS` as an account
@@ -226,8 +226,8 @@ As an example of this, mount the `UTILITIES` table in `HOME`:
 <!-- @mountUtilitiesInHome @test -->
 ```
 $V_BIN/mounttable \
-    --v23.namespace.root /:$PORT_MT_HOME \
-    mount cityUtilities /:$PORT_MT_UTILITY 5h M
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
+    mount cityUtilities /localhost:$PORT_MT_UTILITY 5h M
 ```
 
 ![The HOME namespace](/images/tut/namespace-home-extended.svg)
@@ -239,7 +239,7 @@ Now, your television could display your gas usage by hitting the name
 <!-- @readGas @test -->
 ```
 $V_TUT/bin/client \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     --server cityUtilities/12345/gas
 ```
 
@@ -254,8 +254,8 @@ with a short name `x`:
 <!-- @mountUtilityInMeters @test -->
 ```
 $V_BIN/mounttable \
-    --v23.namespace.root /:$PORT_MT_METERS \
-    mount x /:$PORT_MT_UTILITY 5h M
+    --v23.namespace.root /localhost:$PORT_MT_METERS \
+    mount x /localhost:$PORT_MT_UTILITY 5h M
 ```
 
 Now read your gas meter via a name with cycles:
@@ -263,7 +263,7 @@ Now read your gas meter via a name with cycles:
 <!-- @longName @test -->
 ```
 $V_TUT/bin/client \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     --server meters/x/12345/x/12345/x/12345/x/12345/gas
 ```
 
@@ -275,10 +275,10 @@ Use `namespace resolve` to see that you're accessing the same service:
 <!-- @moreResolving @test -->
 ```
 name1=$($V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     resolve meters/x/12345/x/12345/x/12345/x/12345/gas)
 name2=$($V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_METERS \
+    --v23.namespace.root /localhost:$PORT_MT_METERS \
     resolve gas)
 echo "These should match:"
 echo -e "$name1\n$name2"
@@ -295,7 +295,7 @@ Take a look all at the path expansions using `namespace glob ...`:
 <!-- @queryTableInATable @test -->
 ```
 $V_BIN/namespace \
-    --v23.namespace.root /:$PORT_MT_HOME \
+    --v23.namespace.root /localhost:$PORT_MT_HOME \
     glob '...'
 ```
 

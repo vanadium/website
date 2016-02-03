@@ -237,7 +237,7 @@ $V_BIN/mounttabled \
     --v23.credentials $V_TUT/cred/basics \
     --v23.tcp.address :$PORT_MT &
 TUT_PID_MT=$!
-export V23_NAMESPACE=/:$PORT_MT
+export V23_NAMESPACE=/localhost:$PORT_MT
 ```
 
 Fire up the file server with its root directory set to "$V_TUT":
