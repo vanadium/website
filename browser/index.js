@@ -87,16 +87,14 @@ function parseSidebarProps(el) {
 }
 
 function parseTocProps() {
-  var hs = dom.all(dom.find('.content'), 'h1, h2, h3, h4');
+  // Note, we ignore nested headers such as those inside info boxes.
+  var hs = dom.all('main > h1, main > h2, main > h3, main > h4');
   var titleEl = _.find(hs, function(el) {
     return el.classList.contains('title');
   });
   var headings = [];
   _.forEach(hs, function(el) {
     if (el === titleEl || !el.id) {
-      return;
-    }
-    if (!el.parentNode.classList.contains('content')) {
       return;
     }
     headings.push({

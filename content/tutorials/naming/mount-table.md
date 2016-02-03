@@ -331,17 +331,15 @@ $V_BIN/namespace unmount fortuneAlpha `cat $V_TUT/s2.txt`
 ```
 
 {{# helpers.warning }}
-  # Optionally observe failure
+## Optionally observe failure
 
-  Optionally, confirm that client use of the unmounted name
-  `fortuneAlpha` fails.  Feel free to interrupt before the retry
-  attempts exhaust themselves.
+Optionally, confirm that client use of the unmounted name `fortuneAlpha` fails.
+Feel free to interrupt before the retry attempts exhaust themselves.
 
-  ```
-  $V_TUT/bin/client --server fortuneAlpha
-  ```
+```
+$V_TUT/bin/client --server fortuneAlpha
+```
 {{/ helpers.warning }}
-
 
 {{# helpers.hidden }}
 

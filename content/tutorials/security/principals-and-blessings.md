@@ -114,17 +114,14 @@ The second invocation takes that blessing off the pipe and
 stores it for later use by Bob when talking to Alice's server.
 
 {{# helpers.info }}
-  # Alice and Bob would typically be on different devices.
+## Alice and Bob would typically be on different devices.
 
-  A blessing does not contain any private keys and is useful only to
-  the one blessed, so it could be transferred via email without
-  compromising its purpose.
+A blessing does not contain any private keys and is useful only to the one
+blessed, so it could be transferred via email without compromising its purpose.
 
-  Blessings are transferred via pipes in this tutorial for educational
-  brevity.  Later tutorials will show (with more coding details) how a
-  blessing can directly accompany the request that the blessing
-  authorizes.
-
+Blessings are transferred via pipes in this tutorial for educational brevity.
+Later tutorials will show (with more coding details) how a blessing can directly
+accompany the request that the blessing authorizes.
 {{/ helpers.info }}
 
 ![Alice blesses Bob as a friend](/images/tut/security02-alice-blesses-bob.svg)

@@ -16,10 +16,16 @@ html {
   overflow-y: scroll;
 }
 
+html,
+body {
+  min-height: 100%;
+}
+
 body {
   position: relative;
+  display: flex;
+  flex-direction: column;
   margin: 0;
-  min-height: 0;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   line-height: 1.4;
@@ -28,6 +34,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   margin: 1.2em 0 0.4em;
+  line-height: 1.4;
 }
 h4, h5, h6 {
   font-weight: 500;
@@ -112,19 +119,15 @@ th {
 header {
   @import "header";
 
+  position: fixed;
+  top: 0;
+  width: 100%;
   z-index: 3;
 }
 
-/* The logo element appears in the header and in the sidebar. */
-.logo {
-  font-size: 20px;
-}
-
-main {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin-top: @header-height;
+/* Adjust for sidebar. */
+main,
+.previous-next {
   margin-left: @sidebar-width;
 
   @media @small-screen {
@@ -132,13 +135,19 @@ main {
   }
 }
 
-h1.title {
-  color: @color-cyan-700;
-  font-size: 40px;
-}
-
-/* Prevent headings from being obscured by the <header> for #heading urls. */
 main {
+  position: relative;
+  flex: 1;
+  margin-top: @header-height;
+  padding: 0 calc(@gutter + @gutter-half) @gutter;
+  max-width: @main-max-width;
+
+  h1.title {
+    color: @color-cyan-700;
+    font-size: 40px;
+  }
+
+  /* Prevent headings from being obscured by the <header> for #heading urls. */
   h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
     /**
      * Prevent the :before block from obscuring the element above. Note: The
@@ -161,22 +170,10 @@ main {
   }
 }
 
-.content {
-  flex: 1;
-  padding: 0 calc(@gutter + @gutter-half) @gutter;
-  max-width: @main-max-width;
-}
-
-.note {
-  @import "note";
-}
-
 .previous-next {
   @import "previous-next";
-}
 
-.sidebar-data {
-  display: none;
+  margin-top: @gutter;
 }
 
 .sidebar {
@@ -211,4 +208,17 @@ main {
     bottom: 0;
     width: @sidebar-width;
   }
+}
+
+.sidebar-data {
+  display: none;
+}
+
+/* The logo element appears in the header and in the sidebar. */
+.logo {
+  font-size: 20px;
+}
+
+.note {
+  @import "note";
 }

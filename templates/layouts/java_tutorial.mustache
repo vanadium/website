@@ -5,25 +5,23 @@
     {{> partials/header }}
     {{> partials/sidebar }}
     <main>
-      <div class="content">
-        <h1 class="title">
-          {{# page.fullTitle }}{{ page.fullTitle }}{{/ page.fullTitle }}
-          {{^ page.fullTitle }}{{ page.title }}{{/ page.fullTitle }}
-        </h1>
+      <h1 class="title">
+        {{# page.fullTitle }}{{ page.fullTitle }}{{/ page.fullTitle }}
+        {{^ page.fullTitle }}{{ page.title }}{{/ page.fullTitle }}
+      </h1>
 
-        {{# page.wherein }}
-        <p class="wherein"><strong>Wherein</strong> {{ page.wherein }}</p>
-        {{/ page.wherein }}
+      {{# page.wherein }}
+      <p class="wherein"><strong>Wherein</strong> {{ page.wherein }}</p>
+      {{/ page.wherein }}
 
-        {{# page.toc }}
-        <div class="toc"></div>
-        {{/ page.toc }}
+      {{# page.toc }}
+      <div class="toc"></div>
+      {{/ page.toc }}
 
-        {{> partials/java_tut_prereqs }}
+      {{> partials/java_tut_prereqs }}
 
-        {{{ yield }}}
-      </div>
-      {{> partials/previous_next }}
+      {{{ yield }}}
     </main>
+    {{> partials/previous_next }}
   </body>
 </html>

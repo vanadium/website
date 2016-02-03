@@ -469,11 +469,10 @@ to `$V_TUT/server.txt`.  The client will read it shortly.
 
 
 {{# helpers.warning }}
-  # Warning - the next command demonstrates failure!
+## Warning: The next command demonstrates failure!
 
-   The correct pieces are in place to attempt a request - but the next
-   command shows that you've not yet established the conditions for
-   authorization.
+The correct pieces are in place to attempt a request - but the next command
+shows that you've not yet established the conditions for authorization.
 
 {{/ helpers.warning }}
 
