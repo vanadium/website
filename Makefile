@@ -2,6 +2,10 @@ SHELL := /bin/bash -euo pipefail
 PATH := node_modules/.bin:$(PATH)
 MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 
+# Add node/npm to PATH.
+NODE_DIR := $(shell jiri v23-profile list --info Target.InstallationDir nodejs)
+export PATH := $(NODE_DIR)/bin:$(PATH)
+
 # TODO(sadovsky):
 # - Add "site-test" unit tests
 # - "identity" subdir (needed by identity service?)
@@ -29,6 +33,8 @@ mdl: node_modules
 	cp node_modules/material-design-lite/material*css* public/css
 	cp node_modules/material-design-lite/material*js* public/js
 
+# NOTE(sadovsky): Newer versions of postcss-cli and autoprefixer use JavaScript
+# Promises, which doesn't work with Vanadium's old version of node, 0.10.24.
 public/css/bundle.css: $(shell find stylesheets) node_modules
 	lessc -sm=on stylesheets/index.less | postcss -u autoprefixer > $@
 
@@ -36,7 +42,7 @@ public/js/bundle.js: browser/index.js $(shell find browser) node_modules
 	$(call BROWSERIFY,$<,$@)
 
 ################################################################################
-# Build and serve
+# Build, serve, and deploy
 
 build: $(MDRIP) node_modules hljs mdl public/css/bundle.css public/js/bundle.js gen-scripts
 	haiku build --helpers helpers.js --build-dir $@
@@ -44,6 +50,18 @@ build: $(MDRIP) node_modules hljs mdl public/css/bundle.css public/js/bundle.js 
 .PHONY: serve
 serve: build
 	@static build -H '{"Cache-Control": "no-cache, must-revalidate"}'
+
+TMPDIR := $(shell mktemp -d "/tmp/XXXXXX")
+HEAD := $(shell git rev-parse HEAD)
+
+# TODO(sadovsky): Check that we're in a clean master branch. Also, automate
+# deployment so that changes are picked up automatically.
+.PHONY: deploy
+deploy: clean build
+	git clone git@github.com:vanadium/vanadium.github.io.git $(TMPDIR)
+	rm -rf $(TMPDIR)/*
+	rsync -r build/* $(TMPDIR)
+	cd $(TMPDIR) && git add -A && git commit -m 'pull $(HEAD)' && git push
 
 ################################################################################
 # Clean and lint
