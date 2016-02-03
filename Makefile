@@ -47,7 +47,7 @@ public/js/bundle.js: browser/index.js $(shell find browser) node_modules
 	$(call BROWSERIFY,$<,$@)
 
 ################################################################################
-# Build, serve, and deploy
+# Build, serve, watch and deploy
 
 build: $(MDRIP) node_modules public/css/bundle.css public/js/bundle.js gen-scripts
 	haiku build --helpers helpers.js --build-dir $@
@@ -55,6 +55,13 @@ build: $(MDRIP) node_modules public/css/bundle.css public/js/bundle.js gen-scrip
 .PHONY: serve
 serve: build
 	@static build -H '{"Cache-Control": "no-cache, must-revalidate"}'
+
+# 'entr' can be installed on Debian/Ubuntu using 'apt-get install
+# entr' and 'brew install entr' on OS X.
+.PHONY: watch
+watch: browser/ content/ public/ stylesheets/ templates/
+	@echo "Watching for changes in $^"
+	@find $^ | entr $(MAKE) build
 
 TMPDIR := $(shell mktemp -d "/tmp/XXXXXX")
 HEAD := $(shell git rev-parse HEAD)
