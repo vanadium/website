@@ -27,7 +27,7 @@ environment defined below.
 # from the installation instructions and hope for the best.
 
 [ -z "$JIRI_ROOT" ] && export JIRI_ROOT=${HOME}/v23_root
-[ -z "V23_RELEASE" ] && export V23_RELEASE=${JIRI_ROOT}/release/go
+[ -z "$V23_RELEASE" ] && export V23_RELEASE=${JIRI_ROOT}/release/go
 
 # All files created by the tutorial will be placed in $V_TUT. It is a disposable
 # workspace, easy to recreate.
