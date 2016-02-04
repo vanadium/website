@@ -17,6 +17,7 @@ a {
   }
 }
 
+/* Similar to .logo-row in sidebar.less. */
 .row {
   display: flex;
   align-items: center;
@@ -24,12 +25,24 @@ a {
   height: @header-height;
 
   .icon {
+    margin: 0 @gutter-quarter 0 calc(12px - @gutter);
+  }
+
+  .menu {
     display: none;
 
     @media @small-screen {
       display: block;
-      margin: 0 @gutter-half 0 calc(12px - @gutter);
       padding: 12px;
+    }
+  }
+
+  .v-icon {
+    padding: 6px;
+    cursor: auto;
+
+    @media @small-screen {
+      display: none;
     }
   }
 }

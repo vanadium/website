@@ -86,7 +86,12 @@ module.exports = React.createClass({
   displayName: 'Sidebar',
   render: function() {
     return h('div', [
-      h('div.logo', 'Vanadium'),
+      h('div.logo-row', [
+        h('div.icon.v-icon', {}, h('img', {
+          src: '/images/v-icon-cyan-700.svg'
+        })),
+        h('div.logo', 'Vanadium')
+      ]),
       h('div.items', renderItems(this.props.items))
     ]);
   }

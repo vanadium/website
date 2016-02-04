@@ -9,11 +9,22 @@
   background-color: @color-grey-100;
 }
 
-.logo {
+/* Similar to .row in header.less. */
+.logo-row {
   display: flex;
   align-items: center;
+  padding: 0 @gutter;
   height: @header-height;
-  padding-left: @gutter;
+  color: @color-cyan-700;
+
+  .icon {
+    margin: 0 @gutter-quarter 0 calc(12px - @gutter);
+  }
+
+  .v-icon {
+    padding: 6px;
+    cursor: auto;
+  }
 }
 
 .items {

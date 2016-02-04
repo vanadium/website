@@ -16,9 +16,9 @@ tests, tutorial preparation, etc.
 ```
 function bad_vanadium() {
   echo '
-  Per https://vanadium.github.io/installation, either
+  Per https://vanadium.github.io/installation/, either
 
-    export V23_RELEASE={your installation directory}
+    export JIRI_ROOT={your installation directory}
 
   or do a fresh install.';
   exit 1;

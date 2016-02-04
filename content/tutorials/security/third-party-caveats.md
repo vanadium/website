@@ -486,7 +486,7 @@ Behind the URL is an [identity provider], an instance of Vanadium's
 [identityd], [self-blessed][self-blessing] with the name `dev.v.io`.
 
 A web server associated with that provider told the browser to send
-its user - _you_ - to Google for login, then to an [Oauth] grant
+its user - _you_ - to Google for login, then to an [OAuth] grant
 screen.  After completing that, it gave you a form for creating a
 blessing.  When you clicked __Bless__, the form was submitted, and the
 provider sent an RPC with the resulting blessing to the aforementioned
