@@ -2,8 +2,11 @@ SHELL := /bin/bash -euo pipefail
 PATH := node_modules/.bin:$(PATH)
 MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 
-# Add node/npm to PATH.
+# Add node to PATH.
 NODE_DIR := $(shell jiri v23-profile list --info Target.InstallationDir nodejs)
+# Run npm using 'node npm' to avoid relying on the shebang line in the npm
+# script, which can exceed the Linux shebang length limit on Jenkins.
+NPM := node $(NODE_DIR)/bin/npm
 export PATH := $(NODE_DIR)/bin:$(PATH)
 
 # TODO(sadovsky):
@@ -20,8 +23,8 @@ endef
 .DEFAULT_GOAL := build
 
 node_modules: package.json
-	npm prune
-	npm install
+	$(NPM) prune
+	$(NPM) install
 	touch $@
 
 # NOTE(sadovsky): Some files under public/{css,js} were copied over from the
