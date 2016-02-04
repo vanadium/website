@@ -18,6 +18,10 @@ pre {
   margin: 0 -@gutter-half;
   width: @pre-width;
 
+  @media @small-screen {
+    width: auto;
+  }
+
   /* Include <pre> because clipboard buttons are in <pre>, not <code>. */
   &, & code, & .hljs {
     &:not(.noclipboard) {
