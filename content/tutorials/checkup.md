@@ -16,7 +16,7 @@ tests, tutorial preparation, etc.
 ```
 function bad_vanadium() {
   echo '
-  Per https://v.io/installation/, either
+  Per https://vanadium.github.io/installation, either
 
     export V23_RELEASE={your installation directory}
 
