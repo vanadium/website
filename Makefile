@@ -56,8 +56,8 @@ build: $(MDRIP) node_modules public/css/bundle.css public/js/bundle.js gen-scrip
 serve: build
 	@static build -H '{"Cache-Control": "no-cache, must-revalidate"}'
 
-# 'entr' can be installed on Debian/Ubuntu using 'apt-get install
-# entr' and 'brew install entr' on OS X.
+# 'entr' can be installed on Debian/Ubuntu using 'apt-get install entr', and on
+# OS X using 'brew install entr'.
 .PHONY: watch
 watch: browser/ content/ public/ stylesheets/ templates/
 	@echo "Watching for changes in $^"
