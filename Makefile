@@ -41,7 +41,7 @@ public/js/bundle.js: browser/index.js $(shell find browser) node_modules
 ################################################################################
 # Build, serve, and deploy
 
-build: $(MDRIP) node_modules hljs mdl public/css/bundle.css public/js/bundle.js gen-scripts
+build: $(MDRIP) node_modules public/css/bundle.css public/js/bundle.js gen-scripts
 	haiku build --helpers helpers.js --build-dir $@
 
 .PHONY: serve
