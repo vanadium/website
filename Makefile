@@ -2,12 +2,20 @@ SHELL := /bin/bash -euo pipefail
 PATH := node_modules/.bin:$(PATH)
 MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 
-# Add node to PATH.
+.DELETE_ON_ERROR:
+.DEFAULT_GOAL := build
+
+# Add node and npm to PATH. Note, we run npm using 'node npm' to avoid relying
+# on the shebang line in the npm script, which can exceed the Linux shebang
+# length limit on Jenkins.
 NODE_DIR := $(shell jiri v23-profile list --info Target.InstallationDir nodejs)
-# Run npm using 'node npm' to avoid relying on the shebang line in the npm
-# script, which can exceed the Linux shebang length limit on Jenkins.
-NPM := node $(NODE_DIR)/bin/npm
-export PATH := $(NODE_DIR)/bin:$(PATH)
+NPM_DIR := $(shell mktemp -d "/tmp/XXXXXX")
+export PATH := $(NPM_DIR):$(NODE_DIR)/bin:$(PATH)
+
+.PHONY: npm-executable
+npm-executable:
+	echo 'node $(NODE_DIR)/bin/npm "$$@"' > $(NPM_DIR)/npm
+	chmod +x $(NPM_DIR)/npm
 
 # TODO(sadovsky):
 # - Add "site-test" unit tests
@@ -19,12 +27,9 @@ define BROWSERIFY
 	browserify $1 -d -o $2
 endef
 
-.DELETE_ON_ERROR:
-.DEFAULT_GOAL := build
-
-node_modules: package.json
-	$(NPM) prune
-	$(NPM) install
+node_modules: package.json npm-executable
+	npm prune
+	npm install
 	touch $@
 
 # NOTE(sadovsky): Some files under public/{css,js} were copied over from the
@@ -61,7 +66,7 @@ deploy: clean build
 	git clone git@github.com:vanadium/vanadium.github.io.git $(TMPDIR)
 	rm -rf $(TMPDIR)/*
 	rsync -r build/* $(TMPDIR)
-	cd $(TMPDIR) && git add -A && git commit -m 'pull $(HEAD)' && git push
+	cd $(TMPDIR) && git add -A && git commit -m "pull $(HEAD)" && git push
 
 ################################################################################
 # Clean and lint
@@ -79,8 +84,8 @@ BANNED_WORDS := Javascript node.js Oauth
 .PHONY: banned_words
 banned_words:
 	@for WORD in $(BANNED_WORDS); do \
-		if [ -n "`grep -rn "$$WORD" content templates`" ]; then \
-		  echo "`grep -rn "$$WORD" content templates`"; \
+		if [ -n '`grep -rn "$$WORD" content templates`' ]; then \
+		  echo '`grep -rn "$$WORD" content templates`'; \
 		  echo "Found banned word (case-sensitive): $$WORD"; \
 		  exit 1; \
 		fi \
