@@ -80,7 +80,7 @@ curl -f https://vanadium.github.io/bootstrap.sh | bash
 Add `$JIRI_ROOT/devtools/bin` to your `PATH`, for `jiri`:
 <!-- @addDevtoolsToPath @test -->
 ```
-export PATH=$PATH:$JIRI_ROOT/devtools/bin
+export PATH=$JIRI_ROOT/devtools/bin:$PATH
 ```
 
 Recommended for contributors: Add the line above to your `~/.bashrc` or similar.
