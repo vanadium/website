@@ -222,8 +222,8 @@ database with rows like:
     <list2 uuid>/entries/<uuid> -> Entry
     <list2 uuid>/entries/<uuid> -> Entry
 
-The app could then create two syncgroups: one with the prefix "<list1 uuid>" and
-another with the prefix "<list2 uuid>". Another user's "<list3 uuid>" syncgroup
+The app could then create two syncgroups: one with the prefix `<list1 uuid>` and
+another with the prefix `<list2 uuid>`. Another user's `<list3 uuid>` syncgroup
 could be added directly to this database. It is important that the developer use
 UUIDs to avoid conflicts. However, the system does not enforce that the
 developer use UUIDs because there are times when the developer might actually
