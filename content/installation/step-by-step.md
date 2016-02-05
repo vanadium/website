@@ -64,6 +64,23 @@ this directory, as follows:
 export V23_RELEASE=${JIRI_ROOT}/release/go
 ```
 
+# Start from a clean slate
+
+The `bootstrap.sh` script checks that the `JIRI_ROOT` directory does not yet
+exist, then creates it. So, let's blow away `JIRI_ROOT` if it exists.
+
+{{# helpers.warning }}
+## Danger!
+This will blow away your `JIRI_ROOT` directory, including any pending changes to
+repositories in that directory. Make sure you're not deleting something
+important.
+{{/ helpers.warning }}
+<!-- @define_rmrf_JIRI_ROOT @test -->
+```
+# WARNING: Make sure you're not deleting something important.
+rm -rf $JIRI_ROOT
+```
+
 # Fetch Vanadium repositories
 
 Run the `bootstrap.sh` script. This script will (1) install the `jiri` tool in
