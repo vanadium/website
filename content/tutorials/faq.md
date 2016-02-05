@@ -136,5 +136,5 @@ var config = {
 [bash scripts]: #why-bash-
 [HERE documents]: http://tldp.org/LDP/abs/html/here-docs.html
 [vanadium/website]: https://github.com/vanadium/website
-[API references]: /docs.html
+[API references]: /api-reference.html
 [Vanadium Chrome extension]: /tools/vanadium-chrome-extension.html
