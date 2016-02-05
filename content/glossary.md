@@ -414,13 +414,13 @@ via WebSocket.
 WSPR as a concept will move from a freestanding server into a browser
 extension, and ultimately become native to browsers.
 
-[naming-concepts]: concepts/naming.html
-[rpc-concepts]: concepts/rpc.html
-[vdl-spec]: designdocs/vdl-spec.html
-[vom-spec]: designdocs/vom-spec.html
+[naming-concepts]: /concepts/naming.html
+[rpc-concepts]: /concepts/rpc.html
+[vdl-spec]: /designdocs/vdl-spec.html
+[vom-spec]: /designdocs/vom-spec.html
 [gob]: http://golang.org/pkg/encoding/gob/
 [key pair]: http://en.wikipedia.org/wiki/Public-key_cryptography
 [certificate forging]: https://www.linshunghuang.com/papers/mitm.pdf
 [ssh-agent]: http://en.wikipedia.org/wiki/Ssh-agent
 [vanadium-element]: http://en.wikipedia.org/wiki/Vanadium
-[Security Concepts]: concepts/security.html
+[Security Concepts]: /concepts/security.html

@@ -67,7 +67,7 @@ page JavaScript, then to the content script running on the same tab as the web
 app, and finally to the web app.
 
 [background page]: https://developer.chrome.com/extensions/background_pages "Background Pages"
-[blessing]: ../glossary.html#blessing
+[blessing]: /glossary.html#blessing
 [content script]: https://developer.chrome.com/extensions/content_scripts "Content Scripts"
 [Go]: http://golang.org/ "The Go Programming Language"
 [Native Client]: https://developer.chrome.com/native-client "Native Client"

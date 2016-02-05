@@ -113,10 +113,9 @@ If you must write a shell script, follow the
 [Effective Go]: http://golang.org/doc/effective_go.html
 [Google Shell Style Guide]: https://google-styleguide.googlecode.com/svn/trunk/shell.xml
 [Node.js Style Guide]: https://github.com/felixge/node-style-guide
-[RPC]: ../glossary.html#remote-procedure-call-rpc-
-[VDL]: ../glossary.html#vandium-definition-language-vdl-
+[RPC]: /glossary.html#remote-procedure-call-rpc-
+[VDL]: /glossary.html#vandium-definition-language-vdl-
 [brad talk]: http://talks.golang.org/2014/gocon-tokyo.slide#36
-[contributor installation]: contributing.html#repositories
 [git repositories]: https://github.com/vanadium
 [gofmt]: https://golang.org/cmd/gofmt/
 [packages]: https://golang.org/doc/code.html#PackagePaths

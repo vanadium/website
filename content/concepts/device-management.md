@@ -113,4 +113,4 @@ user may allow or disallow based on their personal comfort level and/or on the
 perceived value of the app feature requesting the new capability.
 
 [docker]: https://www.docker.com/
-[vanadium-security]: security.html
+[vanadium-security]: /concepts/security.html

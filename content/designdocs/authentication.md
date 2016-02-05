@@ -125,11 +125,11 @@ Pointers to code in the reference implementation of the Vanadium APIs:
   - To prevent active network attackers from learning the Client's blessings.
 
 [authenticated-encryption]: http://en.wikipedia.org/wiki/Authenticated_encryption
-[security concepts]: ../concepts/security.html
+[security concepts]: /concepts/security.html
 [Elliptic curve Diffie-Hellman]: http://en.wikipedia.org/wiki/Elliptic_curve_Diffie%E2%80%93Hellman
 [session resumption is not used]: https://secure-resumption.com/#channelbindings
 [channel ids]: http://tools.ietf.org/html/draft-balfanz-tls-channelid-00
-[principal]: ../glossary.html#principal
+[principal]: /glossary.html#principal
 [`v.io/v23/security.Blessings`]: https://godoc.org/v.io/v23/security#Blessings
 [`v.io/v23/security.Principal`]: https://godoc.org/v.io/v23/security#Principal
 [`v.io/x/ref/runtime/internal/rpc/stream`]: https://godoc.org/v.io/x/ref/runtime/internal/rpc/stream

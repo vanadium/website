@@ -177,10 +177,10 @@ issues.
 *  [v.io/review](https://v.io/review): Takes you to your review dashboard.
 *  v.io/c/[num]: Takes you to the review for a specific change.
 
-[installation instructions]: ../installation/
+[installation instructions]: /installation/
 [cla]: https://cla.developers.google.com/about/google-individual?csw=1
 [corp-cla]: https://cla.developers.google.com/about/google-corporate?csw=1
 [issue tracker]: https://github.com/vanadium/issues/issues
 [git]: http://git-scm.com/
 [gerrit]: https://vanadium-review.googlesource.com
-[jiri]: ../tools/jiri.html
+[jiri]: /tools/jiri.html

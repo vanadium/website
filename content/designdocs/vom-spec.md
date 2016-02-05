@@ -297,8 +297,8 @@ type WireOptional struct {
 }
 ```
 
-[VDL]: vdl-spec.html
-[VDL type system]: vdl-spec.html#types
-[RPC]: ../concepts/rpc.html
+[VDL]: /designdocs/vdl-spec.html
+[VDL type system]: /designdocs/vdl-spec.html#types
+[RPC]: /concepts/rpc.html
 [gob]: http://golang.org/pkg/encoding/gob/
 [IEEE 754]: http://en.wikipedia.org/wiki/IEEE_floating_point

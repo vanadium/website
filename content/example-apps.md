@@ -52,7 +52,7 @@ For more information, see the [README][p2b-readme] as well as the help page
 inside a running instance of the P2B application.
 
 [todos]: https://github.com/vanadium/todos
-[syncbase]: /syncbase/index.html
+[syncbase]: /concepts/syncbase-overview.html
 [todos-readme]: https://github.com/vanadium/todos/blob/master/README.md
 [chat]: https://github.com/vanadium/chat
 [web client]: https://chat.v.io

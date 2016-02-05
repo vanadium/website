@@ -146,4 +146,4 @@ grouping.
 [DNS]: http://en.wikipedia.org/wiki/Domain_Name_System
 [forest]: http://en.wikipedia.org/wiki/Forest_(graph_theory)#forest
 [Unix Filesystem]: http://en.wikipedia.org/wiki/Unix_File_System
-[endpoint]: ../glossary.html#endpoint
+[endpoint]: /glossary.html#endpoint

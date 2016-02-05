@@ -42,7 +42,7 @@ the principal that the tool is running as.
 
 Before diving into the details of [`identityd`]'s design, some prerequisites:
 
-- [Principals, Blessings and Caveats](../concepts/security.html).
+- [Principals, Blessings and Caveats](/concepts/security.html).
 - Third-party caveats: In a nutshell, a third-party caveat is a restriction on
   the use of a blessing that must be validated by a party other than the two
   communicating with and authorizing each other. The [blessing] with a
@@ -203,15 +203,15 @@ Revocation can be triggered by clicking buttons on https://dev.v.io/auth/google/
 
 
 [`identityd`]: https://github.com/vanadium/go.ref/tree/master/services/identity/identityd
-[blessing]: ../glossary.html#blessing
-[discharge]: ../glossary.html#discharge
+[blessing]: /glossary.html#blessing
+[discharge]: /glossary.html#discharge
 [OAuth2]: http://oauth.net/2/
-[caveat]: ../glossary.html#caveat
+[caveat]: /glossary.html#caveat
 [HMAC]: http://en.wikipedia.org/wiki/Hash-based_message_authentication_code
 [`principal`]: https://github.com/vanadium/go.ref/tree/master/cmd/principal
 [web service flow]: https://developers.google.com/accounts/docs/OAuth2WebServer
-[blessing root]: ../glossary.html#blessing-root
-[authentication protocol]: authentication.html
+[blessing root]: /glossary.html#blessing-root
+[authentication protocol]: /designdocs/authentication.html
 [_Expiry_]: https://github.com/vanadium/go.v23/blob/master/security/caveat.vdl
 [_Method_]: https://github.com/vanadium/go.v23/blob/master/security/caveat.vdl
 [_PeerBlessings_]: https://github.com/vanadium/go.v23/blob/master/security/caveat.vdl

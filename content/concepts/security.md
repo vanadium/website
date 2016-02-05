@@ -359,7 +359,7 @@ blessing from Alice.
 [Public-key certificate]: http://en.wikipedia.org/wiki/Public_key_certificate
 [Forward-secrecy]: http://en.wikipedia.org/wiki/Forward_secrecy
 [NaCl box]: http://nacl.cr.yp.to/box.html
-[Vanadium authentication protocol]: ../designdocs/authentication.html
+[Vanadium authentication protocol]: /designdocs/authentication.html
 [TPM]: http://en.wikipedia.org/wiki/Trusted_Platform_Module
 [Simple Distributed Security Infrastructure]: http://people.csail.mit.edu/rivest/sdsi11.html#secoverview
 [personally identifiable information]: http://en.wikipedia.org/wiki/Personally_identifiable_information

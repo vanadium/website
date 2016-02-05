@@ -3,88 +3,69 @@ PATH := node_modules/.bin:$(PATH)
 MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 
 .DELETE_ON_ERROR:
-.DEFAULT_GOAL := build
+.DEFAULT_GOAL := all
+
+#############################################################################
+# A note about debugging this Makefile
+#
+# Due to the way testing is managed there is a somewhat complex set of tasks
+# and dependencies which can be hard to get a sense of by looking at the
+# definitions in this Makefile. Additionally, targets for creating and testing
+# shell scripts from tutorial content can take a while to run. Some tips are
+# below to help anyone who might need to make edits or additions.
+#
+# Run a task with make's debug output. This will show information about the
+# target being run as well as it's prerequisites and whether make will rebuild
+# the target.
+#
+#     make <target> --debug
+#
+# Force the target and all prerequisites to build regardless of mtimes:
+#
+#     make <target> --always-make
+#
+# Do a dry run, this will spit out what will happen without actually building
+# the targets. This is probably helpful for creating new targets with
+# complex and/or slow prerequisites.
+#
+#     make <target> --dry-run
+#
+
+#############################################################################
+# Tooling and infrastructure
 
 # Add node and npm to PATH. Note, we run npm using 'node npm' to avoid relying
 # on the shebang line in the npm script, which can exceed the Linux shebang
 # length limit on Jenkins.
 NODE_DIR := $(shell jiri v23-profile list --info Target.InstallationDir nodejs)
+# Once the JS tutorials stop running npm, we can simplify this to setting
+# npm := node $(NODE_DIR)/bin/npm and using $(npm) in place of npm elsewhere
+# in this file.
 NPM_DIR := $(shell mktemp -d "/tmp/XXXXXX")
 export PATH := $(NPM_DIR):$(NODE_DIR)/bin:$(PATH)
 
-.PHONY: npm-executable
-npm-executable:
-	echo 'node $(NODE_DIR)/bin/npm "$$@"' > $(NPM_DIR)/npm
-	chmod +x $(NPM_DIR)/npm
+# SEE: https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
+npm = $(NPM_DIR)/npm
+.INTERMEDIATE: $(npm)
+$(npm):
+	echo 'node $(NODE_DIR)/bin/npm "$$@"' > $(npm)
+	chmod +x $(npm)
 
-# TODO(sadovsky):
-# - Add "site-test" unit tests
-# - "identity" subdir (needed by identity service?)
-# - deploy-production rule
+# mdrip is a tool for extracting shell scripts from any markdown content which
+# might have code blocks in it (like the tutorials). The mdrip tool is also
+# capable of running the extracted code in a subshell, simulating a user
+# stepping through the tutorials in a step by step fashion.
+$(MDRIP):
+	jiri go install github.com/monopole/mdrip
 
-define BROWSERIFY
-	@mkdir -p $(dir $2)
-	browserify $1 -d -o $2
-endef
-
-node_modules: package.json npm-executable
-	npm prune
-	npm install
-	touch $@
-
-# NOTE(sadovsky): Some files under public/{css,js} were copied over from the
-# node_modules directory as follows:
-# cp node_modules/highlight.js/styles/github.css public/css
-# cp node_modules/material-design-lite/material*css* public/css
-# cp node_modules/material-design-lite/material*js* public/js
-
-# NOTE(sadovsky): Newer versions of postcss-cli and autoprefixer use JavaScript
-# Promises, which doesn't work with Vanadium's old version of node, 0.10.24.
-public/css/bundle.css: $(shell find stylesheets) node_modules
-	lessc -sm=on stylesheets/index.less | postcss -u autoprefixer > $@
-
-public/js/bundle.js: browser/index.js $(shell find browser) node_modules
-	$(call BROWSERIFY,$<,$@)
-
-################################################################################
-# Build, serve, watch and deploy
-
-build: $(MDRIP) node_modules public/css/bundle.css public/js/bundle.js gen-scripts
-	haiku build --helpers helpers.js --build-dir $@
-
-.PHONY: serve
-serve: build
-	@static build -H '{"Cache-Control": "no-cache, must-revalidate"}'
-
-# 'entr' can be installed on Debian/Ubuntu using 'apt-get install entr', and on
-# OS X using 'brew install entr'.
-.PHONY: watch
-watch: browser/ content/ public/ stylesheets/ templates/
-	@echo "Watching for changes in $^"
-	@find $^ | entr $(MAKE) build
+#############################################################################
+# Variables, functions, and helpers
 
 TMPDIR := $(shell mktemp -d "/tmp/XXXXXX")
 HEAD := $(shell git rev-parse HEAD)
 
-# TODO(sadovsky): Check that we're in a clean master branch. Also, automate
-# deployment so that changes are picked up automatically.
-.PHONY: deploy
-deploy: clean build
-	git clone git@github.com:vanadium/vanadium.github.io.git $(TMPDIR)
-	rm -rf $(TMPDIR)/*
-	rsync -r build/* $(TMPDIR)
-	cd $(TMPDIR) && git add -A && git commit -m "pull $(HEAD)" && git push
-
-################################################################################
-# Clean and lint
-
-.PHONY: clean
-clean:
-	rm -rf build node_modules public/**/bundle.* public/sh public/tutorials
-
-.PHONY: lint banned_words
-lint: banned_words node_modules
-	jshint .
+bundles := public/css/bundle.css public/js/bundle.js
+haiku_inputs := $(shell find public/* content/* templates/*)
 
 # A list of case-sensitive banned words.
 BANNED_WORDS := Javascript node.js Oauth
@@ -98,8 +79,15 @@ banned_words:
 		fi \
 	done
 
-################################################################################
-# Tutorial script generation and tests
+define BROWSERIFY
+	@mkdir -p $(dir $2)
+	browserify $1 -d -o $2
+endef
+
+#############################################################################
+# Variables, functions, and helpers
+#
+# It's important these are defined above any targets that may depend on them.
 
 install_md = installation/step-by-step.md
 install_sh = public/sh/vanadium-install.sh
@@ -154,12 +142,81 @@ setupScripts = \
 	$(scenario)-e-setup.sh \
 	$(scenario)-f-setup.sh
 
+depsCommon = \
+	content/$(tutSetup).md \
+	content/$(tutCheckup).md \
+	content/$(tutWipeSlate).md
+
 # This target builds the hosted web assets for the JavaScript tutorials.
 jsTutorialResults := public/tutorials/javascript/results
 
-# Install mdrip if needed.
-$(MDRIP):
-	jiri go install github.com/monopole/mdrip
+scripts := $(completerScripts) $(setupScripts) $(jsTutorialResults)
+
+#############################################################################
+# Target definitions
+
+# Silence error output "make: `build' is up to date." for tools like watch by
+# adding @true.
+.PHONY: all
+all: build
+	@true
+
+node_modules: package.json | $(npm)
+	npm prune
+	npm install
+	touch $@
+
+# NOTE(sadovsky): Some files under public/{css,js} were copied over from the
+# node_modules directory as follows:
+# cp node_modules/highlight.js/styles/github.css public/css
+# cp node_modules/material-design-lite/material*css* public/css
+# cp node_modules/material-design-lite/material*js* public/js
+
+# NOTE(sadovsky): Newer versions of postcss-cli and autoprefixer use JavaScript
+# Promises, which doesn't work with Vanadium's old version of node, 0.10.24.
+public/css/bundle.css: $(shell find stylesheets/*) node_modules
+	lessc -sm=on stylesheets/index.less | postcss -u autoprefixer > $@
+
+public/js/bundle.js: browser/index.js $(shell find browser) node_modules
+	$(call BROWSERIFY,$<,$@)
+
+build: $(bundles) $(scripts) $(haiku_inputs) node_modules | $(MDRIP)
+	haiku build --helpers helpers.js --build-dir $@
+	@touch $@
+
+################################################################################
+# Task definitions, targets without build artifacts.
+
+.PHONY: serve
+serve: build
+	@static build -H '{"Cache-Control": "no-cache, must-revalidate"}'
+
+# 'entr' can be installed on Debian/Ubuntu using 'apt-get install entr', and on
+# OS X using 'brew install entr'.
+.PHONY: watch
+watch: browser/ content/ public/ stylesheets/ templates/
+	@echo "Watching for changes in $^"
+	@find $^ | entr $(MAKE) build
+
+# TODO(sadovsky): Check that we're in a clean master branch. Also, automate
+# deployment so that changes are picked up automatically.
+.PHONY: deploy
+deploy: clean build
+	git clone git@github.com:vanadium/vanadium.github.io.git $(TMPDIR)
+	rm -rf $(TMPDIR)/*
+	rsync -r build/* $(TMPDIR)
+	cd $(TMPDIR) && git add -A && git commit -m "pull $(HEAD)" && git push
+
+.PHONY: clean
+clean:
+	rm -rf build node_modules public/**/bundle.* public/sh public/tutorials
+
+.PHONY: lint banned_words
+lint: banned_words node_modules
+	jshint .
+
+################################################################################
+# Tutorial script generation and tests
 
 # Vanadium install script.
 # This can be run as a prerequisite for tutorial setup.
@@ -185,11 +242,6 @@ $(scenario)-a-setup.sh: \
 	content/$(tutCheckup).md | $(MDRIP)
 	mkdir -p $(@D)
 	$(MDRIP) --preambled 0 completer $^ > $@
-
-depsCommon = \
-	content/$(tutSetup).md \
-	content/$(tutCheckup).md \
-	content/$(tutWipeSlate).md
 
 # Targets of the from test-{tutorial-name} are meant for interactive use to test
 # an individual tutorial and/or extract the code associated with said tutorial.
@@ -363,7 +415,8 @@ depsOneBigJavaTutorialTest = \
 test: test-site test-tutorials-core test-tutorials-js-node test-tutorials-java
 
 .PHONY: test-site
-test-site: build
+test-site: build node_modules
+	tape test/test-*.js
 
 # Test core tutorials against an existing development install.
 #
@@ -467,6 +520,3 @@ $(jsTutorialResults): $(depsJSTutorialResults) | $(MDRIP)
 	jiri go install v.io/v23/... v.io/x/ref/...
 	V_TUT=$(abspath $@) $(MDRIP) --subshell --blockTimeOut 1m buildjs $^
 	rm -rf $(abspath $@)/node_modules
-
-.PHONY: gen-scripts
-gen-scripts: $(completerScripts) $(setupScripts) $(jsTutorialResults)

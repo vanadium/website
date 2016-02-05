@@ -75,9 +75,9 @@ services hosted at v.io.
 
 https://github.com/vanadium/go.ref/services/identity/identityd/main.go
 
-[blessing root]: ../glossary.html#blessing-root
-[Vanadium Security Model]: ../concepts/security.html
-[principals]: ../glossary.html#principal
-[design-doc]: ../designdocs/identity-service.html
-[terms of service]: ../tos.html
-[discharge]: ../glossary.html#discharge
+[blessing root]: /glossary.html#blessing-root
+[Vanadium Security Model]: /concepts/security.html
+[principals]: /glossary.html#principal
+[design-doc]: /designdocs/identity-service.html
+[terms of service]: /tos.html
+[discharge]: /glossary.html#discharge

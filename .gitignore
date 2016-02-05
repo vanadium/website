@@ -1,6 +1,7 @@
 /.jiri
 /build
 /node_modules
+# Files compiled via browserify and LESS.
 /public/**/bundle.*
 /public/sh
 /public/tutorials

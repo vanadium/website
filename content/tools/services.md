@@ -26,9 +26,9 @@ See also: [proxy Go documentation]
 
 [proxy Go documentation]: https://godoc.org/v.io/x/ref/services/proxy
 [`mounttable` Go documentation]: https://godoc.org/v.io/x/ref/services/mounttable
-[Mount table]: ../glossary.html#mount-table
-[Naming Concepts]: ../concepts/naming.html
-[Security Concepts]: ../concepts/security.html
+[Mount table]: /glossary.html#mount-table
+[Naming Concepts]: /concepts/naming.html
+[Security Concepts]: /concepts/security.html
 [identityd Go documentation]: https://godoc.org/v.io/x/ref/services/identity/identityd
-[terms of service]: ../tos.html
-[Identity service FAQ]: identity-service-faq.html
+[terms of service]: /tos.html
+[Identity service FAQ]: /tools/identity-service-faq.html

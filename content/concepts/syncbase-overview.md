@@ -408,4 +408,4 @@ One idea that we need to explore further is for the cloud peer to be sync-only.
 It would not support Put/Get/Delete/Scan/Query. By removing that functionality,
 we could potentially increase scalability and simplify deployment.
 
-[Vanadium security model]: security.html
+[Vanadium security model]: /concepts/security.html

@@ -119,5 +119,5 @@ For more details see the [VOM specification].
 
 [RPC]: http://en.wikipedia.org/wiki/Remote_procedure_call
 [communication]: http://en.wikipedia.org/wiki/Inter-process_communication
-[VDL specification]: ../designdocs/vdl-spec.html
-[VOM specification]: ../designdocs/vom-spec.html
+[VDL specification]: /designdocs/vdl-spec.html
+[VOM specification]: /designdocs/vom-spec.html
