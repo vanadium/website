@@ -53,8 +53,9 @@ defeats this goal.
 
 # Where is the source code?
 
-The command blocks presented on tutorial pages are the __canonical
-source__ of those blocks. The source for the pages lives in the [vanadium/www] repository's content directory.
+The command blocks presented on tutorial pages are the __canonical source__ of
+those blocks. The source for the pages lives in the [vanadium/website]
+repository's content directory.
 
 All code files (Go, [VDL], js, etc.), are defined using bash command
 blocks that also _display_ those code files embedded in their
@@ -134,6 +135,6 @@ var config = {
 [golang.org]: http://golang.org/
 [bash scripts]: #why-bash-
 [HERE documents]: http://tldp.org/LDP/abs/html/here-docs.html
-[vanadium/www]: https://github.com/vanadium/www
+[vanadium/website]: https://github.com/vanadium/website
 [API references]: /docs.html
 [Vanadium Chrome extension]: /tools/vanadium-chrome-extension.html
