@@ -395,11 +395,11 @@ resolvers, additional types of predefined resolvers, CRDTs, etc.*
 
 *TODO: Grow this section as questions arise.*
 
-[Syncbase Overview]: ../concepts/syncbase-overview.md
-[installation instructions]: ../installation.md
-[syncQL]: syncql-tutorial.md
-[VOM]: ../concepts/rpc.md#vom
-[VDL]: ../concepts/rpc.md#vdl
-[Vanadium security model]: ../concepts/security.md
+[Syncbase Overview]: /concepts/syncbase-overview.html
+[installation instructions]: /installation/
+[syncQL]: /tutorials/syncbase/syncql-tutorial.html
+[VOM]: /concepts/rpc.html#vom
+[VDL]: /concepts/rpc.html#vdl
+[Vanadium security model]: /concepts/security.html
 [todos demo app]: https://github.com/vanadium/todos
-[Vanadium Chrome extension]: ../tools/vanadium-chrome-extension.md
+[Vanadium Chrome extension]: /tools/vanadium-chrome-extension.html

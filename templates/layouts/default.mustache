@@ -6,7 +6,8 @@
     {{> partials/sidebar }}
     <main>
       <h1 class="title">
-        {{ page.title }}
+        {{# page.fullTitle }}{{ page.fullTitle }}{{/ page.fullTitle }}
+        {{^ page.fullTitle }}{{ page.title }}{{/ page.fullTitle }}
       </h1>
 
       {{# page.toc }}

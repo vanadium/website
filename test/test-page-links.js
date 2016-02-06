@@ -30,7 +30,7 @@ test('inbound links', function(t) {
     var source = data.source
           .replace(build, './content')
           .replace('.html', '.md');
-    var prefix = format('"%s" linked from "%s" - ', href, source);
+    var prefix = format('"%s" links to "%s" - ', source, href);
 
     t.equal(href[0], '/', format('%s should be absolute', prefix));
 

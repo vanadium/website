@@ -1,5 +1,6 @@
 = yaml =
-title: Vanadium
+title:
+fullTitle: Vanadium
 = yaml =
 
 Vanadium is an open-source framework designed to make it much easier to develop

@@ -790,7 +790,7 @@ Let' try another query with a logical expression grouped with parenthesis:
 
 Comparison expressions are of the form:
 
-<*left-operand*> <*operator*> <*right-operand*>
+    <left-operand> <operator> <right-operand>
 
 There's good news!  Everything (Note: OK, not everything.  Using 'As' doesn't make sense and can't be used in the where clause.) you've learned about what can be specified in the select clause can be specified as an operand in the where clause.
 
@@ -975,6 +975,7 @@ Now, let's fetch the next two keys:
 In addition to select statements, syncql supports delete statements.  (Insert and Update statements are planned.)
 
 The delete statement takes the form:
+
     delete from <table> [<where-clause>] [<limit-clause>]
 
 The where and limit clauses for delete are identical to the where and limit caluses for select.
@@ -1070,7 +1071,7 @@ Congratulations!  You've finished the syncQL tutorial.  Don't forget to proceed 
 
 # Teardown
 
-Exit `sb` with <ctrl-d>, kill the syncbased and mounttabled background jobs and delete the principal directory:
+Exit `sb` with &lt;ctrl-d&gt;, kill the syncbased and mounttabled background jobs and delete the principal directory:
 
     <ctrl-d>
     sudo kill $(jobs -p)
