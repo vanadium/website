@@ -16,8 +16,7 @@ Anyone who needs to build a production quality system or application over the
 next few months &mdash; although we believe our code is well tested, we expect
 to continue to make changes to the core APIs and services as we learn from our
 early adopters. Keeping up with such changes in a production environment is
-likely to be problematic. In addition, key features like distributed storage are
-not available yet.
+likely to be problematic.
 
 # Why did you choose the Go language?
 

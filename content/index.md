@@ -3,8 +3,9 @@ title:
 fullTitle: Vanadium
 = yaml =
 
-Vanadium is an open-source framework designed to make it much easier to develop
-secure, distributed applications that can run anywhere. It provides:
+Vanadium is an [open-source](https://github.com/vanadium) framework designed to
+make it much easier to develop secure, distributed applications that can run
+anywhere. It provides:
 + a complete security model, based on public-key cryptography, that supports
   fine-grained permissions and delegation. The combination of traditional ACLs
   and "blessings with caveats" supports a broad set of practical requirements.
