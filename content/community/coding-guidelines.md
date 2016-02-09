@@ -11,6 +11,8 @@ omitted, for brevity):
 
 ```
  $JIRI_ROOT
+   .jiri_root        # Jiri utils and metadata
+     scripts/jiri    # Jiri command-line tool
    devtools          # Contributor tool binaries
    environment       # Platform-dependent configuration
    manifest          # Multi-repo configuration data

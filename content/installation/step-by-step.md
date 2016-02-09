@@ -94,10 +94,10 @@ not write to any files outside of the `JIRI_ROOT` directory.
 curl -f https://vanadium.github.io/bootstrap.sh | bash
 ```
 
-Add `$JIRI_ROOT/devtools/bin` to your `PATH`, for `jiri`:
+Add `$JIRI_ROOT/.jiri_root/scripts` to your `PATH`, for `jiri`:
 <!-- @addDevtoolsToPath @test -->
 ```
-export PATH=$JIRI_ROOT/devtools/bin:$PATH
+export PATH=$JIRI_ROOT/.jiri_root/scripts:$PATH
 ```
 
 Recommended for contributors: Add the line above to your `~/.bashrc` or similar.
@@ -110,7 +110,7 @@ including Snappy, LevelDB, and Node.js.
 We recommend using the `jiri v23-profile` command to install all such
 prerequisites. This command uses `apt-get` on Linux and `brew` on OS X. Note,
 the `jiri` tool and its various plugins are located in
-`$JIRI_ROOT/devtools/bin`.
+`$JIRI_ROOT/.jiri_root/scripts`.
 <!-- @installBaseProfile @test -->
 ```
 jiri v23-profile install base
