@@ -2,7 +2,7 @@
 title: The Suffix - Part II
 layout: tutorial
 wherein: you add fine-grained security to control access to your multiple services. This is an advanced tutorial.
-prerequisites: {completer: suffix-part2, scenario: f}
+prerequisites: {completer: suffix-part2, scenario: e}
 sort: 34
 toc: true
 = yaml =

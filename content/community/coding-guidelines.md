@@ -84,7 +84,7 @@ what). -->
 # VDL
 
 The `devtools/bin/vdl` tool uses VDL files to generate files
-containing [RPC] stub code for various languages - Go, JavaScript,
+containing [RPC] stub code for various languages - Go, Java, JavaScript,
 etc.
 
 [VDL] is not Go, but is modeled after Go, so VDL code should follow

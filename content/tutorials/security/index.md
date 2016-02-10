@@ -51,6 +51,5 @@ Vanadium security that complements these security tutorials.
 [Caveats]: /tutorials/security/first-party-caveats.html
 [Third-party Caveats]: /tutorials/security/third-party-caveats.html
 [client-server]: /tutorials/basics.html
-[JavaScript tutorial]: /tutorials/javascript/hellopeer.html
 [Security Concepts document]: /concepts/security.html
 [Mount table tutorial]: /tutorials/naming/mount-table.html

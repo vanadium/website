@@ -396,7 +396,7 @@ See also: [VDL specification][vdl-spec].
 
 VOM is the data serialization format used in Vanadium.  It enables the
 encoding and decoding of typed values across different programming languages,
-e.g. Go, Java, and JavaScript.
+e.g. Go and Java.
 
 See also: [VOM specification][vom-spec].
 

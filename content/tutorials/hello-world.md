@@ -9,7 +9,7 @@ toc: true
 
 # Introduction
 
-Practically speaking, Vanadium is a set of Go and JavaScript language
+Practically speaking, Vanadium is a set of Go and Java language
 libraries (more languages coming), plus a few dozen services and
 command line tools built on top of them.
 

@@ -16,7 +16,3 @@ title: Tutorials
   {{# content.tutorials.java }}
   * [{{ title }}]({{ url }})
   {{/ content.tutorials.java }}
-* [JavaScript](/tutorials/javascript/)
-  {{# content.tutorials.javascript }}
-  * [{{ title }}]({{ url }})
-  {{/ content.tutorials.javascript }}

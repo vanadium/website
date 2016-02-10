@@ -16,7 +16,7 @@ anywhere. It provides:
   well as for smaller-scale enterprise and consumer applications, including
   those needing to cross NAT boundaries.
 + a performant, self-describing encoding format, usable from many programming
-  languages and platforms (including Go, Java/Android, and JavaScript, with more
+  languages and platforms (including Go and Java/Android, with more
   on the way).
 + a global naming service that offers the convenience of urls but allows for
   federation and multi-level resolution. The 'programming model' consists of

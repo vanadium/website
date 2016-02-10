@@ -80,14 +80,5 @@ RPC Streaming Throughput<br>(echo 1MB)|313.91<br>MB/s|0.92 MB/s|2.31 MB/s
 virtual CPUs, each implemented as a single hyperthread on a 2.3 GHz Intel Xeon
 E5 v3 (Haswell).
 
-# Are JavaScript promises supported?
-
-Yes, the Vanadium JS library is both callback and promise compatible. For
-simplicity, the tutorials use callbacks exclusively.
-
-Any function that accepts a callback argument also returns a promise. Thus, to
-use promises, omit the `cb` argument. Accordingly, use `Promise.resolve` and
-`Promise.reject` to indicate the end of the function.
-
 [benchmarks]: https://github.com/vanadium/go.ref/tree/master/profiles/internal/rpc/benchmark
 [gce]: https://cloud.google.com/compute/docs/machine-types

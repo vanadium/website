@@ -5,7 +5,7 @@ toc: true
 
 This is a reference manual for VDL, the Vanadium Definition Language.  The intended audience is both end-users writing VDL files, as well as core developers implementing VDL.
 
-VDL is an interface definition language for describing Vanadium components.  It is designed to enable interoperability between implementations executing in heterogeneous environments.  E.g. it enables a frontend written in JavaScript running on a phone to communicate with a backend written in Go running on a server.  VDL is compiled into an intermediate representation that is used to generate code in each target environment.
+VDL is an interface definition language for describing Vanadium components.  It is designed to enable interoperability between implementations executing in heterogeneous environments.  E.g. it enables an Android application running on a phone to communicate with a backend written in Go running on a server.  VDL is compiled into an intermediate representation that is used to generate code in each target environment.
 
 Communication in Vanadium is based on remote procedure calls.  The main concepts in VDL map closely to concepts in general-purpose languages used to specify interfaces and communication protocols.
 
@@ -18,12 +18,12 @@ The main reason to write VDL is to define the wire format between different comp
 VDL defines its own type and value system, with well-defined semantics.  The VOM (Vanadium Object Marshalling) protocol defines mappings from values of every VDL type to a wire format.  The combination of VDL and VOM enables a simple yet powerful mechanism to specify wire protocols.
 
 ## Specify the API
-Once a common wire format has been established between components, we need an API to access the functionality in our desired programming environment.  E.g. a JavaScript frontend that needs to invoke methods on a Go backend needs a standard way to access that functionality.
+Once a common wire format has been established between components, we need an API to access the functionality in our desired programming environment.  E.g. an Android Java frontend that needs to invoke methods on a Go backend needs a standard way to access that functionality.
 
 APIs are specified by compiling VDL to your target environment.  The VDL compiler converts VDL concepts into idiomatic native constructs in your target environment.
 
 ## Usage is optional
-The last goal is to ensure the usage of VDL is optional.  Users have a choice to forgo VDL if it doesn't adequately benefit their usage scenario.  E.g. two JavaScript components may choose to communicate directly as full-fledged Vanadium components, without using VDL at all.
+The last goal is to ensure the usage of VDL is optional.  Users have a choice to forgo VDL if it doesn't adequately benefit their usage scenario.  E.g. two Android Java components may choose to communicate directly as full-fledged Vanadium components, without using VDL at all.
 
 # Syntax
 The VDL syntax is based on the Go language, which has a compact and regular grammar.

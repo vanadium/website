@@ -2,7 +2,7 @@
 title: Globber
 layout: tutorial
 wherein: you use the Globber interface to create your own server namespace. This is an advanced tutorial.
-prerequisites: {completer: globber, scenario: f}
+prerequisites: {completer: globber, scenario: e}
 sort: 35
 toc: true
 = yaml =

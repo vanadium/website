@@ -3,28 +3,28 @@ title: Vanadium Chrome Extension
 toc: true
 = yaml =
 
-The [Vanadium Chrome extension][] is a bridge between JavaScript web apps and
+The [Vanadium Chrome extension] is a bridge between JavaScript web apps and
 the Vanadium runtime, libraries, and services.
 
 Support for web applications is a work-in-progress.  Currently, Vanadium web
 apps can run only in the Chrome desktop browser with the [Vanadium Chrome
-extension][] installed.  Mobile browsers and non-Chrome browsers will be
+extension] installed.  Mobile browsers and non-Chrome browsers will be
 supported in the future.
 
 # Overview
 
-The Vanadium codebase is written mostly in [Go][].  In order to make the Go
+The Vanadium codebase is written mostly in [Go].  In order to make the Go
 libraries accessible to a JavaScript web app, the Vanadium Go code is compiled
-into a [Native Client][] (NaCl) plugin and embedded in a Chrome extension.
+into a [Native Client] (NaCl) plugin and embedded in a Chrome extension.
 
-[Native Client][] is a sandbox for running compiled binary code in
+[Native Client] is a sandbox for running compiled binary code in
 the browser efficiently and securely, independent of the user's operating
-system type.  These plugins can make use of the [Pepper API][].
+system type.  These plugins can make use of the [Pepper API].
 
 Traditionally, NaCl has supported only C and C++ compilation, but the Vanadium
 team has extended the Go compiler to target NaCl and the Pepper API.
 
-The [Vanadium JavaScript library][] provides a set of JavaScript APIs for
+The [Vanadium JavaScript library] provides a set of JavaScript APIs for
 interacting with the Vanadium Go code running inside the NaCl plugin in the
 extension.
 
@@ -42,8 +42,8 @@ operations are performed within the extension's NaCl sandbox.
 # Vanadium Chrome extension details
 
 The Vanadium extension has two main components:
-  * a [content script][] that runs on each tab, and
-  * a [background page][] that runs once per browser and contains JavaScript code and a NaCl plugin.
+  * a [content script] that runs on each tab, and
+  * a [background page] that runs once per browser and contains JavaScript code and a NaCl plugin.
 
 The following diagram depicts these components and the flow of messages between them.
 

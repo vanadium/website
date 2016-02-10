@@ -109,8 +109,6 @@ tutNamespace   = tutorials/naming/namespace
 tutSuffixPart1 = tutorials/naming/suffix-part1
 tutSuffixPart2 = tutorials/naming/suffix-part2
 tutGlobber     = tutorials/naming/globber
-tutJSHello     = tutorials/javascript/hellopeer
-tutJSFortune   = tutorials/javascript/fortune
 tutJavaAndroid = tutorials/java/android
 tutJavaFortune = tutorials/java/fortune
 
@@ -126,9 +124,7 @@ completerScripts = \
 	$(completer)-custom-authorizer.sh \
 	$(completer)-suffix-part1.sh \
 	$(completer)-suffix-part2.sh \
-	$(completer)-globber.sh \
-	$(completer)-js-hellopeer.sh \
-	$(completer)-js-fortune.sh
+	$(completer)-globber.sh
 
 # Opaquely named copies of particular completer scripts, used to set up
 # conditions for later tutorials. See individual targets for more explanation.
@@ -139,18 +135,14 @@ setupScripts = \
 	$(scenario)-b-setup.sh \
 	$(scenario)-c-setup.sh \
 	$(scenario)-d-setup.sh \
-	$(scenario)-e-setup.sh \
-	$(scenario)-f-setup.sh
+	$(scenario)-e-setup.sh
 
 depsCommon = \
 	content/$(tutSetup).md \
 	content/$(tutCheckup).md \
 	content/$(tutWipeSlate).md
 
-# This target builds the hosted web assets for the JavaScript tutorials.
-jsTutorialResults := public/tutorials/javascript/results
-
-scripts := $(completerScripts) $(setupScripts) $(jsTutorialResults)
+scripts := $(completerScripts) $(setupScripts)
 
 #############################################################################
 # Target definitions
@@ -290,7 +282,7 @@ test-multiservice-dispatcher: $(depsMultiDisp) | $(MDRIP)
 $(completer)-multiservice-dispatcher.sh: $(depsMultiDisp) | $(MDRIP)
 	mkdir -p $(@D)
 	$(MDRIP) --preambled 0 completer $^ > $@
-$(scenario)-f-setup.sh: $(completer)-multiservice-dispatcher.sh
+$(scenario)-e-setup.sh: $(completer)-multiservice-dispatcher.sh
 	cp $^ $@
 
 depsCaveats1st = $(depsPermsAuth) content/$(tutCaveats1st).md
@@ -350,24 +342,6 @@ $(completer)-globber.sh: $(depsGlobber) | $(MDRIP)
 	mkdir -p $(@D)
 	$(MDRIP) --preambled 0 completer $^ > $@
 
-depsJsHello = $(depsBasics) content/$(tutJSHello).md
-.PHONY: test-js-hello
-test-js-hellopeer: $(depsJsHello) | $(MDRIP)
-	$(MDRIP) --subshell test $^
-$(completer)-js-hellopeer.sh: $(depsJsHello) | $(MDRIP)
-	mkdir -p $(@D)
-	$(MDRIP) --preambled 0 completer $^ > $@
-$(scenario)-e-setup.sh: $(completer)-js-hellopeer.sh
-	cp $^ $@
-
-depsJsFortune = $(depsBasics) content/$(tutJSFortune).md
-.PHONY: test-js-fortune
-test-js-fortune: $(depsJsFortune) | $(MDRIP)
-	$(MDRIP) --subshell test $^
-$(completer)-js-fortune.sh: $(depsJsFortune) | $(MDRIP)
-	mkdir -p $(@D)
-	$(MDRIP) --preambled 0 completer $^ > $@
-
 # An ordering that lets us test all the tutorials faster than running the
 # individual tests in sequence. This exploits the knowledge that, for example,
 # tutCaveats3rd can be tested right after tutCaveats1st without reseting to a
@@ -395,16 +369,6 @@ depsOneBigCoreTutorialTest = \
 	content/$(tutSuffixPart1).md \
 	content/$(tutSuffixPart2).md
 
-# An ordering that lets us test all the JS tutorials faster than running the
-# individual tests in sequence.
-depsOneBigJsTutorialTest = \
-	content/$(tutSetup).md \
-	content/$(tutCheckup).md \
-	content/$(tutWipeSlate).md \
-	content/$(tutBasics).md \
-	content/$(tutJSHello).md \
-	content/$(tutJSFortune).md
-
 # An ordering that lets us test all the Java tutorials faster than running the
 # individual tests in sequence.
 depsOneBigJavaTutorialTest = \
@@ -412,7 +376,7 @@ depsOneBigJavaTutorialTest = \
 	content/$(tutJavaAndroid).md
 
 .PHONY: test
-test: test-site test-tutorials-core test-tutorials-js-node test-tutorials-java
+test: test-site test-tutorials-core test-tutorials-java
 
 .PHONY: test-site
 test-site: build node_modules
@@ -438,49 +402,6 @@ test-tutorials-core: build
 test-tutorials-java: build
 	$(MDRIP) --blockTimeOut 5m --subshell test $(depsOneBigJavaTutorialTest)
 
-# Test JS tutorials against an existing development install.
-#
-# This is the target to run to see if the tutorials work against Vanadium
-# changes that have not been checked in.
-#
-# Note: Unlike test-tutorials-js-web, this test is intended to skip the UI
-# portion of the test in order to achieve some amount of test coverage without
-# having to introduce additional dependencies.
-#
-# Called from v.io/x/devtools/jiri-test/internal/test/website.go.
-# This test fails if JIRI_ROOT isn't defined.
-# This test defines V_TUT (a tutorial variable) appropriately in terms of
-# JIRI_ROOT.
-.PHONY: test-tutorials-js-node
-test-tutorials-js-node: build
-	jiri go install v.io/v23/... v.io/x/ref/...
-	$(MDRIP) --blockTimeOut 2m --subshell test content/testing.md $(depsOneBigJsTutorialTest)
-
-# Test JS tutorials (web version) against an existing development install.
-#
-# This is the target to run to see if the tutorials work against Vanadium
-# changes that have not been checked in.
-#
-# However, it uses the live version of the Vanadium extension.
-#
-# Used to be called from v.io/x/devtools/jiri-test/internal/test/website.go.
-# This test fails if JIRI_ROOT isn't defined.
-#
-# This test also takes additional env vars (typically temporary):
-# - GOOGLE_BOT_USERNAME and GOOGLE_BOT_PASSWORD (to sign into Google/Chrome)
-# - CHROME_WEBDRIVER (the path to the Chrome WebDriver)
-# - WORKSPACE (optional, defaults to $JIRI_ROOT/website)
-#
-# In addition, this test requires Maven and Xvfb and xvfb-run to be installed.
-# An HTML report is written to $JIRI_ROOT/website/htmlReports.
-#
-# NOTE(sadovsky): This test does not currently work, is omitted from continuous
-# integration testing, and will likely be decommissioned soon.
-.PHONY: test-tutorials-js-web
-test-tutorials-js-web: build
-	jiri go install v.io/v23/... v.io/x/ref/...
-	$(MDRIP) --subshell --blockTimeOut 3m testui content/testing.md $(depsOneBigJsTutorialTest)
-
 # Test tutorials against fresh external install.
 #
 # This runs an install from v.io, then runs the tutorials against that install,
@@ -500,23 +421,3 @@ test-tutorials-external: build
 .PHONY: test-tutorials-no-install
 test-tutorials-no-install: build
 	$(MDRIP) --subshell test $(depsOneBigCoreTutorialTest)
-
-# The files needed to build JS tutorial output.
-depsJSTutorialResults = \
-	content/testing.md \
-	content/$(tutSetup).md \
-	content/$(tutBasics).md \
-	content/$(tutJSHello).md \
-	content/$(tutJSFortune).md
-
-# There are two steps to this build target:
-# 1. Build any dependencies like the VDL tool.
-# 2. Run mdrip to create artifacts from running $(jsDeps) code blocks.
-#
-# NOTE: Jenkins nodes may use the $JIRI_ROOT installation rather than "go get".
-# The "jiri go install" line below ensures all required tools (e.g. vdl) are
-# installed.
-$(jsTutorialResults): $(depsJSTutorialResults) | $(MDRIP)
-	jiri go install v.io/v23/... v.io/x/ref/...
-	V_TUT=$(abspath $@) $(MDRIP) --subshell --blockTimeOut 1m buildjs $^
-	rm -rf $(abspath $@)/node_modules

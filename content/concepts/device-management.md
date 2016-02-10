@@ -10,7 +10,7 @@ Vanadium targets a broad range of compute devices and environments. Vanadium's d
 
 A __device__ abstracts a system running Vanadium software, although the device need not be exclusively for Vanadium apps - for example, the system could be running natively installed applications alongside Vanadium applications. Typically, a device is a physical computing device, but a device could also be a virtual machine or a browser environment.
 
-An __application__ is a piece of software built using Vanadium. We use "app" as shorthand for "application", without adopting any of the specific meanings the term "app" may have elsewhere (e.g. in the context of mobile device app stores). Vanadium applications instantiate the Vanadium runtime. Usually, a running instance of a binary corresponds to an application, though applications can be multi-processed, or can be scripts (such as JavaScript applications), or can be [Docker][docker] images.
+An __application__ is a piece of software built using Vanadium. We use "app" as shorthand for "application", without adopting any of the specific meanings the term "app" may have elsewhere (e.g. in the context of mobile device app stores). Vanadium applications instantiate the Vanadium runtime. Usually, a running instance of a binary corresponds to an application, though applications can be multi-processed, or can be scripts (such as Node.js applications), or can be [Docker][docker] images.
 
 Applications are described by an __application envelope__. The envelope
 contains information needed by the device to install and run the application,

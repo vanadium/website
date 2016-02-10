@@ -84,11 +84,6 @@ and executes them, failing on any error.  Library changes that would
 break the tutorials must be accompanied by tutorial content changes
 that keep things up to date.
 
-# Do I need to know JavaScript to do the JavaScript tutorials?
-
-The JavaScript tutorials describe Vanadium concepts from a JavaScript
-perspective. Familiarity with the language is helpful but is not required.
-
 # Where are the API docs?
 
 Please refer to our in-depth [API references].
@@ -97,39 +92,6 @@ Please refer to our in-depth [API references].
 
 Please refer to the
 [Vanadium Chrome extension] page.
-
-# How can the JavaScript tutorials be run in Node.js?
-
-The JavaScript tutorials are designed for the browser and interact with web
-pages. They can be adapted to a pure `node` environment by removing the
-web-specific components.
-
-Vanadium Node.js programs currently require a go-language proxy `wsprd`
-(Websocket Proxy Daemon) to be running. `wsprd` performs the same role as the
-[Vanadium Chrome extension]. It is our intention to remove these requirements
-so that running `npm install` is the only step needed to use Vanadium.
-
-To start `wsprd`, run:
-
-```
-$V_BIN/wsprd \
-  -v23.namespace.root /\(dev.v.io/role/vprod/service/mounttabled\)@ns.dev.v.io:8101 \
-  -v23.proxy proxy \
-  -identd identity/dev.v.io/u/google
-```
-
-The above flags give the `node` program the same blessings and namespace root as
-the tutorial examples running in the browser.
-
-The Vanadium program will also need to know where `wsprd` is running. By default,
-this is at `http://127.0.0.1:8124`. (It can be customized with the
-`v23.tcp.address` flag.) Add the `wspr` field to your Vanadium configuration:
-
-```
-var config = {
-  wspr: http://127.0.0.1:8124,
-};
-```
 
 [VDL]: /glossary.html#vanadium-definition-language-vdl-
 [golang.org]: http://golang.org/
