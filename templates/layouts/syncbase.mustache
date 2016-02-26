@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  {{> partials/head }}
+  <body>
+    {{> partials/syncbase_header }}
+    {{> partials/syncbase_sidebar }}
+    <main>
+      <h1 class="title">
+        {{# page.fullTitle }}{{ page.fullTitle }}{{/ page.fullTitle }}
+        {{^ page.fullTitle }}{{ page.title }}{{/ page.fullTitle }}
+      </h1>
+
+      {{# page.toc }}
+      <div class="toc"></div>
+      {{/ page.toc }}
+
+      {{{ yield }}}
+    </main>
+  </body>
+</html>

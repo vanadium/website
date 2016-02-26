@@ -1,0 +1,26 @@
+{{!
+Note to contributors: The sidebar items and ordering were tested extensively for
+usability. Changes here should not be taken lightly.
+}}
+<div class="sidebar"></div>
+{{! TODO(sadovsky): Transmit data as JSON, not HTML. }}
+<div class="sidebar-data">
+  <a href="/syncbase/">Overview</a>
+  <a href="/syncbase/quickstart.html">Quick Start</a>
+
+  <a href="#" class="nav">Tutorial</a>
+   <nav>
+    {{# content.syncbase.tutorial }}
+    <a href="{{ url }}">{{ title }}</a>
+    {{/ content.syncbase.tutorial }}
+   </nav>
+
+  <a href="#" class="nav">Guides</a>
+  <nav>
+    {{# content.syncbase.guides }}
+    <a href="{{ url }}">{{ title }}</a>
+    {{/ content.syncbase.guides }}
+  </nav>
+
+  <a href="/syncbase/example-apps.html">Example Apps</a>
+</div>
