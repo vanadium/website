@@ -64,7 +64,7 @@ $(MDRIP):
 TMPDIR := $(shell mktemp -d "/tmp/XXXXXX")
 HEAD := $(shell git rev-parse HEAD)
 
-bundles := public/css/bundle.css public/js/bundle.js
+bundles := public/css public/js/bundle.js
 haiku_inputs := $(shell find public/* content/* templates/*)
 
 # A list of case-sensitive banned words.
@@ -166,8 +166,13 @@ node_modules: package.json | $(npm)
 
 # NOTE(sadovsky): Newer versions of postcss-cli and autoprefixer use JavaScript
 # Promises, which doesn't work with Vanadium's old version of node, 0.10.24.
-public/css/bundle.css: $(shell find stylesheets/*) node_modules
-	lessc -sm=on stylesheets/index.less | postcss -u autoprefixer > $@
+
+# Generates a compiled css file for every less file in the themes directory.
+public/css: $(shell find stylesheets/*) node_modules
+	@for FILE in $(shell find stylesheets/themes/* -type f -print0 | xargs -0 -n1 basename) ; do \
+		lessc -sm=on stylesheets/themes/$$FILE | postcss -u autoprefixer > $@/bundle.$${FILE%.*}.css ; \
+	done
+	touch $@
 
 public/js/bundle.js: browser/index.js $(shell find browser) node_modules
 	$(call BROWSERIFY,$<,$@)

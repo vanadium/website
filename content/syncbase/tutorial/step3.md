@@ -1,9 +1,9 @@
 = yaml =
-title: Step 2
+title: Step 3
 layout: syncbase_tutorial
 theme: teal
-wherein: you do the step 2
-sort: 2
+wherein: you do the step 3
+sort: 3
 toc: true
 = yaml =
 

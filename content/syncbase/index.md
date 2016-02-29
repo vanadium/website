@@ -1,6 +1,7 @@
 = yaml =
 title: Syncbase
 layout: syncbase
+theme: teal
 toc: true
 = yaml =
 
