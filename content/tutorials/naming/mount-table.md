@@ -53,7 +53,7 @@ program can report its [VDL interface][mounttable interface]:
 
 <!-- @queryMountTable @test -->
 ```
-$V_BIN/vrpc signature /localhost:$PORT_MT
+$V_BIN/vrpc signature -s /localhost:$PORT_MT
 ```
 
 It also means that the mount table has a [principal] - it must run
@@ -66,6 +66,9 @@ would have been used, and the problems reviewed at the
 [end of the basics tutorial][random credentials] would happen below
 when processes start talking to each other.  Mount table security will
 be discussed in later tutorial.
+
+The `-s` option stands for 'shallow resolve'.  It forces vprc to apply
+to mount table itself and not what might be mounted at its root.
 
 # The namespace client
 
