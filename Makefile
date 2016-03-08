@@ -37,7 +37,7 @@ MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 # Add node and npm to PATH. Note, we run npm using 'node npm' to avoid relying
 # on the shebang line in the npm script, which can exceed the Linux shebang
 # length limit on Jenkins.
-NODE_DIR := $(shell jiri v23-profile list --info Target.InstallationDir nodejs)
+NODE_DIR := $(shell jiri profile list --info Target.InstallationDir v23:nodejs)
 # Once the JS tutorials stop running npm, we can simplify this to setting
 # npm := node $(NODE_DIR)/bin/npm and using $(npm) in place of npm elsewhere
 # in this file.
