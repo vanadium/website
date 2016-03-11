@@ -19,9 +19,8 @@ Advanced or adventurous users may want to install [Raspian] directly.
 You could use the [RaspberryPi] as your complete development environment -
 write code, compile it and run it all on the Pi. To do that you will:
 
-1. Need the [Go] compiler. Unfortunately, there are no official Go compiler distributions for
-   the processor architecture of the Pis. You could compile it from source, but might prefer
-   [Dave Cheney's unofficial distribution][go-arm].
+1. Need the [Go] compiler. Starting with Go 1.6, the official release includes
+   binaries that work on the Pi (the armv6l architecture).
 2. Download the Vanadium sources:
    ```
    export GOPATH=$HOME/vanadium  # Or any other directory of your choosing
@@ -36,28 +35,19 @@ build them using `go build` or `go install`.
 Developing and building on the Pi is all great, but if you have a
 laptop/desktop that you prefer to use instead - which has all your editor
 customizations, screen size, keyboard you love etc., then you can also build
-binaries for the [RaspberryPi] on it. The catch is that your laptop/desktop
-must be running Linux.
+binaries for the [RaspberryPi] on it.
 
-Once Go 1.5 is released and we remove a few vestigal C code, these instructions
-should become much less onerous.  Furthermore, you will be able to build
-binaries for your Pi running Linux on your laptop/desktop running either Linux
-or Mac OS X, courtesy [significant improvements][go1.5xcompile] in the Go
-compiler's support for cross-compilation.
+The Vanadium codebase includes some C-code, and thus you need a cross-compiler
+that can compile C-code into a binary suitable for the ARM architecture. If you
+performed the setup steps described in the [contribution guidelines], you can
+use the [jiri] tool to install the required cross-compiler.
 
-Till then:
-1. Install the [jiri] tool as per the [contribution guidelines].
-2. Setup the cross-compiler using `jiri v23-profile install arm`
-
-Let's say you're building a binary (such as the `principal` command-line tool)
-for the machine you're developing on, you'd likely do something like:
 ```
-jiri go install v.io/x/ref/cmd/principal
-```
+# Install the cross-compiler
+jiri profile-v23 install --target=arm-linux v23:base
 
-To build it for the Pi, use:
-```
-JIRI_PROFILE=arm jiri go install v.io/x/ref/cmd/principal
+# Compiling a binary for the Pi
+jiri go -target=arm-linux install v.io/x/ref/cmd/principal
 ```
 
 This will place the binary under
@@ -67,18 +57,14 @@ using `scp` or some other mechanism to your Pi.
 # Using the GPIO ports
 
 Your RaspberryPi projects might involve some circuit manipulation using the
-available GPIO ports. [Search the
-web][gpio-libs] to settle on
+available GPIO ports. [Search the web][gpio-libs] to settle on
 which of a variety of Go libraries to manipulate the GPIO ports you'd like to
 play with.
 
 [RaspberryPi]: https://www.raspberrypi.org/
 [Raspian]: https://www.raspberrypi.org/documentation/installation/installing-images/README.md
 [Go]: https://golang.org
-[go1.5xcompile]: http://dave.cheney.net/2015/03/03/cross-compilation-just-got-a-whole-lot-better-in-go-1-5
-[installation instructions]: /installation/index.html
 [jiri]: /tools/jiri.html
 [contribution guidelines]: /community/contributing.html
 [rpi-documentation]: https://www.raspberrypi.org/documentation/
-[go-arm]: http://dave.cheney.net/unofficial-arm-tarballs
 [gpio-libs]: https://www.google.com/search?q=golang+gpio+raspberry+pi
