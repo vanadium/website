@@ -19,7 +19,7 @@ The instructions below assume you've set the `JIRI_ROOT` environment variable
 and have added `$JIRI_ROOT/devtools/bin` to your `PATH`:
 
     # Edit to taste.
-    export JIRI_ROOT=${HOME}/vanadium
+    export JIRI_ROOT=${HOME}/v23_root
     export PATH=$PATH:$JIRI_ROOT/devtools/bin
 
 Recommended: Add the lines above to your `~/.bashrc` or similar.
