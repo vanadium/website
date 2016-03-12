@@ -63,22 +63,17 @@ these requirements.
 
 # Are there benchmarks for the Vanadium RPC system?
 
-Benchmark details and code used to measure the performance of the Vanadium RPC
-stack are [available on GitHub][benchmarks].
+Benchmark code used to measure the performance of the Vanadium RPC stack is
+[available on GitHub][benchmarks]. Results from the latest version of the
+codebase are regularly measured and archived. Numbers from March, 2016 are
+summarized in this table, but for the latest numbers [see this
+page](/performance.html).
 
-As of April 20, 2015, the numbers are dismally low. We expect to make
-significant improvements to them over the coming months.
-
-Benchmark|GCE<br>`n1-standard-4` |Raspberry Pi | Raspberry Pi 2
+Benchmark      |Linux Desktop    |Raspberry Pi 2   | Nexus 5X Phone
 ---------------|:---------------:|:---------------:|:---------------:
-RPC Connection |33.48<br>ms/rpc        |1765.47 ms/rpc  | 847.41 ms/rpc
-RPC (echo 1KB) |1.31<br>ms/rpc<br>(763.05<br>qps)|78.61 ms/rpc<br>(12.72 qps)| 16.47 ms/rpc<br>(60.71 qps)
-RPC Streaming<br>(echo 1KB)| 0.11<br>ms/rpc|23.85<br>ms/rpc   |3.33 ms/rpc
-RPC Streaming Throughput<br>(echo 1MB)|313.91<br>MB/s|0.92 MB/s|2.31 MB/s
+[Connection][benchmark-connection]     |4 ms             | 130 ms          | 90 ms
+[RPC (echo 1B)][benchmark-echo-1B] |0.4 ms/rpc       | 5 ms/rpc        | 4 ms/rpc
 
-**Note**: [Google Compute Engine `n1-standard-4`][gce] has 15 GB of memory and 4
-virtual CPUs, each implemented as a single hyperthread on a 2.3 GHz Intel Xeon
-E5 v3 (Haswell).
-
-[benchmarks]: https://github.com/vanadium/go.ref/tree/master/profiles/internal/rpc/benchmark
-[gce]: https://cloud.google.com/compute/docs/machine-types
+[benchmarks]: https://github.com/vanadium/go.ref/blob/master/runtime/internal/rpc/benchmark/benchmark_test.go
+[benchmark-connection]: https://benchmarks.v.io/?q=v.io%2Fx%2Fref%2Fruntime%2Finternal%2Frpc%2Fbenchmark.BenchmarkConnectionEstablishment+uploader%3Adev.v.io%3Arole%3Avlab%3Aapp%3Abenchmarks%3A20160218
+[benchmark-echo-1B]: https://benchmarks.v.io/?q=v.io%2Fx%2Fref%2Fruntime%2Finternal%2Frpc%2Fbenchmark.Benchmark____1B+uploader%3Adev.v.io%3Arole%3Avlab%3Aapp%3Abenchmarks%3A20160218
