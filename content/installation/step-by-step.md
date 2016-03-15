@@ -107,16 +107,16 @@ Recommended for contributors: Add the line above to your `~/.bashrc` or similar.
 Some components of Vanadium (e.g. Syncbase) have additional prerequisites,
 including Snappy, LevelDB, and Node.js.
 
-We recommend using the `jiri v23-profile` command to install all such
+We recommend using the `jiri profile` command to install all such
 prerequisites. This command uses `apt-get` on Linux and `brew` on OS X. Note,
 the `jiri` tool and its various plugins are located in
 `$JIRI_ROOT/.jiri_root/scripts`.
 <!-- @installBaseProfile @test -->
 ```
-jiri v23-profile install base
+jiri profile install v23:base
 ```
 
-The `jiri v23-profile install` command only writes to files under `JIRI_ROOT`,
+The `jiri profile install` command only writes to files under `JIRI_ROOT`,
 i.e. it will not write to system folders such as those under `/usr`.
 
 # Install Vanadium binaries

@@ -21,7 +21,7 @@ the Vanadium website.
 ### Prerequisites
 
 Install Vanadium per the installation instructions on the website. Also, install
-the Node.js profile using `jiri v23-profile install nodejs`.
+the Node.js profile using `jiri profile install v23:nodejs`.
 
 ### Local development
 
