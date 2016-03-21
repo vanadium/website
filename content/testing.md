@@ -18,7 +18,7 @@ place. Check your state:
 <!-- @checkInstall -->
 ```
 [ -z "${JIRI_ROOT:?'Must define JIRI_ROOT'}" ]
-[ -x "$JIRI_ROOT/devtools/bin/jiri" ] || echo 'No jiri!'
+[ -x "$JIRI_ROOT/.jiri_root/scripts/jiri" ] || echo 'No jiri!'
 [ -x "$JIRI_ROOT/release/go/bin/principal" ] || echo 'No bin!'
 ```
 

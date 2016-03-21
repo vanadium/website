@@ -12,8 +12,8 @@ omitted, for brevity):
 ```
  $JIRI_ROOT
    .jiri_root        # Jiri utils and metadata
+     bin             # Contributor tool binaries
      scripts/jiri    # Jiri command-line tool
-   devtools          # Contributor tool binaries
    environment       # Platform-dependent configuration
    manifest          # Multi-repo configuration data
    release           # Source code
@@ -31,10 +31,9 @@ omitted, for brevity):
    website           # Source for this site
 ```
 
-Each repository has a `README.md` file summarizing its purpose. The `devtools`
-directory isn't a repository, but rather a top-level directory where contributor
-tools are placed during installation. The `manifest` repository contains the
-configuration that describes this repository arrangement.
+Each repository has a `README.md` file summarizing its purpose.  The `manifest`
+repository contains the configuration that describes this repository
+arrangement.
 
 Things move around, so its best to examine your local installation for the
 latest arrangement.
@@ -83,9 +82,8 @@ what). -->
 
 # VDL
 
-The `devtools/bin/vdl` tool uses VDL files to generate files
-containing [RPC] stub code for various languages - Go, Java, JavaScript,
-etc.
+The `vdl` tool uses VDL files to generate files containing [RPC] stub code for
+various languages - Go, Java, JavaScript, etc.
 
 [VDL] is not Go, but is modeled after Go, so VDL code should follow
 Go's style guidelines.

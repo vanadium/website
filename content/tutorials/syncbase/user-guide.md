@@ -45,11 +45,11 @@ Linux and OS X.
    Vanadium repositories, which include Syncbase as well as the Todos demo app.
 
    The instructions below assume you've set the `JIRI_ROOT` environment variable
-   and have added `$JIRI_ROOT/devtools/bin` to your `PATH`:
+   and have added `$JIRI_ROOT/.jiri_root/scripts` to your `PATH`:
 
         # Edit to taste.
         export JIRI_ROOT=${HOME}/vanadium
-        export PATH=$PATH:$JIRI_ROOT/devtools/bin
+        export PATH=$PATH:$JIRI_ROOT/.jiri_root/scripts
 
    Recommended: Add the lines above to your `~/.bashrc` or similar.
 
