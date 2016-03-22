@@ -29,8 +29,8 @@ To reiterate this, create two principals Alice and Bob with blessings
 
 <!-- @makeAliceAndBob @test @completer -->
 ```
-$V_BIN/principal create --overwrite $V_TUT/cred/alice alice
-$V_BIN/principal create --overwrite $V_TUT/cred/bob bob
+$V_BIN/principal create --with-passphrase=false --overwrite $V_TUT/cred/alice alice
+$V_BIN/principal create --with-passphrase=false --overwrite $V_TUT/cred/bob bob
 ```
 
 Run the server with Alice's credentials (i.e, authenticate as `alice`):

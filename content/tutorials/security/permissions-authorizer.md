@@ -152,7 +152,7 @@ Introduce Carol:
 
 <!-- @createCarol @test @completer -->
 ```
-$V_BIN/principal create --overwrite $V_TUT/cred/carol carol
+$V_BIN/principal create --with-passphrase=false --overwrite $V_TUT/cred/carol carol
 ```
 
 At this point no request from Carol will succeed because Carol is

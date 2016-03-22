@@ -49,7 +49,7 @@ Introduce Diane:
 
 <!-- @createDiane @test -->
 ```
-$V_BIN/principal create --overwrite $V_TUT/cred/diane diane
+$V_BIN/principal create --with-passphrase=false --overwrite $V_TUT/cred/diane diane
 ```
 
 As a new principal, Diane has no blessings (other than the default
