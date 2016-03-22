@@ -19,7 +19,7 @@ The instructions below assume you've set the `JIRI_ROOT` environment variable
 and have added `$JIRI_ROOT/.jiri_root/scripts` to your `PATH`:
 
     # Edit to taste.
-    export JIRI_ROOT=${HOME}/v23_root
+    export JIRI_ROOT=${HOME}/vanadium
     export PATH=$PATH:$JIRI_ROOT/.jiri_root/scripts
 
 Recommended: Add the lines above to your `~/.bashrc` or similar.

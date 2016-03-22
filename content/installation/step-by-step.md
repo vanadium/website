@@ -47,38 +47,44 @@ Use an absolute path to a non-existent directory on the local filesystem. The
 NFS are discouraged for performance reasons and to avoid git ENOKEY errors.)
 <!-- @define_JIRI_ROOT @test -->
 ```
-# Edit to taste.
-export JIRI_ROOT=${HOME}/v23_root
+# Uses existing $JIRI_ROOT environment variable, defaults to ${HOME}/vanadium if
+# $JIRI_ROOT is not set.
+export JIRI_ROOT=${JIRI_ROOT:=${HOME}/vanadium}
 ```
 
 Recommended for contributors: Add the line above to your `~/.bashrc` or similar.
 
-# V23_RELEASE environment variable
+# VANADIUM_RELEASE environment variable
 
 The tutorials on this website use Go code from a particular subdirectory of
-`JIRI_ROOT`. Tutorial users should set the `V23_RELEASE` environment variable to
+`JIRI_ROOT`. Tutorial users should set the `VANADIUM_RELEASE` environment variable to
 this directory, as follows:
-<!-- @define_V23_RELEASE @test -->
+<!-- @define_VANADIUM_RELEASE @test -->
 ```
 # Needed for tutorials only.
-export V23_RELEASE=${JIRI_ROOT}/release/go
+export VANADIUM_RELEASE=${JIRI_ROOT}/release/go
 ```
 
-# Start from a clean slate
+# Prompt for a clean slate
 
 The `bootstrap.sh` script checks that the `JIRI_ROOT` directory does not yet
-exist, then creates it. So, let's blow away `JIRI_ROOT` if it exists.
+exist, then creates it. If it exists, warn the user with a clear message about
+trying to install over an existing path and provide instructions on how to
+correct.
 
-{{# helpers.warning }}
-## Danger!
-This will blow away your `JIRI_ROOT` directory, including any pending changes to
-repositories in that directory. Make sure you're not deleting something
-important.
-{{/ helpers.warning }}
-<!-- @define_rmrf_JIRI_ROOT @test -->
+<!-- @check_JIRI_ROOT @test -->
 ```
-# WARNING: Make sure you're not deleting something important.
-rm -rf $JIRI_ROOT
+# Check that the JIRI_ROOT path does not exist.
+if [[ -e "${JIRI_ROOT}" ]]; then
+  echo ""
+  echo "ERROR: The JIRI_ROOT path already exists: ${JIRI_ROOT}"
+  echo "To proceed with a fresh install remove the directory and re-run:"
+  echo ""
+  echo "    rm -rf ${JIRI_ROOT}"
+  echo ""
+  echo "Or set JIRI_ROOT to a different path."
+  exit 1
+fi
 ```
 
 # Fetch Vanadium repositories

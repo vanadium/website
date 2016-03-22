@@ -412,16 +412,16 @@ test-tutorials-java: build
 # This runs an install from v.io, then runs the tutorials against that install,
 # exactly as an external user would run them. Local changes of Vanadium have no
 # impact on this test. This test does not require definition of JIRI_ROOT; it
-# uses V23_RELEASE instead, per the installation instructions on the external
+# uses VANADIUM_RELEASE instead, per the installation instructions on the external
 # site.
 .PHONY: test-tutorials-external
 test-tutorials-external: build
 	$(MDRIP) --subshell --blockTimeOut 10m test content/$(install_md) $(depsOneBigCoreTutorialTest)
 
-# Test tutorials without install. Assumes JIRI_ROOT and V23_RELEASE are defined.
+# Test tutorials without install. Assumes JIRI_ROOT and VANADIUM_RELEASE are defined.
 #
 # This runs tests without first doing any installation step, and assumes
-# JIRI_ROOT and V23_RELEASE are properly defined. It's a time saver if you are
+# JIRI_ROOT and VANADIUM_RELEASE are properly defined. It's a time saver if you are
 # happy with your installation and are just debugging tutorial code.
 .PHONY: test-tutorials-no-install
 test-tutorials-no-install: build

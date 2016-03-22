@@ -44,7 +44,7 @@ __tutorial environment__ to run the tests:
 
 <!-- @defineLocalEnv @test @testui @buildjs -->
 ```
-export V23_RELEASE=${JIRI_ROOT}/release/go
+export VANADIUM_RELEASE=${JIRI_ROOT}/release/go
 
 # Extract GOPATH from jiri utility.
 export V23_GOPATH=`jiri go env GOPATH`

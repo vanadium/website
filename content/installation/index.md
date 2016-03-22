@@ -32,14 +32,14 @@ takes about five minutes to run.
 It runs all the steps from the [step-by-step instructions].
 
 In particular, it checks for prerequisites, sets the `JIRI_ROOT` and
-`V23_RELEASE` environment variables to `$HOME/v23_root` and
+`VANADIUM_RELEASE` environment variables to `$HOME/vanadium` and
 `$JIRI_ROOT/release/go` respectively, and installs Vanadium to the `JIRI_ROOT`
 directory using the `bootstrap.sh` script.
 
-The tutorials depend on `V23_RELEASE` to find the Vanadium installation, but
+The tutorials depend on `VANADIUM_RELEASE` to find the Vanadium installation, but
 Vanadium itself doesn't depend on this variable.
 
-Feel free to move `JIRI_ROOT` and `V23_RELEASE` elsewhere if you like.
+Feel free to move `JIRI_ROOT` and `VANADIUM_RELEASE` elsewhere if you like.
 
 [source]: /tutorials/faq.html#why-source-
 [tutorials]: /tutorials/hello-world.html

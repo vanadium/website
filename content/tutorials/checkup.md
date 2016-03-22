@@ -6,7 +6,7 @@ toc: false
 enumerable: false
 = yaml =
 
-A smoke test to see that `V23_RELEASE` is defined and provides access to crucial
+A smoke test to see that `VANADIUM_RELEASE` is defined and provides access to crucial
 Vanadium file assets.
 
 This isn't meant to be an exhaustive test, just a quick check. It's used in
@@ -24,7 +24,7 @@ function bad_vanadium() {
   exit 1;
 }
 
-[ -z "$V23_RELEASE" ] && { echo 'The environment variable V23_RELEASE is not defined.'; bad_vanadium; }
+[ -z "$VANADIUM_RELEASE" ] && { echo 'The environment variable VANADIUM_RELEASE is not defined.'; bad_vanadium; }
 
-[ -x "$V23_RELEASE/bin/principal" ] || { echo 'The file $V23_RELEASE/bin/principal does not exist or is not executable.'; bad_vanadium; }
+[ -x "$VANADIUM_RELEASE/bin/principal" ] || { echo 'The file $VANADIUM_RELEASE/bin/principal does not exist or is not executable.'; bad_vanadium; }
 ```

@@ -60,7 +60,7 @@ interface.  It will soon be linked into a client and server.
 
 <!-- @compileInterface @test @completer -->
 ```
-VDLROOT=$V23_RELEASE/src/v.io/v23/vdlroot \
+VDLROOT=$VANADIUM_RELEASE/src/v.io/v23/vdlroot \
     VDLPATH=$V_TUT/src \
     $V_BIN/vdl generate --lang go $V_TUT/src/hello/ifc
 ```

@@ -10,7 +10,7 @@ You don't need to read this, unless you were sent here with a suggestion to
 start a second tutorial terminal, likely to keep the output from multiple
 processes easier to read.
 
-In addition to the `$V23_RELEASE` variable defined by [installation], every
+In addition to the `$VANADIUM_RELEASE` variable defined by [installation], every
 terminal window used in a tutorial must run the environment definition script
 below.
 
@@ -23,11 +23,11 @@ environment defined below.
 
 <!-- @envVars @buildjs @test @testui @completer -->
 ```
-# If JIRI_ROOT or V23_RELEASE are not defined, set them to the default values
+# If JIRI_ROOT or VANADIUM_RELEASE are not defined, set them to the default values
 # from the installation instructions and hope for the best.
 
-[ -z "$JIRI_ROOT" ] && export JIRI_ROOT=${HOME}/v23_root
-[ -z "$V23_RELEASE" ] && export V23_RELEASE=${JIRI_ROOT}/release/go
+[ -z "$JIRI_ROOT" ] && export JIRI_ROOT=${HOME}/vanadium
+[ -z "$VANADIUM_RELEASE" ] && export VANADIUM_RELEASE=${JIRI_ROOT}/release/go
 
 # All files created by the tutorial will be placed in $V_TUT. It is a disposable
 # workspace, easy to recreate.
@@ -36,7 +36,7 @@ export V_TUT=${V_TUT-$HOME/v23_tutorial}
 # V_BIN is a convenience for running Vanadium binaries. It avoids the need to
 # modify your PATH or to be 'in' a particular directory when doing the
 # tutorials.
-export V_BIN=${V23_RELEASE}/bin
+export V_BIN=${VANADIUM_RELEASE}/bin
 
 # For the shell doing the tutorials, GOPATH must include both Vanadium and the
 # code created as a result of doing the tutorials. To avoid trouble with
