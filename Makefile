@@ -37,18 +37,18 @@ MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 # Add node and npm to PATH. Note, we run npm using 'node npm' to avoid relying
 # on the shebang line in the npm script, which can exceed the Linux shebang
 # length limit on Jenkins.
-NODE_DIR := $(shell jiri profile list --info Target.InstallationDir v23:nodejs)
+NODE_BIN := $(shell jiri profile env --profiles=v23:base,v23:nodejs NODE_BIN=)
 # Once the JS tutorials stop running npm, we can simplify this to setting
-# npm := node $(NODE_DIR)/bin/npm and using $(npm) in place of npm elsewhere
+# npm := node $(NODE_BIN)/npm and using $(npm) in place of npm elsewhere
 # in this file.
 NPM_DIR := $(shell mktemp -d "/tmp/XXXXXX")
-export PATH := $(NPM_DIR):$(NODE_DIR)/bin:$(PATH)
+export PATH := $(NPM_DIR):$(NODE_BIN):$(PATH)
 
 # SEE: https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
 npm = $(NPM_DIR)/npm
 .INTERMEDIATE: $(npm)
 $(npm):
-	echo 'node $(NODE_DIR)/bin/npm "$$@"' > $(npm)
+	echo 'node $(NODE_BIN)/npm "$$@"' > $(npm)
 	chmod +x $(npm)
 
 # mdrip is a tool for extracting shell scripts from any markdown content which
