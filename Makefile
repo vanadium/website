@@ -414,9 +414,11 @@ test-tutorials-java: build
 # impact on this test. This test does not require definition of JIRI_ROOT; it
 # uses VANADIUM_RELEASE instead, per the installation instructions on the external
 # site.
+ext_tut_jiri_root := ~/tutorial-install
 .PHONY: test-tutorials-external
 test-tutorials-external: build
-	$(MDRIP) --subshell --blockTimeOut 10m test content/$(install_md) $(depsOneBigCoreTutorialTest)
+	rm -rf $(ext_tut_jiri_root)
+	JIRI_ROOT=$(ext_tut_jiri_root) $(MDRIP) --subshell --blockTimeOut 10m test content/$(install_md) $(depsOneBigCoreTutorialTest)
 
 # Test tutorials without install. Assumes JIRI_ROOT and VANADIUM_RELEASE are defined.
 #
