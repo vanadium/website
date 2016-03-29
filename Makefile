@@ -52,7 +52,7 @@ $(MDRIP):
 
 #############################################################################
 # Variables, functions, and helpers
-TMPDIR := $(shell mktemp -d "XXXXXX" --tmpdir=$(TMPDIR))
+TMPDIR := $(shell mktemp -d "$${TMPDIR:-/tmp}/XXXXXX")
 HEAD := $(shell git rev-parse HEAD)
 
 bundles := public/css public/js/bundle.js
