@@ -80,11 +80,9 @@ the site (or use `make watch` to have your changes trigger rebuild).
 
 ## Deployment
 
-The `make deploy` task deploys the website to GitHub Pages. Be sure to run this
-task from a clean master branch, and to run `jiri update` immediately before
-deploying to ensure that you aren't missing any upstream changes. We're working
-on setting up additional checks to avoid these pitfalls, along with an automatic
-deployment process.
+Jenkins [automatically](https://veyron.corp.google.com/jenkins/job/vanadium-website-deploy/)
+deploys to production on every successful build of
+[vanadium-website-site](https://veyron.corp.google.com/jenkins/job/vanadium-website-site/) target.
 
 [mustache]: http://mustache.github.io/
 [markdown]: https://daringfireball.net/projects/markdown/

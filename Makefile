@@ -34,22 +34,14 @@ MDRIP ?= $(JIRI_ROOT)/third_party/go/bin/mdrip
 #############################################################################
 # Tooling and infrastructure
 
-# Add node and npm to PATH. Note, we run npm using 'node npm' to avoid relying
+# Find nodejs and add it to PATH.
+NODE_BIN := $(shell jiri profile env --profiles=v23:base,v23:nodejs NODE_BIN=)
+export PATH := $(NODE_BIN):$(PATH)
+
+# Note, we run npm using 'node npm' to avoid relying
 # on the shebang line in the npm script, which can exceed the Linux shebang
 # length limit on Jenkins.
-NODE_BIN := $(shell jiri profile env --profiles=v23:base,v23:nodejs NODE_BIN=)
-# Once the JS tutorials stop running npm, we can simplify this to setting
-# npm := node $(NODE_BIN)/npm and using $(npm) in place of npm elsewhere
-# in this file.
-NPM_DIR := $(shell mktemp -d "/tmp/XXXXXX")
-export PATH := $(NPM_DIR):$(NODE_BIN):$(PATH)
-
-# SEE: https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
-npm = $(NPM_DIR)/npm
-.INTERMEDIATE: $(npm)
-$(npm):
-	echo 'node $(NODE_BIN)/npm "$$@"' > $(npm)
-	chmod +x $(npm)
+npm := node $(NODE_BIN)/npm
 
 # mdrip is a tool for extracting shell scripts from any markdown content which
 # might have code blocks in it (like the tutorials). The mdrip tool is also
@@ -60,8 +52,7 @@ $(MDRIP):
 
 #############################################################################
 # Variables, functions, and helpers
-
-TMPDIR := $(shell mktemp -d "/tmp/XXXXXX")
+TMPDIR := $(shell mktemp -d "XXXXXX" --tmpdir=$(TMPDIR))
 HEAD := $(shell git rev-parse HEAD)
 
 bundles := public/css public/js/bundle.js
@@ -153,9 +144,9 @@ scripts := $(completerScripts) $(setupScripts)
 all: build
 	@true
 
-node_modules: package.json | $(npm)
-	npm prune
-	npm install
+node_modules: package.json
+	$(npm) prune
+	$(npm) install
 	touch $@
 
 # NOTE(sadovsky): Some files under public/{css,js} were copied over from the
@@ -195,14 +186,22 @@ watch: browser/ content/ public/ stylesheets/ templates/
 	@echo "Watching for changes in $^"
 	@find $^ | entr $(MAKE) build
 
-# TODO(sadovsky): Check that we're in a clean master branch. Also, automate
-# deployment so that changes are picked up automatically.
+################################################################################
+# Note: deploy target is automatically triggered by Jenkins by the
+# 'vanadium-website-deploy' job after each successful build of the
+# 'vanadium-website-site' job.
+# If there are any changes, it commits and pushes to the vanadium.github.io
+# repository, which is served by GitHub pages.
 .PHONY: deploy
 deploy: clean build
 	git clone git@github.com:vanadium/vanadium.github.io.git $(TMPDIR)
 	rm -rf $(TMPDIR)/*
 	rsync -r build/* $(TMPDIR)
-	cd $(TMPDIR) && git add -A && git commit -m "pull $(HEAD)" && git push
+	cd $(TMPDIR) && \
+	git add -A && \
+	git diff-index --quiet HEAD || \
+	git commit -m "pull $(HEAD)" && \
+	git push
 
 .PHONY: clean
 clean:
