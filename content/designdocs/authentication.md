@@ -65,7 +65,7 @@ Where:
 
 The protocol along with the guarantees that it makes has been formalized in
 [ProVerif] to provide a proof of correctness. This formalization is available
-at https://github.com/vanadium/docs/tree/master/proofs/authentication
+at https://vanadium.github.io/proofs/authentication
 
 ## Code pointers
 
