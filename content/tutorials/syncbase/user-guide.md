@@ -402,4 +402,3 @@ resolvers, additional types of predefined resolvers, CRDTs, etc.*
 [VDL]: /concepts/rpc.html#vdl
 [Vanadium security model]: /concepts/security.html
 [todos demo app]: https://github.com/vanadium/todos
-[Vanadium Chrome extension]: /tools/vanadium-chrome-extension.html

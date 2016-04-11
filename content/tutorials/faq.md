@@ -88,10 +88,6 @@ that keep things up to date.
 
 Please refer to our in-depth [API references].
 
-# What is the Vanadium Chrome extension?
-
-Please refer to the
-[Vanadium Chrome extension] page.
 
 [VDL]: /glossary.html#vanadium-definition-language-vdl-
 [golang.org]: http://golang.org/
@@ -99,4 +95,3 @@ Please refer to the
 [HERE documents]: http://tldp.org/LDP/abs/html/here-docs.html
 [vanadium/website]: https://github.com/vanadium/website
 [API references]: /api-reference.html
-[Vanadium Chrome extension]: /tools/vanadium-chrome-extension.html
