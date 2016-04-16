@@ -66,9 +66,12 @@ Set up some credentials:
 
 <!-- @initializeCredentials @test -->
 ```
-$V_BIN/principal create --overwrite $V_TUT/cred/cheapDrive cheapDrive
-$V_BIN/principal create --overwrite $V_TUT/cred/alice alice
-$V_BIN/principal create --overwrite $V_TUT/cred/$USER $USER
+$V_BIN/principal create --with-passphrase=false --overwrite \
+    $V_TUT/cred/cheapDrive cheapDrive
+$V_BIN/principal create --with-passphrase=false --overwrite \
+    $V_TUT/cred/alice alice
+$V_BIN/principal create --with-passphrase=false --overwrite \
+    $V_TUT/cred/$USER $USER
 ```
 
 Now you (really you) will use your Google account to _seek a blessing_:

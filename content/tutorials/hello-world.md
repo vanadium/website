@@ -190,6 +190,7 @@ Create a principal called `tutorial`:
 <!-- @principalTutorial @test -->
 ```
 $V_BIN/principal create \
+    --with-passphrase=false \
     --overwrite $V_TUT/cred/basics tutorial
 ```
 

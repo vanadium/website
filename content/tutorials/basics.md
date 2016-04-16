@@ -505,6 +505,7 @@ writes credentials associated with the name `tutorial` into the
 <!-- @principalTutorial @test @testui @completer -->
 ```
 $V_BIN/principal create \
+    --with-passphrase=false \
     --overwrite $V_TUT/cred/basics tutorial
 ```
 

@@ -142,15 +142,15 @@ the `Reader` annotation in the [fortune VDL] file.
 First, initialize some principals.
 <!-- @createProphIncPrincipal @test -->
 ```
-$V_BIN/principal create --overwrite \
+$V_BIN/principal create --with-passphrase=false --overwrite \
     $V_TUT/cred/prophInc prophInc
-$V_BIN/principal create --overwrite \
+$V_BIN/principal create --with-passphrase=false --overwrite \
     $V_TUT/cred/cassandra cassandra
-$V_BIN/principal create --overwrite \
+$V_BIN/principal create --with-passphrase=false --overwrite \
     $V_TUT/cred/nostradamus nostradamus
-$V_BIN/principal create --overwrite \
+$V_BIN/principal create --with-passphrase=false --overwrite \
     $V_TUT/cred/alice alice
-$V_BIN/principal create --overwrite \
+$V_BIN/principal create --with-passphrase=false --overwrite \
     $V_TUT/cred/bob bob
 ```
 
