@@ -60,9 +60,16 @@ domready(function() {
 
   // Update img elements to display alt text in a figcaption.
   dom.all('main img').forEach(function(img) {
+    var a = dom.element('a');
+        a.setAttribute('href', img.src);
+        a.setAttribute('target', '_blank');
+        a.appendChild(img.cloneNode());
+
+    var caption = dom.element('figcaption', img.alt);
     var figure = dom.element('figure');
-    figure.appendChild(img.cloneNode());
-    figure.appendChild(dom.element('figcaption', img.alt));
+        figure.appendChild(a);
+        figure.appendChild(caption);
+
     img.parentNode.replaceChild(figure, img);
   });
 
