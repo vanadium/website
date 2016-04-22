@@ -8,6 +8,10 @@ Syncbase is a storage system for developers that makes it easy to synchronize
 app data between devices. It works even when devices are not connected to the
 Internet.
 
+(The video below describes an app built for web browsers.  Syncbase is currently
+focused on Android and iOS, and we have removed browser support.  The concepts
+in the video are still valid, however.)
+
 <iframe width="560" height="315" src="https://www.youtube.com/embed/2cHzd8pBYmU" frameborder="0" allowfullscreen></iframe>
 
 # Why use Syncbase?
@@ -22,7 +26,7 @@ Internet.
     WiFi or Bluetooth as the internet
 - Conflict resolution system merges data when devices have been working offline
 - Unified storage model handles both structured data and blobs
-  - Structured databases are easy to use and queryable
+  - Structured databases are easy to use and support transactions and notifications
   - Blob caching policies work well on resource-limited devices
 - Powerful management tools
   - Leverages the Vanadium namespace and security system
@@ -30,7 +34,7 @@ Internet.
     tight control over the data
 
 The initial version of Syncbase is ready for testing and evaluation by early
-adopters - it is suitable for prototyping, but not for production applications.
+adopters.
 
 This document presents an overview of the system. It is very light on
 implementation details. Subsequent docs will contain those details.
@@ -47,33 +51,22 @@ of those problems.
 
 # Data Model
 
-Syncbase holds blob data and two types of structured data. The data is organized
+Syncbase holds blob data and structured data. The data is organized
 by the following hierarchy:
-- App: Each app has its own namespace to prevent conflicts. An app can contain
-  multiple databases but will usually contain only one.
-- Database: The system is designed for multiple types of database. The NoSQL
-  database is currently implemented, and we are starting to design the SQL
-  database. Both types support blobs and fine-grained synchronization. Queries
-  and batches, which are similar to transactions, are limited to the scope of a
-  single database.
-  - **NoSQL**: Tables in a NoSQL database map a key to a structured value. The
-    value's type is vdl.Any, and reflection allows features like queries to
-    access the fields within the struct (if it is a struct). The keys are always
-    strings and kept separate from values (unlike MongoDB). The keys are ordered
-    to support efficient scan of related entries. Queries are specified with a
-    SQL style language, and functionality is currently limited to filtering the
-    values returned by the ordered scan. Tables are heterogeneous to allow for
-    related data to be denormalized. If the developer wishes for homogeneous
-    tables, it is up to the developer to enforce that.
-  - **SQL**: (Not yet implemented, and may be folded into NoSQL by supporting
-    optional schemas, secondary indexes, and richer queries.) A SQL table
-    implements the SQL 92 standard as much as possible while still supporting
-    blobs and synchronization. We recognize that there are certain apps that
-    stretch the limits of the NoSQL data model.
+
+- Database: An app can contain multiple databases but will usually contain only
+  one.  A database is bound to the app that created it.
+- Collection: A collection is an ordered set of key-value pairs (rows), where
+  keys are strings and values are structured types.
+  Collections are the unit of access control and can be grouped together
+  for synchronization.
+- Row: Each row contains a single value, and the values in the rows of a
+  Collection are heterogeneous.  Therefore, developers should denormalize
+  their data, grouping related data by giving those rows a common key prefix.
 
 ## Blobs
 
-Both SQL and NoSQL databases have strong support for blobs. Blobs support a
+Syncbase has strong support for blobs. Blobs support a
 streaming upload/download API rather than the all-at-once operations of the
 structured data. Syncbase understands references to blobs in the structured
 data, making it possible to implement automatic caching and garbage collection
@@ -119,60 +112,28 @@ While the edge cases prevent us from claiming ACID semantics, we believe that
 the behavior above strikes a good balance between implementable semantics and
 useful behavior for the developer and user.
 
-Batches are not limited to the data within a syncgroup (see below). If a batch
-contains data from multiple syncgroups, peers will receive only the parts of the
-batch for which they are a member.
+Batches are not limited to the data within a Collection. If a batch contains
+data from multiple Collections, peers will receive only the parts of the batch
+they are allowed to see.
 
 ## Access Control
 
-Syncbase enables collaboration between multiple users, so it is important for it
-to have fine grained access control. Syncbase uses the [Vanadium security model]
-for identification and authentication. The mechanisms for authorization vary by
-database type.
+Syncbase enables collaboration between multiple users, so access control is an
+important feature.  Syncbase uses the [Vanadium security model]
+for identification and authentication.
 
-### NoSQL ACLs
+Each Collection in a database has its own ACL specifying who can access and modify
+the rows in that Collection.  This ACL is synced along with the data itself.
+'Admin' access grants the client permission to change the ACL.  'Write' access
+allows the client to insert and update rows in the Collection.  'Read'
+represents a read-only privilege.  These ACLs are enforced by the local
+Syncbase as well as by peer Syncbases during the sync protocol.
 
-Developers specify ACLs with a key prefix. If there are multiple prefixes for a
-row, the longest prefix wins. This behavior makes it easy to set an ACL on
-related data and have new data automatically inherit the right ACL if possible.
-
-We expect developers to give a common key prefix to related data. For example, a
-TODO list might have a table like:
-
-    <list uuid>                -> List
-    <list uuid>/entries/<uuid> -> Entry
-    <list uuid>/entries/<uuid> -> Entry
-
-All entries in the list have a common prefix, making it easy to find all of the
-entries in the list. Because this list is fully collaborative, the developer
-would set a simple ACL like:
-
-    <list uuid> -> {<owner>: Read, Write, Admin; <friends>: Read, Write}
-
-All entries in the list would inherit this ACL. We expect that most apps will
-use a single ACL for a group of related data, so we optimized for this case.
-
-There are also apps that will require finer-grained ACLs. For example, a blog
-might have a table like:
-
-    <post uuid>                                 -> Post
-    <post uuid>/comments/<uuid>                 -> Comment
-    <post uuid>/comments/<uuid>/comments/<uuid> -> Comment
-    <post uuid>/comments/<uuid>                 -> Comment
-    <post uuid>/comments/<uuid>                 -> Comment
-
-All comments on the Post have a key with a prefix of the Post's uuid. This makes
-it efficient to find all of the comments for the post. Comments on comments (row
-3) are similarly nested. The developer would set ACLs like:
-
-    <post uuid>                 -> {<author>: Read, Write, Admin; <friends>: Read}
-    <post uuid>/comments/       -> {<author>: Read, Write, Admin; <friends>: Read, Insert}
-    <post uuid>/comments/<uuid> -> {<friend>: Read, Write, Admin; <friends>: Read}
-## SQL ACLs
-
-*Lots TBD here. We're thinking that the developer would use a query to specify
-the ACL. This would mean that the ACL is dependent on the properties of the data
-(e.g. salesperson can see all customer data where Location = "CA").*
+Using a TODO list app as an example, each list would live in its own Collection.
+This allows the user to share a grocery list with a spouse and a party planning
+list with a friend.  Syncbase synchronizes the two lists independently, yet
+the two lists show up in the same database, making it easy to display them in
+an "all my lists" UI.
 
 ## Blob ACLs
 
@@ -194,17 +155,14 @@ low latency communication.
 Peer-to-peer sync introduces problems not present in client-server sync:
 - Sub-groups of devices can collaborate independently, leading to substantial
   data conflicts
-- If all peers are equal, hiding data from a subset of those peers is tricky.
-  For example, User1, User2, and User3 sync with each other. User1 and User2
-  have access to A, B, and C. User3 can access only C. If User1 atomically
-  modifies A and C, how does User3 propagate that change to User2 without seeing
-  the contents of A?
 - Malicious peers can perform man-in-the-middle attacks. The system should help
   prevent them.
 
-We define a _syncgroup_ as a set of data that is synchronized within a set of
-devices. The following sections describe which data and which devices make up a
-syncgroup.
+We define a _syncgroup_ as a list of Collections that are synchronized within
+a set of devices. There can be multiple syncgroups for a single Collection,
+making it possible for a single device to bridge between two groups of devices.
+
+# TODO(kash): The content below this point is stale as of April 21, 2016.  Update me!
 
 ## Which data?
 
