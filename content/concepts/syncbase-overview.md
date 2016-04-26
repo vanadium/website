@@ -54,8 +54,8 @@ of those problems.
 Syncbase holds blob data and structured data. The data is organized
 by the following hierarchy:
 
-- Database: An app can contain multiple databases but will usually contain only
-  one.  A database is bound to the app that created it.
+- Database: An app is preconfigured to have a single database which may contain
+  any number of Collections.
 - Collection: A collection is an ordered set of key-value pairs (rows), where
   keys are strings and values are structured types.
   Collections are the unit of access control and can be grouped together
@@ -153,6 +153,7 @@ path for synchronization, apps can use Syncbase as for asynchronous, relatively
 low latency communication.
 
 Peer-to-peer sync introduces problems not present in client-server sync:
+
 - Sub-groups of devices can collaborate independently, leading to substantial
   data conflicts
 - Malicious peers can perform man-in-the-middle attacks. The system should help
@@ -160,60 +161,61 @@ Peer-to-peer sync introduces problems not present in client-server sync:
 
 We define a _syncgroup_ as a list of Collections that are synchronized within
 a set of devices. There can be multiple syncgroups for a single Collection,
-making it possible for a single device to bridge between two groups of devices.
+making it possible for a single device to bridge between otherwise disjoint
+groups of devices.
 
-# TODO(kash): The content below this point is stale as of April 21, 2016.  Update me!
+## Arranging data for sync
 
-## Which data?
+Continuing with our TODO list example, there would be a Collection for each
+list.  There might also be a Collection to store the user's preferences.
 
-### NoSQL
+    Collection for preferences
+    preferences    -> Preferences
+    last-viewed    -> String      // The ID of the last viewed TODO list.
 
-A database can have multiple syncgroups each specified by a set of (table, row
-prefix) pairs. We expect apps to typically have a single database and splice in
-data from various syncgroups. For example, a Todo app could use the NoSQL
-database with rows like:
+    Collection for list1
+    metadata       -> List
+    entries/<uuid> -> Entry
+    entries/<uuid> -> Entry
 
-    <list1 uuid>                -> List
-    <list1 uuid>/entries/<uuid> -> Entry
-    <list1 uuid>/entries/<uuid> -> Entry
-    <list2 uuid>                -> List
-    <list2 uuid>/entries/<uuid> -> Entry
-    <list2 uuid>/entries/<uuid> -> Entry
+    Collection for list2
+    metadata       -> List
+    entries/<uuid> -> Entry
+    entries/<uuid> -> Entry
 
-The app could then create two syncgroups: one with the prefix `<list1 uuid>` and
-another with the prefix `<list2 uuid>`. Another user's `<list3 uuid>` syncgroup
-could be added directly to this database. It is important that the developer use
-UUIDs to avoid conflicts. However, the system does not enforce that the
-developer use UUIDs because there are times when the developer might actually
-want conflicts.
+The app could then create three syncgroups:
 
-Syncgroups may be nested within each other. For example, if the Todo app puts
-lists in folders, it can sync a folder one way and sync the lists within it in
-another way. Note that the keys are fully copied regardless of the syncgroup; it
-is not possible to "mount" a syncgroup with a different key prefix.
+* Preferences Collection: Synced across the user's devices.  Private to that user.
+* list1 Collection: Synced across the user's devices as well as Alice and Bob's
+  devices.
+* list2 Collection: Synced across the user's devices as well as Alice and Carol's
+  devices.
 
-### SQL
+Collections created by all users live in the same namespace.  To avoid
+collisions, the system automatically prepends the user's identity (blessing)
+to the Collection ID.  The developer still needs to think about collisions,
+however.  The user might use one device while offline and then switch to
+another device while still offline. When those two devices sync with each
+other, should the Collections merge or stay separate?  If the developer wants
+them to stay separate, the Collection IDs should include a UUID.  If the
+developer wants them to merge, they should use a predictable name (e.g.
+"preferences").
 
-*The SQL database similarly represents a syncgroup with a query. Lots TBD.*
+It is not possible to sync a subset of a Collection differently than the whole
+Collection.  The typical solution to this problem is to pull that subset of data
+into its own Collection and leave a reference/pointer in the original Collection.
 
-### ACLs
+## ACLs
 
-The sync protocol respects the ACLs on the data. That means that if a peer is
-not in the ACL for a row, that row is not sent to that peer. This makes conflict
-resolution more complicated (e.g. a batch might contain some data that is
-visible to the device and some data that is not).
+The sync protocol respects the ACLs on the data. If a peer has read-only
+access to a row, it can still propagate changes from peers that do have write
+access to that row. To prevent this read-only peer from performing a man-in-
+the-middle attack, Syncbase will sign the mutations on behalf of the writer.
+The receivers automatically verify the signatures.
 
-If a peer has read-only access to a row, it can still propagate changes from
-peers that do have write access to that row. This opens up the possibility of
-this read-only peer performing a man-in-the-middle attack. Syncbase provides the
-ability to digitally sign mutations to these mixed-privilege rows, and the
-receivers automatically verify the signatures. Public key encryption is
-computationally expensive, so it is up to the developer to determine which rows
-require signatures.
+## Example Apps
 
-### Example Apps
-
-We examined 10 apps in detail to understand what granularity of access control
+We examined 15+ apps in detail to understand what granularity of access control
 and syncing was appropriate. For some apps like a news reader or a brokerage,
 everything is single user, so syncing all of the data in the local database is
 appropriate. For apps like turn-based games or Nest, there are islands of data
@@ -235,11 +237,10 @@ or just "folder2"?
     folder1/folder2
     folder1/folder2/doc2
 
-We decided that the keys would be fully copied between the peers in the
-syncgroup (i.e. "folder1/folder2").
-
-We recognize that these hierarchical folders are not a perfect fit for the NoSQL
-data model. Our goal is that the SQL database handles this much better.
+We explored this topic in great detail, building a FileManager app in the process.
+We concluded that if a developer wishes to share a subfolder differently than the
+parent folder, the developer should move the subfolder to its own Collection and
+leave a reference in the original Collection.
 
 ## Which devices?
 
@@ -251,28 +252,30 @@ of devices.
 ## Resolving Conflicts
 
 The majority of apps would benefit greatly from simple, automatic conflict
-resolution policies (e.g. last-one-wins, min, max), some apps would benefit from
-more sophisticated operational transforms (OT) (e.g. lists, strings), while a
-small number of apps have policies best encoded in the app itself. We should
-strive to make the simple, automatic conflict resolution policies as convenient
-as possible even if it comes at the expense of making other conflict resolution
-policies more difficult to use. OT policies or datatypes such as
-CollaborativeString and CollaborativeMap supported by the [Google Realtime
-API](https://developers.google.com/drive/realtime/reference/) are helpful but
-not sufficient for all apps. Finally, some apps have such unique policies that
-attempting to encode them in some "conflict resolution language" would be
-counter-productive. For these apps, we provide them with an API that is at a low
-enough level that they can do whatever they want in application code. We believe
-that API should provide access to a tuple of (local version, peer version,
-common ancestor version).
+resolution policies (e.g. last-one-wins, min, max), some apps would benefit
+from more sophisticated operational transforms (OT) (e.g. lists, strings) or
+Conflict-free Replicated Data Types (CRDT), while a small number of apps have
+policies best encoded in the app itself. We should strive to make the simple,
+automatic conflict resolution policies as convenient as possible even if it
+comes at the expense of making other conflict resolution policies more
+difficult to use. OT policies or datatypes such as CollaborativeString and
+CollaborativeMap supported by the
+[Google Realtime API](https://developers.google.com/drive/realtime/reference/)
+are helpful but not sufficient for all apps. Finally, some apps have such unique
+policies that attempting to encode them in some "conflict resolution language" would be
+counter-productive. For these apps, we will provide them with an API that is at a
+low enough level that they can do whatever they want in application code. We
+believe that API should provide access to a tuple of (local version, peer
+version, common ancestor version).  This information is stored in Syncbase,
+but we have not yet exposed this API to applications.
 
 ## Pluggable Sync
 
 Syncbase provides an escape hatch for apps that do not fit entirely into the
 storage and synchronization model. For example, some apps have existing,
-canonical data in Oracle or Megastore (e.g. Google Calendar). Other apps need to
+canonical data in an Oracle or MySQL database. Other apps need to
 broadcast identical data to many users (e.g. DVR program guide). For these
-reasons, Syncbase makes it easy to plug custom code into the sync protocol.
+reasons, Syncbase should make it easy to plug custom code into the sync protocol.
 
 *Lots of details TBD at this point. The need for this feature is clear, but we
 need to look at the detailed requirements.*
@@ -302,22 +305,22 @@ not all blobs need to be on all devices. It is the responsibility of Syncbase to
 watch for BlobRefs in the structured storage and cache the right blobs on each
 device.
 
-The ACL protecting the BlobRef in structured storage acts as an implicit ACL for
-the blob itself. The ACL protects the BlobRef, but once the BlobRef is
-accessible, it acts as a capability. Any app instance possessing the BlobRef can
-access the blob. A BlobRef can be copied into another row, table, database, or
-even app. However, the BlobRef only works on the Syncbase from which it came
+The ACL protecting the BlobRef in structured storage acts as an implicit ACL
+for the blob itself. The ACL protects the BlobRef, but once the BlobRef is
+accessible, it acts as a capability. Any app instance possessing the BlobRef
+can access the blob. A BlobRef can be copied into another row, collection, or
+database. However, the BlobRef only works on the Syncbase from which it came
 (i.e. sending a BlobRef over RPC to another device is not useful).
 
 ### Durability
 
 Syncbase ensures that not all peers will simultaneously evict a blob because
 that would result in data loss. The sync protocol keeps track of which peers
-have which blobs, and certain peers can be marked as "durable". For example, a
-Cloud peer could have effectively unlimited storage space and never need to
-evict blobs. When an ordinary peer sees that the blob has made it to a durable
-peer, the ordinary peer is free to evict the blob. Note that it is possible for
-multiple peers to be durable.
+have which blobs, and certain peers can be marked as more durable than others.
+For example, a Cloud peer could have effectively unlimited storage space and
+never need to evict blobs. When an ordinary peer sees that the blob has made
+it to a durable peer, the ordinary peer is free to evict the blob. Note that
+it is possible for multiple peers to be durable.
 
 To permanently delete a blob, all references to the blob must be deleted. The
 durable peer holding the blob can detect when the other peers have deleted their
@@ -337,13 +340,13 @@ contents. Lots of details TBD.*
 Syncbase needs to work on a variety of devices and configurations. Not only does
 it need to work well on phones, tablets, desktops, and other networked devices,
 app developers also need a multi-tenant deployment they can provide to their
-users for durability and ease of use. We plan the following implementations:
+users for durability and ease of use. We offer the following implementations:
 
 ## Mobile
 
-We need an implementation that works well on mobile devices. It should be aware
-of performance constraints of mobile flash devices. It needs to be aware of
-battery and network usage too. This implementation does not need to scale to
+There is an implementation that works well on mobile devices. It is aware
+of performance constraints of mobile flash devices. It is also aware of
+battery and network usage. This implementation does not need to scale to
 huge sizes nor to high throughput.
 
 ## Cloud
@@ -355,15 +358,16 @@ This version of Syncbase acts as a cloud peer.
 - It may or may not have an instance of the app available to resolve conflicts.
 - It needs to function as a multi-tenant service that app developers can run for
   their users.
-- It should be simple for an app developer or advanced user to deploy (e.g. VM
+- It is simple for an app developer or advanced user to deploy (e.g. VM
   image with everything required).
-- The first version does not need to scale beyond a single machine. This
-  implementation would probably use MySQL as the underlying storage layer and
-  could likely handle tens of thousands of users. Further scale would be up to
-  the developer or open source community.
+- The first version does not scale beyond a single machine. This
+  implementation is mostly the same as the mobile implementation and is suitable
+  for prototyping.  A subsequent version would probably use MySQL as the
+  underlying storage layer and could likely handle tens of thousands of users.
+  Further scale would be up to the developer or open source community.
 
 One idea that we need to explore further is for the cloud peer to be sync-only.
-It would not support Put/Get/Delete/Scan/Query. By removing that functionality,
+It would not support Put/Get/Delete/Scan. By removing that functionality,
 we could potentially increase scalability and simplify deployment.
 
 [Vanadium security model]: /concepts/security.html
