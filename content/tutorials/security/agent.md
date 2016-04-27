@@ -24,10 +24,17 @@ at the moment, they aren't.  At no point during earlier tutorials did
 you - the tutee - get prompted for a passphrase, despite frequent use
 of the `--v23.credentials {directory}` flag.
 
-Using that flag means the given program loads the private key into
-process memory as part of its runtime initialization.
+Encrypting the file on disk, and requiring a password with each
+invocation of a command specifying `--v23.credentials {directory}`
+will solve the immediate problem of a clear text key on disk, but is
+onerous.
 
-This was OK for the tutorials, which had the goal of _teaching_
+In addition to the nuisance of having to provide a decryption
+passphrase each time the credentials are used, having each program
+load the private key into process memory as part of its runtime
+initialization exposes the key to the risk of compromise.
+
+This would be OK for the tutorials, which had the goal of _teaching_
 security concepts rather than _being_ secure.  You were running only
 official Vanadium apps or programs that you wrote, in your own
 authenticated session, on a machine under your control.
@@ -35,38 +42,51 @@ authenticated session, on a machine under your control.
 But easy access to the private key is not OK under normal
 circumstances. A private key should be private.
 
-Likewise, the way blessings have been generated so far -  in which
-you the tutee casually exploited your read access to the private keys
-of both the blessor and blessee - isn't practical for blessings being
-granted between disjoint principals remote from each other on
-a network.
-
-Encrypting the file on disk, and requiring a password with each
-invocation of a command specifying `--v23.credentials {directory}`
-will solve the immediate problem of a clear text key on disk, but
-doesn't solve these other problems.
+Furthermore, if several program were to access the same credentials
+directory simulataneously, they would risk corrupting the data during
+mutations.  There is a need for coordinating concurrent access to
+credentials.
 
 # An agent holds the key
 
-Part of the solution to these problems is `agentd`, a Vanadium utility
-analogous to [`ssh-agent`].  It loads credentials into its memory, and
-serves key management requests from child processes.
+Part of the solution to these problems is `v23agentd`, a Vanadium
+utility analogous to [`ssh-agent`].  It loads credentials into its
+memory, and serves key management requests from other client
+processes.
 
-The child process, needing to check the validity of blessings coming
-in with a request, can pass said blessings (implicitly via the
-runtime's use of a POSIX [file descriptor]) up to `agentd`, which then
-does the necessary crypto with the keys it holds, passing the result
-back to the child.
+A client process, needing to check the validity of blessings coming in
+with a request, can pass said blessings (implicitly via the runtime's
+use of a POSIX [file descriptor]) up to `v23agentd`, which then does
+the necessary crypto with the keys it holds, passing the result back
+to the client.
 
-This happens in the Vanadium runtime - no new client code required.
+Launching an agent to serve credentials in a given directory (by
+invoking `v23agentd {directory}`) sets up a socket file in the
+directory, which the client connects to when using `--v23.credentials
+{directory}`.  This happens in the Vanadium runtime - no new client
+code required.
 
-To see that, rerun the _existing_ client code against the _existing_
-server code using two instances of the agent - one becomes Alice, the
-other becomes Bob.
+Typically, however, launching an agent explicitly is not necessary --
+as long as `v23agentd` is in its `PATH`, a program run with
+`--v23.credentials {directory}` will automatically launch an agent to
+serve the credentials.  Other programs using `--v23.credentials
+{directory}` will connect to the same agent and safely share the
+credentials.  The agent will stay up for as long as there are client
+connected to it.  In fact, this is what happened in all previous
+tutorials, like the [hello world][hello world] tutorial, enabling the
+same credentials to be shared between client and server.
+
+Occasionally, launching the agent explicitly is needed, such as when
+we do not trust the program to access the credentials and launch
+`v23agentd`.
+
+To illustrate, rerun the _existing_ client code against the _existing_
+server code using two explicit instances of the agent - one becomes
+Alice, the other becomes Bob.
 
 The only difference between the following command sequence and
-[previous usage][previous-usage] is that `agentd` takes the
-`--v23.credentials` flag, rather than the client and server.
+[previous usage][previous-usage] is that `v23agentd` gets launched
+before we run the client and server.
 
 <!-- @twoAgents @test -->
 ```
@@ -74,23 +94,27 @@ The only difference between the following command sequence and
 kill_tut_process TUT_PID_AGENT
 /bin/rm -f $V_TUT/server.txt
 
-# Run the server under an agent.
-$V_BIN/agentd --v23.credentials $V_TUT/cred/alice \
-    $V_TUT/bin/server \
-        --endpoint-file-name $V_TUT/server.txt \
-        --perms '{"R": {"In": ["alice:family",
-                               "alice:friend"]},
-                  "W": {"In": ["alice:family"]}}' &
-TUT_PID_AGENT=$!
+# Run an agent for server credentials.
+$V_BIN/v23agentd $V_TUT/cred/alice &
+$V_TUT/bin/server \
+    --v23.credentials $V_TUT/cred/alice \
+    --endpoint-file-name $V_TUT/server.txt \
+    --perms '{"R": {"In": ["alice:family",
+                           "alice:friend"]},
+              "W": {"In": ["alice:family"]}}' &
+TUT_PID_SERVER=$!
+
 # Wait for startup.
 sleep 2s
 
-# Run the client under an agent.
-$V_BIN/agentd --v23.credentials $V_TUT/cred/bob \
-    $V_TUT/bin/client --server `cat $V_TUT/server.txt`
+# Run an agent for client credentials.
+$V_BIN/agentd $V_TUT/cred/bob &
+$V_TUT/bin/client \
+    --v23.credentials $V_TUT/cred/bob \
+    --server `cat $V_TUT/server.txt`
 
 # All done, kill the server.
-kill_tut_process TUT_PID_AGENT
+kill_tut_process TUT_PID_SERVER
 ```
 
 The above should run without errors, i.e. the client should report a
@@ -98,7 +122,7 @@ fortune.
 
 The crucial new behavior here is that _neither the server nor client
 binary had access to private keys_.  The runtime off-loaded all crypto
-checks to the agent in a different process (the parent process).
+checks to the agent in a different process.
 
 In the normal course of events, where you run code whose source code
 you've not written or may not have access to, this is a critical
@@ -107,9 +131,9 @@ send the private keys to that identity elsewhere.
 
 # Become Alice
 
-Use `bash {scriptName}` as the argument to `agentd` to safely
-run a script as a given identity.  Here, the script just runs
-`principal dump` commands, introspecting its own identity:
+Set the environment variable `V23_CREDENTIALS={directory}` to run a
+script as a given identity.  Here, the script just runs `principal
+dump` commands, introspecting its own identity:
 
 <!-- @becomeAlice @test -->
 ```
@@ -118,18 +142,12 @@ cat <<EOF > $V_TUT/subshell.sh
   $V_BIN/principal get forpeer ... | \
       $V_BIN/principal dumpblessings -
 EOF
-$V_BIN/agentd --v23.credentials $V_TUT/cred/alice \
-    bash $V_TUT/subshell.sh
+V23_CREDENTIALS=$V_TUT/cred/alice bash $V_TUT/subshell.sh
 ```
 
 Don't do this now, but say you wanted to spend the day as Alice.  To
 interactively issue many commands as a particular Vanadium principal,
-just start an agent-wrapped _interactive_ shell:
-
-`$V_BIN/agentd --v23.credentials {directory} bash`
-
-At the time of writing, only the _bash_ shell (not _csh_ or _zsh_)
-supports the correct file descriptor forwarding to allow this.
+just set `V23_CREDENTIALS` accordingly.
 
 
 # Alice's vassals
@@ -147,9 +165,7 @@ cat <<EOF > $V_TUT/subshell.sh
   echo "************************ Alice's vassal Andy:"
   $V_BIN/vbecome --name andy $V_BIN/principal dump
 EOF
-$V_BIN/agentd --v23.credentials $V_TUT/cred/alice \
-    --additional-principals $V_TUT/cred/alice \
-    bash $V_TUT/subshell.sh
+V23_CREDENTIALS=$V_TUT/cred/alice bash $V_TUT/subshell.sh
 ```
 
 Compare the output of the two `dump` commands to see that the first
@@ -162,9 +178,10 @@ many processes, running each process with a new identity.
 
 Here's the server and client example again, using `vbecome` for the
 client.  This example omits the `--name` flag on `vbecome`.  In this
-case, `vbecome` uses the name of the executable being run as the blessing
-name.  Thus, in this case, the blessing name will be _alice:client_ (the agent
-runs as _alice_, and the executable's name is _client_).
+case, `vbecome` uses the name of the executable being run as the
+blessing name.  Thus, in this case, the blessing name will be
+_alice:client_ (the script runs as _alice_, and the executable's name
+is _client_).
 
 <!-- @onceMoreWithFeeling @test -->
 ```
@@ -179,9 +196,7 @@ cat <<EOF > $V_TUT/subshell.sh
       --server \`cat $V_TUT/server.txt\`
   kill \$TUT_PID_SERVER # Only making one call.
 EOF
-$V_BIN/agentd --v23.credentials $V_TUT/cred/alice \
-    --additional-principals $V_TUT/cred/alice \
-    bash $V_TUT/subshell.sh
+V23_CREDENTIALS=$V_TUT/cred/alice bash $V_TUT/subshell.sh
 ```
 
 The RPC works because the client runs with a blessing derived from the
@@ -197,13 +212,18 @@ other process using `principal set forpeer`.
 
 The problem in that is not the blessing being sent 'in the clear' -
 that's OK.  The problem is that the person issuing the commands _has
-direct access to credential data on both sides_.
+direct access to credential data on both sides_. The way blessings
+have been generated so far in the tutorials - in which you the tutee
+casually exploited your read access to the private keys of both the
+blessor and blessee - isn't practical for blessings being granted
+between disjoint principals remote from each other on a network.
 
 The agent, and the command `principal recvblessing`, make the act of
 blessing much more secure.
 
-The following example involves two processes, securely running under
-distinct agents (neither process can see private keys).
+The following example involves two processes, securely running with
+distinct agents started automatically (neither process can see private
+keys).
 
 The first process, running as Bob, will get into a state where it
 _waits_ for a blessing. The second process, running as Alice, will
@@ -219,8 +239,7 @@ cat <<EOF > $V_TUT/subshell1.sh
       --remote-arg-file $V_TUT/recvblessings_args.json
   $V_BIN/principal dump
 EOF
-$V_BIN/agentd --v23.credentials $V_TUT/cred/bob \
-    bash $V_TUT/subshell1.sh &
+V23_CREDENTIALS=$V_TUT/cred/bob bash $V_TUT/subshell1.sh &
 ```
 
 {{# helpers.info }}
@@ -241,8 +260,7 @@ cat <<EOF > $V_TUT/subshell2.sh
       --remote-arg-file $V_TUT/recvblessings_args.json \
       companion
 EOF
-$V_BIN/agentd --v23.credentials $V_TUT/cred/alice \
-    bash $V_TUT/subshell2.sh
+V23_CREDENTIALS=$V_TUT/cred/alice bash $V_TUT/subshell2.sh
 ```
 
 The `bless` command above transmits the blessing `alice:companion` from
@@ -259,7 +277,8 @@ info.
 
 # Summary
 
-* Use `agentd` to keep your private keys private.
+* Use `v23agentd` to keep your private keys private.  Remember
+  `v23agentd` gets started automatically if in the `PATH`.
 
 * Use `vbecome` to seamlessly create a principal for a subprocess, blessed
   by the principal of the existing process.
@@ -273,3 +292,4 @@ info.
 [file descriptor]: http://en.wikipedia.org/wiki/File_descriptor
 [`ssh-agent`]: http://en.wikipedia.org/wiki/Ssh-agent
 [second terminal]: /tutorials/setup.html
+[hello world]: /tutorials/hello-world.html
