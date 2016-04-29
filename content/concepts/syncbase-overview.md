@@ -215,13 +215,14 @@ The receivers automatically verify the signatures.
 
 ## Example Apps
 
-We examined 15+ apps in detail to understand what granularity of access control
-and syncing was appropriate. For some apps like a news reader or a brokerage,
-everything is single user, so syncing all of the data in the local database is
-appropriate. For apps like turn-based games or Nest, there are islands of data
-(e.g. one instance of a game is totally separate from another, one house is
-totally separate from another), so grouping the data into syncgroups is easy.
-The remaining apps were more complicated.
+We [examined 15+ apps in detail](/designdocs/syncbase-examples.html)
+to understand what granularity of access control and syncing was appropriate.
+For some apps like a news reader or a brokerage, everything is single user, so
+syncing all of the data in the local database is appropriate. For apps like
+turn-based games or Nest, there are islands of data (e.g. one instance of a
+game is totally separate from another, one house is totally separate from
+another), so grouping the data into syncgroups is easy. The remaining apps
+were more complicated.
 
 For productivity apps like Todos or Docs, it might make sense to have folders
 and subfolders. The user might want to share a root folder, a subfolder, or
