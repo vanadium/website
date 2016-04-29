@@ -66,7 +66,7 @@ directory, which the client connects to when using `--v23.credentials
 {directory}`.  This happens in the Vanadium runtime - no new client
 code required.
 
-Typically, however, launching an agent explicitly is not necessary --
+Typically, launching an agent explicitly is not necessary --
 as long as `v23agentd` is in its `PATH`, a program run with
 `--v23.credentials {directory}` will automatically launch an agent to
 serve the credentials.  Other programs using `--v23.credentials
@@ -91,11 +91,11 @@ before we run the client and server.
 <!-- @twoAgents @test -->
 ```
 # Clean up from previous attempt, if any.
-kill_tut_process TUT_PID_AGENT
+kill_tut_process TUT_PID_SERVER
 /bin/rm -f $V_TUT/server.txt
 
 # Run an agent for server credentials.
-$V_BIN/v23agentd $V_TUT/cred/alice &
+$V_BIN/v23agentd $V_TUT/cred/alice
 $V_TUT/bin/server \
     --v23.credentials $V_TUT/cred/alice \
     --endpoint-file-name $V_TUT/server.txt \
@@ -108,13 +108,15 @@ TUT_PID_SERVER=$!
 sleep 2s
 
 # Run an agent for client credentials.
-$V_BIN/agentd $V_TUT/cred/bob &
+$V_BIN/v23agentd $V_TUT/cred/bob
 $V_TUT/bin/client \
     --v23.credentials $V_TUT/cred/bob \
     --server `cat $V_TUT/server.txt`
 
-# All done, kill the server.
+# All done, kill the server and agents
 kill_tut_process TUT_PID_SERVER
+$V_BIN/v23agentd --stop $V_TUT/cred/alice
+$V_BIN/v23agentd --stop $V_TUT/cred/bob
 ```
 
 The above should run without errors, i.e. the client should report a
