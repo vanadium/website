@@ -61,7 +61,7 @@ the necessary crypto with the keys it holds, passing the result back
 to the client.
 
 Launching an agent to serve credentials in a given directory (by
-invoking `v23agentd {directory}`) sets up a socket file in the
+invoking `v23agentd --credentials={directory}`) sets up a socket file in the
 directory, which the client connects to when using `--v23.credentials
 {directory}`.  This happens in the Vanadium runtime - no new client
 code required.
@@ -95,7 +95,7 @@ kill_tut_process TUT_PID_SERVER
 /bin/rm -f $V_TUT/server.txt
 
 # Run an agent for server credentials.
-$V_BIN/v23agentd $V_TUT/cred/alice
+$V_BIN/v23agentd --credentials=$V_TUT/cred/alice
 $V_TUT/bin/server \
     --v23.credentials $V_TUT/cred/alice \
     --endpoint-file-name $V_TUT/server.txt \
@@ -108,15 +108,15 @@ TUT_PID_SERVER=$!
 sleep 2s
 
 # Run an agent for client credentials.
-$V_BIN/v23agentd $V_TUT/cred/bob
+$V_BIN/v23agentd --credentials=$V_TUT/cred/bob
 $V_TUT/bin/client \
     --v23.credentials $V_TUT/cred/bob \
     --server `cat $V_TUT/server.txt`
 
 # All done, kill the server and agents
 kill_tut_process TUT_PID_SERVER
-$V_BIN/v23agentd --stop $V_TUT/cred/alice
-$V_BIN/v23agentd --stop $V_TUT/cred/bob
+$V_BIN/v23agentd stop --credentials=$V_TUT/cred/alice
+$V_BIN/v23agentd stop --credentials=$V_TUT/cred/bob
 ```
 
 The above should run without errors, i.e. the client should report a
