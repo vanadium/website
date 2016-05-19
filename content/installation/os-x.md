@@ -36,8 +36,7 @@ This will pop up a dialog window to install the command line tools:
 
 Click "Install".
 
-Note, you can also install all of [Xcode], but that's not needed for Vanadium
-unless you are using the Node.js libraries.
+Note, you can also install all of [Xcode], but that's not needed for Vanadium.
 
 If you are using a version of OS X that is older than 10.9, you will need to get
 the command line tools for your version from

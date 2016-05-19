@@ -400,20 +400,6 @@ e.g. Go and Java.
 
 See also: [VOM specification][vom-spec].
 
-# WebSocket Proxy (WSPR)
-
-A server (usually called WSPR, pronounced *whisper*) allows JavaScript
-running in a web browser or Node.js to communicate with a Vanadium system.
-WSPR proxies the Vanadium world behind a WebSocket interface.
-
-A JavaScript app uses a Node.js module that implements a WebSocket front-end
-to WSPR. WSPR accepts requests from the app over the WebSocket, sends them on
-as conventional Vanadium RPCs, and returns the responses to the JavaScript app
-via WebSocket.
-
-WSPR as a concept will move from a freestanding server into a browser
-extension, and ultimately become native to browsers.
-
 [naming-concepts]: /concepts/naming.html
 [rpc-concepts]: /concepts/rpc.html
 [vdl-spec]: /designdocs/vdl-spec.html

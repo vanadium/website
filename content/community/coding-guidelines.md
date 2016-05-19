@@ -95,12 +95,6 @@ project like Vanadium, the simplest way to accomplish this is to place
 VDL source files into the `go/src` tree at the location that the
 generated Go should be placed.
 
-# JavaScript
-
-Follow the [Node.js Style Guide]. Use our [.jshintrc].
-
-<!-- TODO: Documentation generation (jsdoc). -->
-
 # Shell
 
 We prefer Go programs over shell scripts for jobs traditionally given
@@ -109,10 +103,8 @@ to shell scripts.
 If you must write a shell script, follow the
 [Google Shell Style Guide].
 
-[.jshintrc]: https://github.com/vanadium/js/blob/master/.jshintrc
 [Effective Go]: http://golang.org/doc/effective_go.html
 [Google Shell Style Guide]: https://google-styleguide.googlecode.com/svn/trunk/shell.xml
-[Node.js Style Guide]: https://github.com/felixge/node-style-guide
 [RPC]: /glossary.html#remote-procedure-call-rpc-
 [VDL]: /glossary.html#vandium-definition-language-vdl-
 [brad talk]: http://talks.golang.org/2014/gocon-tokyo.slide#36

@@ -24,8 +24,8 @@ place. Check your state:
 
 Development also requires Node.js. Install it as follows:
 ```
-# Adds node to $JIRI_ROOT/environment/cout/node/bin. The Makefile adds this to
-# $PATH automatically.
+# Install the Node.js profile. The Makefile adds the nodejs binary to $PATH
+# automatically.
 jiri profile install v23:nodejs
 ```
 
