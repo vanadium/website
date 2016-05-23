@@ -1,40 +1,54 @@
 = yaml =
-title: Syncbase
+title: Syncbase for Android
 layout: syncbase
-theme: teal
-toc: true
+toc: false
 = yaml =
 
 Syncbase is a storage system for developers that makes it easy to synchronize
 app data between devices. It works even when devices are not connected to the
-Internet.
+Internet. Syncbase runs on both Android and iOS.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2cHzd8pBYmU" frameborder="0" allowfullscreen></iframe>
+<img src="http://placehold.it/600x400?text=Syncbase Animation">
+<figcaption>Syncbase's easy-to-use API and peer-to-peer synchronization make
+developing offline-first mobile apps a breeze.</figcaption>
 
 # Why use Syncbase?
 
-- Synchronization between one user's devices is trivial to configure; multiple
-  users can synchronize specific data too
-  - Low latency synchronization enables many apps to use storage for
-    asynchronous communication
-- Internet connection not required
-  - Local storage still works when not connected to the internet
-  - Synchronization protocol is peer-to-peer and works just as well over local
-    WiFi or Bluetooth as the internet
-- Conflict resolution system merges data when devices have been working offline
-- Unified storage model handles both structured data and blobs
-  - Structured databases are easy to use and queryable
-  - Blob caching policies work well on resource-limited devices
-- Powerful management tools
-  - Leverages the Vanadium namespace and security system
-  - Open source reference implementation of Syncbase for developers who want
-    tight control over the data
+<div class="intro-detail intro-detail-offline">
+<p>
+**Offline-first and peer-to-peer**<br>
+Syncbase provides local storage that opportunistically syncs data behind the
+scenes with very low latency. Then built-in conflict resolvers merge data
+seamlessly when devices have been working offline.
+<br>
+There is no cloud instance or internet required for data synchronization to work.
+Synchronization protocol is peer-to-peer and works just as well over local WiFi
+or Bluetooth as the internet. Of course, optionally adding a cloud peer can help
+with data backup and improved data availability.
+</p>
+</div>
 
-The initial version of Syncbase is ready for testing and evaluation by early
-adopters - it is suitable for prototyping, but not for production applications.
+<div class="intro-detail intro-detail-codebase">
+<p>
+**Easy to use**<br>
+Syncbase includes a high-level API that's intuitive and easy-to-use.
+The data model is simple to understand and based on collections of
+key-value pairs.<br>
+Synchronization between one user's devices works out of the box and sharing
+data with other users is trivial.
+</p>
+</div>
 
-This document presents an overview of the system. It is very light on
-implementation details. Subsequent docs will contain those details.
+<div class="intro-detail intro-detail-security">
+<p>
+**Secure**<br>
+Syncbase is secure by default. All data is only accessible by the creator unless
+shared explicitly with others using Syncbase's fine-grained access control
+feature.<br>
+When synchronizing with peers, all communication is encrypted end-to-end on the
+wire.
+</p>
+</div>
 
 # Background
 
@@ -45,3 +59,12 @@ addition, very few systems have the fine-grained access control or powerful,
 configurable conflict resolution we want. In summary, we're trying to solve a
 bunch of problems simultaneously whereas those other systems each solve a subset
 of those problems.
+
+# Ready to get started?
+
+The initial version of Syncbase is ready for testing and evaluation by early
+adopters - it is suitable for prototyping, but not for production applications.
+
+<a href="/syncbase/quickstart.html" class="button-passive">
+Build your first app
+</a>

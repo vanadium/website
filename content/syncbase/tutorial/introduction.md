@@ -1,7 +1,6 @@
 = yaml =
-title: Setup
+title: Introduction
 layout: syncbase_tutorial
-wherein: you do the step 1
 sort: 1
 toc: true
 = yaml =

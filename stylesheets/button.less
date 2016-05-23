@@ -1,0 +1,33 @@
+/* Copyright 2015 The Vanadium Authors. All rights reserved. */
+/* Use of this source code is governed by a BSD-style */
+/* license that can be found in the LICENSE file. */
+
+@import "constants";
+
+.button,
+.button-passive,
+.button-primary {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  text-transform: uppercase;
+  padding: 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  outline: 0;
+}
+
+.button-passive {
+  color: @color-primary-700;
+  background-color: transparent;
+  border: 1px solid @color-primary-700;
+  transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover, &:active {
+    color: @color-white;
+    background-color: @color-primary-700;
+    border: 1px solid @color-primary-700;
+  }
+}

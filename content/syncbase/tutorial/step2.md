@@ -1,10 +1,7 @@
 = yaml =
-title: Step 2
+title: Creating Todo Lists
 layout: syncbase_tutorial
-theme: teal
 wherein: you do the step 2
 sort: 2
 toc: true
 = yaml =
-
-# Introduction to step 2

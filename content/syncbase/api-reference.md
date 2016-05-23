@@ -1,7 +1,5 @@
 = yaml =
-title: Access Control
+title: API Reference
 layout: syncbase
-theme: teal
-sort: 5
 toc: true
 = yaml =

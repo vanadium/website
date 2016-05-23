@@ -1,5 +1,5 @@
 = yaml =
-title: Example Apps
+title: My Cloud Syncbase
 layout: syncbase
 toc: true
 = yaml =

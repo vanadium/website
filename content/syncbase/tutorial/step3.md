@@ -1,10 +1,7 @@
 = yaml =
-title: Step 3
+title: Sharing Todo Lists
 layout: syncbase_tutorial
-theme: teal
 wherein: you do the step 3
 sort: 3
 toc: true
 = yaml =
-
-# Introduction to step 3

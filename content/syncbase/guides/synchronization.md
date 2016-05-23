@@ -1,7 +1,6 @@
 = yaml =
-title: Synchronization
+title: Sharing Data
 layout: syncbase
-theme: teal
 sort: 3
 toc: true
 = yaml =
