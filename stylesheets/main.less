@@ -245,3 +245,14 @@ main {
 .note {
   @import "note";
 }
+
+.rows {
+  display: flex;
+  margin-right: @gutter-half;
+  margin-left: @gutter-half;
+  & > * {
+    flex: 1;
+    margin-right: @gutter-half;
+    margin-left: @gutter-half;
+  }
+}

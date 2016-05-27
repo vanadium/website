@@ -8,7 +8,8 @@ Syncbase is a storage system for developers that makes it easy to synchronize
 app data between devices. It works even when devices are not connected to the
 Internet. Syncbase runs on both Android and iOS.
 
-<img src="http://placehold.it/600x400?text=Syncbase Animation">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/2cHzd8pBYmU" frameborder="0" allowfullscreen></iframe>
+
 <figcaption>Syncbase's easy-to-use API and peer-to-peer synchronization make
 developing offline-first mobile apps a breeze.</figcaption>
 
@@ -66,5 +67,5 @@ The initial version of Syncbase is ready for testing and evaluation by early
 adopters - it is suitable for prototyping, but not for production applications.
 
 <a href="/syncbase/quickstart.html" class="button-passive">
-Build your first app
+Get started quickly
 </a>

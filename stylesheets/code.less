@@ -6,7 +6,22 @@
 
 pre, code {
   font-family: "Source Code Pro", monospace;
-  font-size: 12px;
+  font-size: @code-font-size;
+
+  .hljs-code-dim {
+    opacity: 0.35;
+    visibility: hidden;
+    font-size: 0px;
+
+    .hljs-code-dim-children {
+      visibility: visible;
+      font-size: @code-font-size;
+    }
+  }
+
+  &:hover .hljs-code-dim {
+    opacity: 0.1;
+  }
 }
 
 code {

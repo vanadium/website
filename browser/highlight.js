@@ -7,15 +7,29 @@ var hljs = require('highlight.js');
 function language(name) {
   return function() {
     var l = hljs.getLanguage(name);
-    l.contains.push({className: 'catline', begin: 'cat', end: '$'});
-    l.contains.push({className: 'eofline', begin: 'EOF', end: '$'});
+    l.contains.push({
+      className: 'code-dim',
+      begin: '<dim>',
+      end: '</dim>',
+      contains: [{
+        className: 'code-dim-children',
+        begin: '<dim-children>',
+        end: '</dim-children>',
+        excludeEnd: true,
+        excludeBegin: true,
+        contains: l.contains
+      }]
+    });
     return l;
   };
 }
 
 module.exports = function() {
-  hljs.registerLanguage('vjs', language('javascript'));
+  // Extend every supported language with code dimming functionality.
   hljs.registerLanguage('vxml', language('xml'));
-  hljs.configure({languages: ['bash', 'go', 'vjs', 'vxml']});
+  hljs.registerLanguage('vjava', language('java'));
+  hljs.registerLanguage('vgo', language('go'));
+  hljs.registerLanguage('vbash', language('bash'));
+  hljs.configure({languages: ['vbash', 'vgo', 'vxml', 'vjava']});
   hljs.initHighlighting();
 };

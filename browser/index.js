@@ -54,7 +54,7 @@ domready(function() {
   // Add copy-to-clipboard buttons to code blocks, but only for certain sections
   // of the site.
   var pathname = window.location.pathname;
-  if (pathname.match(/(tutorials|installation|contributing)/)) {
+  if (pathname.match(/(tutorials|installation|contributing|syncbase)/)) {
     require('./clipboard')();
   }
 

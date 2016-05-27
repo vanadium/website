@@ -30,6 +30,12 @@ exports.codeoutput = function(text) {
   return mkcode(text, 'noclipboard nohighlight');
 };
 
+// Dims enclosed code when used within a code block.
+exports.codedim = function(text) {
+  text = text.replace(/^\n+|\s+$/g, '');
+  return '<dim><dim-children>' + text + '</dim-children></dim>\n';
+};
+
 ////////////////////////////////////////
 // Internal helpers
 
