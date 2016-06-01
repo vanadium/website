@@ -3,17 +3,6 @@ title: Example Apps
 toc: true
 = yaml =
 
-# Todos (using Syncbase)
-
-* Repo: https://github.com/vanadium/todos
-* Issues: https://github.com/vanadium/todos/issues
-
-[Syncbase Todos][todos] is an example app that demonstrates
-[Syncbase][syncbase], Vanadium's p2p-synced datastore. Changes are synced in
-real time, with or without an Internet connection.
-
-For more information, see the [README][todos-readme].
-
 # Vanadium Chat
 
 * Repo: https://github.com/vanadium/chat
