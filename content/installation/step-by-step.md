@@ -123,7 +123,11 @@ Note that the printed command may need to be run as root.
 
 <!-- @packagesBaseProfile @test -->
 ```
+# Print the package installation command.
 jiri profile os-packages v23:base
+
+# Run the package installation command as root.
+sudo $(jiri profile os-packages v23:base)
 ```
 
 Then install the prerequisites themselves.
