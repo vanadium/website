@@ -17,7 +17,7 @@ these docs are intended to provide inspiration while designing your own apps.
 Allows a user to browse and place orders from a catalog containing coffee and
 related paraphernalia.
 
-[Design Doc](/designdocs/syncbase-examples/coffee-catalog.html)
+[Design Doc](/syncbase/designdocs/coffee-catalog.html)
 
 
 # TODO(kash): Convert the other 15+ docs to markdown

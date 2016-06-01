@@ -1,5 +1,6 @@
 = yaml =
 title: Coffee Catalog
+layout: syncbase
 toc: false
 = yaml =
 
@@ -55,25 +56,29 @@ type Order struct {
 }
 ```
 ## Organization
+```
+<app-blessing>-catalog Collection
+  <Item.Id>: Item
 
-    <app-blessing>-catalog Collection
-      <Item.Id>: Item
+<user-blessing>-user Collection
+  <User.Id>: User
+  // possibly also include per-user catalog metadata, e.g. favorites
 
-    <user-blessing>-user Collection
-      <User.Id>: User
-      // possibly also include per-user catalog metadata, e.g. favorites
+<user-blessing>-draftOrders Collection
+  <Order.Id>: Order
+  <Order.Id>/items/
+    <Item.Id>: OrderItem
 
-    <user-blessing>-draftOrders Collection
-      <Order.Id>: Order
-      <Order.Id>/items/
-        <Item.Id>: OrderItem
+<user-blessing>-placedOrders Collection - same layout as draftOrders
+<user-blessing>-processedOrders Collection - same layout as draftOrders
+```
 
-    <user-blessing>-placedOrders Collection - same layout as draftOrders
-    <user-blessing>-processedOrders Collection - same layout as draftOrders
-
-Note: We might keep user records in a "users" table and order records in an
+{{# helpers.info }}
+### Note
+We might keep user records in a "users" table and order records in an
 “orders” table in order to enforce schema, but this is orthogonal to
 collection layout.
+{{/ helpers.info }}
 
 When a user "places" an order, all data for the order is moved (copy + delete)
 atomically from the “draftOrders” to the “placedOrders” collection.
@@ -97,7 +102,7 @@ wrappers and helper functions, e.g. an "order" object that directly contains a
 list of items (to simplify view rendering) and functions to add, remove, or
 update items in a draft order (to simplify writing back to the store).
 
-## Syncing and permissions
+# Syncing and permissions
 
 Let "bluebottle" be the blessing for the administrator/owner of the store.
 
@@ -118,7 +123,7 @@ Let "bluebottle" be the blessing for the administrator/owner of the store.
 In all cases, both "bluebottle" and user can have syncgroup admin (sgA)
 permissions to make adding new devices more flexible.
 
-## Conflicts
+# Conflicts
 
 * Items in catalog: last-writer-wins. (Per-field last-writer-wins would be better.)
   Conflicts should be rare since users can’t write this data, but are possible

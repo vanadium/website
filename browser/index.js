@@ -130,8 +130,7 @@ function ensureHttps() {
   var protocol = window.location.protocol;
 
   if (protocol !== 'https:' &&
-      !host.startsWith('localhost') &&
-      !host.startsWith('127.0.0.1')) {
+      host === 'vanadium.github.io') {
     window.location.href = 'https:' + window.location.href.substring(protocol.length);
   }
 }

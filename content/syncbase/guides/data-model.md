@@ -4,3 +4,209 @@ layout: syncbase
 sort: 1
 toc: true
 = yaml =
+
+# Introduction
+Syncbase is a key-value storage system that handles both structured data and
+blobs. The data is organized by the following hierarchy:
+
+* [Database](#database): An app is pre-configured to have a single database
+which may contain any number of collections.
+* [Collection](#collections): A collection is a set of key-value pairs
+(rows). Collections are the unit of access control and sharing.
+* [Row](#rows): Each row contains a single key-value pair. Keys are strings and
+the values can be both [structured data](#structured-data) and [blobs](#blobs).
+Values in the rows of a collection can be heterogeneous or based on a
+pre-defined [schema](#schema).
+
+# Database
+Database is the entry point to the Syncbase API and provides functionality to
+create, watch and share collections, and to perform batch operations.
+
+There is a pre-configured database for each app. `Syncbase.getDatabase()` is
+used to initialize Syncbase and get a reference to the app's database.
+
+```
+DatabaseOptions dbOpt = new DatabaseOptions();
+
+dbOpt.cloudSyncbaseAddress = '<Your Cloud Syncbase Address>';
+dbOpt.cloudSyncbaseBlessing = '<Your Cloud Syncbase Blessing>';
+
+Database db = Syncbase.getDatabase();
+```
+
+Other database options include ability to set the directory where data files
+are stored and whether collections should automatically sync across a user's
+devices or not (true by default).
+
+[Database API reference](/syncbase/api-reference.html#database)
+
+
+# Collections
+
+Collections in Syncbase are used to group related rows together and are the
+unit of access control and sharing.
+
+By default, collection data is synced among the creator's devices. Collections
+can also be shared with other users.
+
+The sharing mechanism is based on *Syncgroups*. Each collection has a default
+Syncgroup that is used to sync data to the user's other devices. By inviting
+other users to join this pre-defined Syncgroup, one can share the collection
+with others. When inviting others to join a collection's Syncgroup, one can
+specify different levels of access such as `Read`, `ReadWrite` or `ReadWriteAdmin`.
+
+Collections created by all users live in the same namespace. To avoid collisions,
+the system automatically prepends the user's identity (blessing) to the
+Collection ID. The developer still needs to think about collisions, however.
+The user might use one device while offline and then switch to another device
+while still offline. When those two devices sync with each other, should the
+Collections merge or stay separate? If the developer wants them to stay separate,
+the collection IDs should include a UUID. If the developer wants them to merge,
+they should use a predictable name (example: "preferences"). Collection names are
+restricted to alphanumeric characters plus underscore and can have a maximum
+length of 64 bytes.
+
+```
+UUID collectionName = Syncbase.getUUID();
+Collection collection = db.collection(collectionName);
+
+UUID rowKey = Syncbase.getUUID();
+collection.put(rowKey, "myValue");
+
+String myValue = collection.get(rowKey, String.class);
+
+collection.delete(rowKey);
+```
+
+As mentioned earlier, collections are synced across user's devices by default
+but one can set `withoutSyncgroup` to `false` on
+`CollectionOptions` to make a local-only collection that will not sync with
+any other peer.
+
+[Collection API reference](/syncbase/api-reference.html#collection)
+
+
+# Rows
+
+A row refers to a key-value pair in a collection.
+
+## Keys
+
+Keys are strings and normally UUIDs, however there are no restrictions on what
+keys can be. All UTF-8 strings are valid and there is no limit on key length.
+
+It can be beneficial to use hierarchical keys to facilitate prefix-matching
+and/or filtering. This can be done by using a known separator such as `/`.
+For example, data model for a folder/file storage system may design a key space
+such as:
+
+{{# helpers.code }}
+folder1
+folder1/doc1
+folder1/folder2
+folder1/folder2/doc2
+{{/ helpers.code }}
+
+## Structured Data
+
+Syncbase supports [POJO](https://en.wikipedia.org/wiki/Plain_Old_Java_Object)
+as values and takes case of serialization. POJO classes must have an empty
+constructor.
+
+```
+public class MyPojo {
+    String foo;
+    Integer bar;
+    List<MyPojo> baz;
+
+    public MyPojo() {
+        foo = null;
+        bar = null;
+        baz = Lists.newArrayList();
+    }
+}
+
+MyPojo pojoIn = new MyPojo();
+collection.put('myKey', pojo);
+MyPojo pojoOut = collection.get('myKey', MyPojo.class);
+```
+
+{{# helpers.info }}
+### Query support is an upcoming feature
+Syncbase has support for querying values in structured data. For
+example, one could find all the `MyPojo` objects that have the value `bar > 10`.
+This feature is currently not exposed in the API, but might be in the
+future.
+{{/ helpers.info }}
+
+## Blobs
+
+{{# helpers.info }}
+### Blob support is an upcoming feature
+This feature is currently not exposed in the API, but will be in the
+future.
+{{/ helpers.info }}
+
+Syncbase has strong support for blobs. Blobs support a streaming upload/download
+API rather than the all-at-once operations of the structured data. Syncbase
+understands references to blobs in the structured data, making it possible to
+implement automatic caching and garbage collection of the blobs. Blob references
+implicitly grant access to blobs in a manner similar to a
+[capability](https://en.wikipedia.org/wiki/Capability-based_security).
+
+Blob references can be stored as values in the key-value store. There is an API
+for apps to specify per-device caching policies so that not all blobs need to be
+in all devices. It is the responsibility of Syncbase to watch for BlobRefs in
+the structured storage and cache the right blobs on each device.
+
+# Schema
+
+{{# helpers.info }}
+### Schema support is an upcoming feature
+This feature is currently not exposed in the API, but will be in the
+future.
+{{/ helpers.info }}
+
+To support stronger data integrity, collections can be tied to a data schema, and
+Syncbase will ensure all written values match that schema or write will fail.
+
+# Example Models
+
+To validate the Syncbase data model, we wrote design docs for a wide variety of
+apps. These docs focused on the interactions with Syncbase and the schema they
+would use for storage and synchronization. There are many variations on the
+features in the apps and many ways to implement those features, so these docs
+are not intended to represent the only way to build these apps. Instead, these
+docs are intended to provide inspiration while designing your own apps.
+
+## Coffee Catalog
+
+Allows a user to browse and place orders from a catalog containing coffee and
+related paraphernalia.
+
+[Design Doc](/syncbase/designdocs/coffee-catalog.html)
+
+## Croupier
+
+Allows users to organize and play peer-to-peer card games together.
+The Syncbase schema supports general card games, and it is up to each
+application to support games (e.g., Hearts, Solitaire, etc.).
+
+[Design Doc](/syncbase/designdocs/croupier.html)
+
+## SyncSlides
+
+Peer-to-peer slide presentation.  Allows audience to ask questions.
+Presenter can delegate control of the presentation to an audience member temporarily.
+
+[Design Doc](/syncbase/designdocs/syncslides.html)
+
+## Brokerage
+
+The Brokerage app allows a user to invest in the stock market and monitor the
+performance of the portfolio.  Security is of utmost importance.
+The portfolio can be browsed while offline.  Some non-critical data
+(e.g., stock watchlist) may be shared in read-only mode with other apps.
+There is no sharing between user accounts.
+
+[Design Doc](/syncbase/designdocs/brokerage.html)
