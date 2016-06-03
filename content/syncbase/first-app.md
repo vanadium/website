@@ -152,7 +152,7 @@ through the Watch handler with very low latency enabling us to only update the
 UI in a single place, regardless of whether the new value is local or was synced
 from a remote device.
 
-<img src="/images/syncbase-dice-data-flow.png" alt="Unidirectioanl Data Flow using Watch API">
+<img src="/images/syncbase-dice-data-flow.png" alt="Unidirectional Data Flow using Watch API">
 
 Now let's hook up this model to our code.
 
