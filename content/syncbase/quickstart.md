@@ -7,7 +7,7 @@ toc: true
 {{# helpers.hidden }}
 <!-- @setupEnvironment @test -->
 ```
-SYNCBASE_ANDROID_PROJECT_DIR=$(mktemp -d /tmp/tmp.XXXXXXXXXX)
+SYNCBASE_ANDROID_PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/quickstart/* $SYNCBASE_ANDROID_PROJECT_DIR
 cd $SYNCBASE_ANDROID_PROJECT_DIR
 ```
