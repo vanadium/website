@@ -7,9 +7,8 @@ toc: true
 {{# helpers.hidden }}
 <!-- @setupEnvironment @test -->
 ```
-SYNCBASE_ANDROID_PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
-cp -r $JIRI_ROOT/website/tools/android_project_stubs/quickstart/* $SYNCBASE_ANDROID_PROJECT_DIR
-cd $SYNCBASE_ANDROID_PROJECT_DIR
+export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
+cp -r $JIRI_ROOT/website/tools/android_project_stubs/quickstart/* $PROJECT_DIR
 ```
 {{/ helpers.hidden }}
 
@@ -29,7 +28,7 @@ To install the library, add the following to your `build.gradle` file.
 {{# helpers.hide_cat_eof_lines }}
 <!-- @addSyncbaseDependency @test -->
 ```
-cat <<EOF >> app/build.gradle
+cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
   compile 'io.v:syncbase:0.1.4'
 }
@@ -57,7 +56,7 @@ In your `MainActivity`, import Syncbase and read/write some data!
 {{# helpers.hide_cat_eof_lines }}
 <!-- @generateMainActivity @test -->
 ```
-cat <<EOF | sed 's/{{.*}}//' > app/src/main/java/syncbase/io/v/quickstart/MainActivity.java
+cat - <<EOF | sed 's/{{.*}}//' > $PROJECT_DIR/app/src/main/java/syncbase/io/v/quickstart/MainActivity.java
 {{# helpers.codedim}}
 package syncbase.io.v.quickstart;
 
@@ -101,7 +100,7 @@ EOF
 {{# helpers.hidden }}
 <!-- @compile_mayTakeMinutes @test -->
 ```
-./gradlew assembleRelease
+cd $PROJECT_DIR && ./gradlew assembleRelease
 ```
 {{/ helpers.hidden }}
 
