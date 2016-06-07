@@ -4,6 +4,15 @@ layout: syncbase
 toc: true
 = yaml =
 
+{{# helpers.hidden }}
+<!-- @setupEnvironment @test -->
+```
+SYNCBASE_ANDROID_PROJECT_DIR=$(mktemp -d /tmp/tmp.XXXXXXXXXX)
+cp -r $JIRI_ROOT/website/tools/android_project_stubs/quickstart/* $SYNCBASE_ANDROID_PROJECT_DIR
+cd $SYNCBASE_ANDROID_PROJECT_DIR
+```
+{{/ helpers.hidden }}
+
 # Setup
 This tutorial uses Android Studio, but feel free to use your IDE of choice.
 
@@ -17,11 +26,16 @@ template.
 Syncbase's Android library is published to both [JCenter] and [MavenCentral].
 To install the library, add the following to your `build.gradle` file.
 
+{{# helpers.hide_cat_eof_lines }}
+<!-- @addSyncbaseDependency @test -->
 ```
+cat <<EOF >> app/build.gradle
 dependencies {
-  compile 'io.v:vanadium-android:2.1.3+'
+  compile 'io.v:syncbase:0.1.4'
 }
+EOF
 ```
+{{/ helpers.hide_cat_eof_lines }}
 
 # Setup Cloud Syncbase
 Head to [https://sb-allocator.v.io/](https://sb-allocator.v.io/) to setup a free
@@ -39,41 +53,57 @@ used without a cloud Syncbase soon.
 # Use Syncbase
 In your `MainActivity`, import Syncbase and read/write some data!
 
+
+{{# helpers.hide_cat_eof_lines }}
+<!-- @generateMainActivity @test -->
 ```
-{{# helpers.codedim }}
-import android.util.Log;
-{{/ helpers.codedim }}
+cat <<EOF | sed 's/{{.*}}//' > app/src/main/java/syncbase/io/v/quickstart/MainActivity.java
+{{# helpers.codedim}}
+package syncbase.io.v.quickstart;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+{{/ helpers.codedim}}
 import io.v.syncbase.*;
 
-{{# helpers.codedim }}
-@Override
-public void onCreate() {
-    super.onCreate();
-{{/ helpers.codedim }}
+{{# helpers.codedim}}
+public class MainActivity extends AppCompatActivity {
 
-  Users.loginWithDefaultAccount();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        {{/ helpers.codedim}}
+        Syncbase.database(new Syncbase.DatabaseCallback() {
+            @Override
+            public void onSuccess(Database db) {
 
-  DatabaseOptions dbOpt = new DatabaseOptions();
-  dbOpt.cloudSyncbaseAddress = '<Your Cloud Syncbase Address>';
-  dbOpt.cloudSyncbaseBlessing = '<Your Cloud Syncbase Blessing>';
+                // Use database to interact with Syncbase.
 
-  Database database = Syncbase.getDatabase(dbOpt);
+                Collection collection = db.collection("myCollection");
 
-  Collection collection = database.collection('myCollection');
+                collection.put("myKey", "myValue");
 
-  collection.put("myKey", "myValue");
+                String value = collection.get("myKey", String.class);
+            }
+        }, new Syncbase.DatabaseOptions());
+        {{# helpers.codedim}}
 
-  String value = collection.get('myKey', String.class);
-
-  // Prints "Value is: myValue"
-  Log.i("info", "Value is: " + value);
-
-{{# helpers.codedim }}
+        setContentView(R.layout.activity_main);
+    }
 }
-{{/ helpers.codedim }}
+{{/ helpers.codedim}}
+EOF
 ```
+{{/ helpers.hide_cat_eof_lines }}
 
 **That's all!** You are now using Syncbase!
+
+{{# helpers.hidden }}
+<!-- @compile_mayTakeMinutes @test -->
+```
+./gradlew assembleRelease
+```
+{{/ helpers.hidden }}
 
 # Got 10 more minutes?
 Let's create a simple *Dice Roller* app and see it sync peer-to-peer in action!
@@ -81,7 +111,6 @@ Let's create a simple *Dice Roller* app and see it sync peer-to-peer in action!
 <a href="/syncbase/first-app.html" class="button-passive">
 Create your first app
 </a>
-
 
 [JCenter]: https://bintray.com/vanadium/io.v/vanadium-android
 [MavenCentral]: http://repo1.maven.org/maven2/io/v/vanadium-android

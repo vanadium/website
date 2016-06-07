@@ -7,14 +7,16 @@ var hljs = require('highlight.js');
 function language(name) {
   return function() {
     var l = hljs.getLanguage(name);
+    l.contains.push({className: 'catline', begin: '^cat', end: '\n'});
+    l.contains.push({className: 'eofline', begin: '^EOF', end: '\n'});
     l.contains.push({
       className: 'code-dim',
-      begin: '<dim>',
-      end: '</dim>',
+      begin: '{#dim}',
+      end: '{/dim}',
       contains: [{
         className: 'code-dim-children',
-        begin: '<dim-children>',
-        end: '</dim-children>',
+        begin: '{#dim-children}',
+        end: '{/dim-children}',
         excludeEnd: true,
         excludeBegin: true,
         contains: l.contains

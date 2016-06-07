@@ -103,6 +103,8 @@ tutGlobber     = tutorials/naming/globber
 tutJavaAndroid = tutorials/java/android
 tutJavaFortune = tutorials/java/fortune
 
+syncbaseAndroidQuickstart = syncbase/quickstart
+
 # Scripts that 'complete' the named tutorials, creating all relevant files
 # (code, credentials, etc.) but skipping ephemeral steps like starting servers,
 # running clients, etc. Such scripts need exist only for tutorials that create
@@ -379,8 +381,11 @@ depsOneBigJavaTutorialTest = \
 	content/$(tutJavaFortune).md \
 	content/$(tutJavaAndroid).md
 
+depsOneBigSyncbaseAndroidTest = \
+	content/$(syncbaseAndroidQuickstart).md
+
 .PHONY: test
-test: test-site test-tutorials-core test-tutorials-java
+test: test-site test-tutorials-core test-tutorials-java test-syncbase-android
 
 .PHONY: test-site
 test-site: build node_modules
@@ -405,6 +410,11 @@ test-tutorials-core: build
 .PHONY: test-tutorials-java
 test-tutorials-java: build
 	$(MDRIP) --blockTimeOut 5m --subshell test $(depsOneBigJavaTutorialTest)
+
+# Test Syncbase quickstart, guides and tutorials for Android.
+# Called from v.io/x/devtools/jiri-test/internal/test/website.go.
+test-syncbase-android: build
+	$(MDRIP) --blockTimeOut 10m --subshell test $(depsOneBigSyncbaseAndroidTest)
 
 # Test tutorials against fresh external install.
 #

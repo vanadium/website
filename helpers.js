@@ -33,7 +33,12 @@ exports.codeoutput = function(text) {
 // Dims enclosed code when used within a code block.
 exports.codedim = function(text) {
   text = text.replace(/^\n+|\s+$/g, '');
-  return '<dim><dim-children>' + text + '</dim-children></dim>\n';
+  return '{#dim}{#dim-children}' + text + '{/dim-children}{/dim}\n';
+};
+
+// Hides the "cat <<EOF > ..." and "EOF" lines in tutorial code.
+exports.hide_cat_eof_lines = function(text) {
+  return '<div class="hide-cat-eof-lines">' + marked(text) + '</div>\n';
 };
 
 ////////////////////////////////////////
