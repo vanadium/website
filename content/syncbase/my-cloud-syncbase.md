@@ -57,8 +57,7 @@ address and blessing patterns is desired.
 
 The `DASHBOARD` button opens a page showing load and resource utilization for
 the instance.  The `DEBUG` button opens a page showing details about the
-instance like its blessings, stats, and a browse view of the databases.  See
-[Debugging] for more details.
+instance like its blessings, stats, and a browse view of the databases.
 
 [Debugging]: /syncbase/guides/debugging.html
 

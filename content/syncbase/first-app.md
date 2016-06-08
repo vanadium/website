@@ -4,6 +4,13 @@ layout: syncbase
 toc: true
 = yaml =
 
+{{# helpers.warning }}
+## Work in Progress!
+We're actively working on finishing up the Syncbase API and implementation.
+The code below compiles, but may not execute successfully.
+If you'd like to actually run this code, please check back with us in a few weeks.
+{{/ helpers.warning }}
+
 # Introduction
 
 In this quick tutorial, we will build a *Dice Roller* Android app where
@@ -11,8 +18,7 @@ one can simply generate a random number between 1-6 and have it sync
 across multiple devices peer-to-peer, even with Wi-Fi turned off!
 
 <div class="rows">
-  <img src="/images/syncbase-dice-device-1.gif">
-  <img src="/images/syncbase-dice-device-2.gif">
+  <img style="width:250px" src="/images/syncbase-dice-device-1.gif">
 </div>
 
 # Setup
@@ -264,8 +270,7 @@ ensure Bluetooth is enabled on both devices and turn off Wi-Fi, the dice rolls
 should still sync between the devices just fine!
 
 <div class="rows">
-  <img src="/images/syncbase-dice-device-1.gif">
-  <img src="/images/syncbase-dice-device-2.gif">
+  <img style="width:250px" src="/images/syncbase-dice-device-1.gif">
 </div>
 
 # Want to dive deeper?

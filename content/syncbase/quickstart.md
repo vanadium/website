@@ -4,6 +4,13 @@ layout: syncbase
 toc: true
 = yaml =
 
+{{# helpers.warning }}
+## Work in Progress!
+We're actively working on finishing up the Syncbase API and implementation.
+The code below compiles, but may not execute successfully.
+If you'd like to actually run this code, please check back with us in a few weeks.
+{{/ helpers.warning }}
+
 {{# helpers.hidden }}
 <!-- @setupEnvironment @test -->
 ```
@@ -72,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         {{/ helpers.codedim}}
+        Syncbase.DatabaseOptions options = new Syncbase.DatabaseOptions();
+        // dbOpt.cloudSyncbaseAddress = '<Your Cloud Syncbase Address>';
+        // dbOpt.cloudSyncbaseBlessing = '<Your Cloud Syncbase Blessing>';
+
         Syncbase.database(new Syncbase.DatabaseCallback() {
             @Override
             public void onSuccess(Database db) {
@@ -84,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String value = collection.get("myKey", String.class);
             }
-        }, new Syncbase.DatabaseOptions());
+        }, options);
         {{# helpers.codedim}}
 
         setContentView(R.layout.activity_main);
