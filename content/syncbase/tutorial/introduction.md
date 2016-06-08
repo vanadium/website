@@ -10,7 +10,8 @@ toc: true
 We are currently working on writing a detailed step-by-step tutorial for our
 canonical Todos example app.
 Meanwhile, feel free to use the simpler [Your First App] tutorial or
-checkout the code for the Todos app at https://github.com/vanadium/todos
+checkout the code for the Todos app at https://github.com/vanadium/todos, and
+please join our [mailing list](/community/mailing-lists.html) for updates.
 {{/ helpers.warning }}
 
 [Your First App]: /syncbase/first-app.html

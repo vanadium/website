@@ -7,8 +7,8 @@ toc: true
 {{# helpers.warning }}
 ## Work in Progress!
 We're actively working on finishing up the Syncbase API and implementation.
-The code below compiles, but may not execute successfully.
-If you'd like to actually run this code, please check back with us in a few weeks.
+The code below compiles, but may not execute successfully. Please join
+our [mailing list](/community/mailing-lists.html) for updates.
 {{/ helpers.warning }}
 
 {{# helpers.hidden }}
