@@ -13,9 +13,6 @@ var dom = require('./dom');
 var Sidebar = React.createFactory(require('./sidebar'));
 var Toc = React.createFactory(require('./toc'));
 
-// Redirect to https url if on http and not localhost.
-ensureHttps();
-
 domready(function() {
   var sidebarEl = dom.find('.sidebar');
   ReactDOM.render(Sidebar({
@@ -123,14 +120,4 @@ function parseTocProps() {
     title: titleEl.innerText,
     headings: headings
   };
-}
-
-function ensureHttps() {
-  var host = window.location.host;
-  var protocol = window.location.protocol;
-
-  if (protocol !== 'https:' &&
-      host === 'vanadium.github.io') {
-    window.location.href = 'https:' + window.location.href.substring(protocol.length);
-  }
 }
