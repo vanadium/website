@@ -4,7 +4,7 @@
   <body>
     {{> partials/syncbase_header }}
     {{> partials/syncbase_sidebar }}
-    <main>
+    <main class="hide-cat-eof-lines">
       <h1 class="title">
         {{# page.fullTitle }}{{ page.fullTitle }}{{/ page.fullTitle }}
         {{^ page.fullTitle }}{{ page.title }}{{/ page.fullTitle }}

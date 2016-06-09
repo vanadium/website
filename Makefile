@@ -104,6 +104,7 @@ tutJavaAndroid = tutorials/java/android
 tutJavaFortune = tutorials/java/fortune
 
 syncbaseAndroidQuickstart = syncbase/quickstart
+syncbaseAndroidFirstApp = syncbase/first-app
 
 # Scripts that 'complete' the named tutorials, creating all relevant files
 # (code, credentials, etc.) but skipping ephemeral steps like starting servers,
@@ -382,7 +383,8 @@ depsOneBigJavaTutorialTest = \
 	content/$(tutJavaAndroid).md
 
 depsOneBigSyncbaseAndroidTest = \
-	content/$(syncbaseAndroidQuickstart).md
+	content/$(syncbaseAndroidQuickstart).md \
+	content/$(syncbaseAndroidFirstApp).md
 
 .PHONY: test
 test: test-site test-tutorials-core test-tutorials-java test-syncbase-android

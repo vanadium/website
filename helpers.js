@@ -36,11 +36,6 @@ exports.codedim = function(text) {
   return '{#dim}{#dim-children}' + text + '{/dim-children}{/dim}\n';
 };
 
-// Hides the "cat <<EOF > ..." and "EOF" lines in tutorial code.
-exports.hide_cat_eof_lines = function(text) {
-  return '<div class="hide-cat-eof-lines">' + marked(text) + '</div>\n';
-};
-
 ////////////////////////////////////////
 // Internal helpers
 

@@ -15,7 +15,7 @@ our [mailing list](/community/mailing-lists.html) for updates.
 <!-- @setupEnvironment @test -->
 ```
 export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
-cp -r $JIRI_ROOT/website/tools/android_project_stubs/quickstart/* $PROJECT_DIR
+cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 ```
 {{/ helpers.hidden }}
 
@@ -32,7 +32,6 @@ template.
 Syncbase's Android library is published to both [JCenter] and [MavenCentral].
 To install the library, add the following to your `build.gradle` file.
 
-{{# helpers.hide_cat_eof_lines }}
 <!-- @addSyncbaseDependency @test -->
 ```
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
@@ -41,7 +40,6 @@ dependencies {
 }
 EOF
 ```
-{{/ helpers.hide_cat_eof_lines }}
 
 # Setup Cloud Syncbase
 Head to [https://sb-allocator.v.io/](https://sb-allocator.v.io/) to setup a free
@@ -59,13 +57,11 @@ used without a cloud Syncbase soon.
 # Use Syncbase
 In your `MainActivity`, import Syncbase and read/write some data!
 
-
-{{# helpers.hide_cat_eof_lines }}
 <!-- @generateMainActivity @test -->
 ```
-cat - <<EOF | sed 's/{{.*}}//' > $PROJECT_DIR/app/src/main/java/syncbase/io/v/quickstart/MainActivity.java
+cat - <<EOF | sed 's/{{.*}}//' > $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/MainActivity.java
 {{# helpers.codedim}}
-package syncbase.io.v.quickstart;
+package io.v.syncbase.example;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -85,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         Syncbase.database(new Syncbase.DatabaseCallback() {
             @Override
-            public void onSuccess(Database db) {
+            public void onSuccess(final Database db) {
 
                 // Use database to interact with Syncbase.
 
@@ -104,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 {{/ helpers.codedim}}
 EOF
 ```
-{{/ helpers.hide_cat_eof_lines }}
 
 **That's all!** You are now using Syncbase!
 
