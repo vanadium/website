@@ -88,13 +88,14 @@ void updateState(WatchChange change) {
             break;
     }
 }
+
+```
+
 {{# helpers.info }}
 ### Tip
 `db.removeAllWatchChangeHandlers()` can be used in activity's `onDestroy`
 to remove all registered watch handlers.
 {{/ helpers.info }}
-
-```
 
 In most cases, source of a change should be irrelevant to the application.
 However `watchChange.isFromSync()` can tell you if a change is due to a local
