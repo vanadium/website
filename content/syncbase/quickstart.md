@@ -49,7 +49,7 @@ Make note of the Syncbase **Address** and the **Blessing** for your cloud
 instance, they are required by the Syncbase API during initialization.
 
 {{# helpers.info }}
-## Please note
+## Note
 Requiring a cloud Syncbase is temporary. We are planning to allow the API to be
 used without a cloud Syncbase soon.
 {{/ helpers.info }}
@@ -110,7 +110,7 @@ cd $PROJECT_DIR && ./gradlew assembleRelease
 ```
 {{/ helpers.hidden }}
 
-# Got 10 more minutes?
+# Got 10 More Minutes?
 Let's create a simple *Dice Roller* app and see it sync peer-to-peer in action!
 
 <a href="/syncbase/first-app.html" class="button-passive">

@@ -38,7 +38,7 @@ By default, creating a collection creates an associated syncgroup, initially
 synced amongst the creator’s devices but other users can also be added to this
 syncgroup to allow sharing.
 
-## Sharing collections
+## Sharing Collections
 
 Sharing collections involves **inviting** other users to **join** a collection's
 syncgroup. Upon inviting a user, the invitee **receives an invite event**. When
@@ -84,7 +84,7 @@ syncing into the invitee's database. As the collection syncs, data will be
 surfaced through the *Watch API*. See [Data Flow] guide for details on how
 to model your app's data flow.
 
-## Unsharing collections
+## Unsharing Collections
 
 Ejecting a user from a collection's syncgroup will unshare the collection. If
 the target user has not accepted the invitation yet, the invite will simply

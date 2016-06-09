@@ -56,7 +56,7 @@ Make note of the Syncbase **Address** and the **Blessing** for your cloud
 instance, they are required by the Syncbase API during initialization.
 
 {{# helpers.info }}
-## Please note
+## Note
 Requiring a cloud Syncbase is temporary. We are planning to allow the API to be
 used without a cloud Syncbase very soon.
 {{/ helpers.info }}
@@ -298,12 +298,12 @@ the `Select a Deployment Target`. If you prefer to use the command line
 tool that makes it easy to run Android apps on multiple devices.
 
 {{# helpers.info }}
-## Please note
+## Note
 Internet connectivity is required the first time the app is run to authenticate
 the user and generate an offline auth certificate.
-Subsequence runs do not require Internet connectivity for 24 hours. (Auth protocol
-starts trying to refresh the certificate after 12 hours and it would expire in
-24 hours if all tries are unsuccessful).
+Subsequent runs generally do not require Internet connectivity. The auth
+protocol refreshes its certificate automatically after 12 hours, but the
+certificate will expire if a device is offline for more than 24 hours.
 {{/ helpers.info }}
 
 After running the application on 2 or more devices with Internet connectivity,
@@ -319,7 +319,7 @@ cd $PROJECT_DIR && ./gradlew assembleRelease
 ```
 {{/ helpers.hidden }}
 
-# Want to dive deeper?
+# Want to Dive Deeper?
 Checkout the [Tutorial] to build a full-fledged Todo app and learn more Syncbase
 features such as sharing, batches and discovery.
 

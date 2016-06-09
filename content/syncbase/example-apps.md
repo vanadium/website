@@ -4,7 +4,7 @@ layout: syncbase
 toc: true
 = yaml =
 
-# Todos *(canonical example)*
+# Todos *(Canonical Example)*
 
 * Repo: https://github.com/vanadium/todos
 

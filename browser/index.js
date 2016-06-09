@@ -17,6 +17,7 @@ domready(function() {
   var sidebarEl = dom.find('.sidebar');
   if (sidebarEl) {
     ReactDOM.render(Sidebar({
+      subsite: sidebarEl.dataset.subsite,
       items: parseSidebarProps(dom.find('.sidebar-data'))
     }), sidebarEl);
 

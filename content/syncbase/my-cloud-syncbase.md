@@ -14,7 +14,7 @@ Each instance is running in a dedicated container, isolated from all the other
 instances.  Access is restricted to the creator of the instance.
 
 {{# helpers.warning }}
-## Please note
+## Note
 
 The instances are meant to be used for development.  There are no guarantees
 about availability or performance.  Data stored in the instances can be lost at

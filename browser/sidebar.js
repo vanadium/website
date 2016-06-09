@@ -80,18 +80,38 @@ function renderItems(items) {
   });
 }
 
+function renderLogo(subsite) {
+  var title;
+  var href;
+  if (subsite === 'syncbase') {
+    title = 'Syncbase';
+    href = '/syncbase';
+  } else {
+    title = 'Core';
+    href = '/core.html';
+  }
+
+  return h('div.logo-row', [
+    h('div.icon.v-icon', {},
+      h('a', {href: '/'},
+        h('img', {
+          src: '/images/v-icon-cyan-700.svg'
+        })
+      )
+    ),
+    h('div.logo', {},
+      h('a', {href: href}, title)
+    )
+  ]);
+}
+
 // Expects props {items []Item}, where Item is either {text, items []Item} or
 // {text, href}.
 module.exports = React.createClass({
   displayName: 'Sidebar',
   render: function() {
     return h('div', [
-      h('div.logo-row', [
-        h('div.icon.v-icon', {}, h('img', {
-          src: '/images/v-icon-cyan-700.svg'
-        })),
-        h('div.logo', 'Vanadium')
-      ]),
+      renderLogo(this.props.subsite),
       h('div.items', renderItems(this.props.items))
     ]);
   }

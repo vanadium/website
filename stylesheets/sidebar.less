@@ -29,31 +29,31 @@
 
 .items {
   padding: @gutter-half 0;
-}
-
-a {
-  display: block;
-  padding: @gutter-quarter @gutter-half;
-  color: @color-text-primary;
-  font-size: 14px;
-  font-weight: 400;
-
-  &.active {
-    background-color: @color-blue-grey-100;
-    font-weight: 500;
-  }
-}
-
-nav {
-  overflow: hidden;
 
   a {
-    padding: 6px;
-    padding-left: @gutter;
-    font-size: 13px;
+    display: block;
+    padding: @gutter-quarter @gutter-half;
+    color: @color-text-primary;
+    font-size: 14px;
+    font-weight: 400;
+
+    &.active {
+      background-color: @color-blue-grey-100;
+      font-weight: 500;
+    }
   }
 
-  nav a {
-    padding-left: calc(@gutter + @gutter-half);
+  nav {
+    overflow: hidden;
+
+    a {
+      padding: 6px;
+      padding-left: @gutter;
+      font-size: 13px;
+    }
+
+    nav a {
+      padding-left: calc(@gutter + @gutter-half);
+    }
   }
 }

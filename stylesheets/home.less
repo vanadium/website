@@ -36,7 +36,7 @@
   section {
     max-width: 100%;
     width: 100%;
-    padding: @gutter;
+    padding: (2 * @gutter) @gutter;
   }
 
   .menu {
@@ -44,7 +44,7 @@
   }
 
   .v-icon {
-    display: block !important;
+    display: flex !important;
   }
 
   .section-container {
@@ -53,23 +53,25 @@
   }
 
   h1, h2, h3 {
-    font-weight: 100;
     margin: @gutter-half 0px;
   }
 
   h1 {
     color: @color-white;
     font-size: @intro-heading-font-size;
+    font-weight: 400;
   }
 
   h2 {
     color: @color-primary-700;
     font-size: @intro-subheading-font-size;
+    font-weight: 100;
   }
 
   h3 {
     color: @color-blue-grey-500;
     font-size: @intro-text-font-size;
+    font-weight: 100;
   }
 
   .intro {

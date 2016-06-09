@@ -12,7 +12,7 @@ Syncbase runs on both Android and iOS (coming soon).
 
 <figcaption>Syncbase Overview</figcaption>
 
-# Why use Syncbase?
+# Why Use Syncbase?
 
 <div class="intro-detail intro-detail-offline">
 <p>
@@ -60,7 +60,7 @@ configurable conflict resolution we want. In summary, we're trying to solve a
 bunch of problems simultaneously whereas those other systems each solve a subset
 of those problems.
 
-# Ready to get started?
+# Ready to Get Started?
 
 The initial version of Syncbase is ready for testing and evaluation by early
 adopters - it is suitable for prototyping, but not for production applications.
