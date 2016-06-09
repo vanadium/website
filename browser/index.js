@@ -15,24 +15,26 @@ var Toc = React.createFactory(require('./toc'));
 
 domready(function() {
   var sidebarEl = dom.find('.sidebar');
-  ReactDOM.render(Sidebar({
-    items: parseSidebarProps(dom.find('.sidebar-data'))
-  }), sidebarEl);
+  if (sidebarEl) {
+    ReactDOM.render(Sidebar({
+      items: parseSidebarProps(dom.find('.sidebar-data'))
+    }), sidebarEl);
 
-  // Menu toggle, for small screens.
-  var obfuscatorEl = dom.element('div');
-  obfuscatorEl.classList.add('mdl-layout__obfuscator');
-  dom.find('body').appendChild(obfuscatorEl);
-  function showSidebar() {
-    sidebarEl.classList.add('is-visible');
-    obfuscatorEl.classList.add('is-visible');
+    // Menu toggle, for small screens.
+    var obfuscatorEl = dom.element('div');
+    obfuscatorEl.classList.add('mdl-layout__obfuscator');
+    dom.find('body').appendChild(obfuscatorEl);
+    function showSidebar() {
+      sidebarEl.classList.add('is-visible');
+      obfuscatorEl.classList.add('is-visible');
+    }
+    function hideSidebar() {
+      sidebarEl.classList.remove('is-visible');
+      obfuscatorEl.classList.remove('is-visible');
+    }
+    obfuscatorEl.addEventListener('click', hideSidebar);
+    dom.find('header .icon').addEventListener('click', showSidebar);
   }
-  function hideSidebar() {
-    sidebarEl.classList.remove('is-visible');
-    obfuscatorEl.classList.remove('is-visible');
-  }
-  obfuscatorEl.addEventListener('click', hideSidebar);
-  dom.find('header .icon').addEventListener('click', showSidebar);
 
   // Render table of contents if requested and there are headings.
   var el = dom.find('.toc');
@@ -53,6 +55,21 @@ domready(function() {
   var pathname = window.location.pathname;
   if (pathname.match(/(tutorials|installation|contributing|syncbase)/)) {
     require('./clipboard')();
+  }
+
+  // Run the scroll listener on landing page only. Other pages have the header
+  // fixed.
+  if (pathname === '/' || pathname === '/index.html') {
+    var body = document.body;
+    function onScroll() {
+      if(body.scrollTop < 15) {
+         body.classList.add('not-scrolled');
+      } else {
+         body.classList.remove('not-scrolled');
+      }
+    }
+    onScroll();
+    document.addEventListener('scroll', onScroll);
   }
 
   // Update img elements to display alt text in a figcaption.

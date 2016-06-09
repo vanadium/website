@@ -6,17 +6,26 @@
 
 .button,
 .button-passive,
-.button-primary {
+.button-secondary,
+.button-disabled {
   display: inline-block;
-  font-size: 14px;
-  line-height: 14px;
+  font-size: @button-font-size;
+  line-height: @button-font-size;
   font-weight: 500;
   font-family: inherit;
   text-transform: uppercase;
-  padding: 10px;
+  padding: @gutter-half;
   border-radius: 4px;
   text-decoration: none;
   outline: 0;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 2px 0px;
+}
+
+.buttons {
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  padding: @gutter-half;
 }
 
 .button-passive {
@@ -30,4 +39,43 @@
     background-color: @color-primary-700;
     border: 1px solid @color-primary-700;
   }
+}
+
+.button-secondary {
+  background-color: @color-primary-700;
+
+  &, &:hover, &:active {
+    color: @color-white;
+  }
+}
+
+.button-disabled {
+  &, &:hover, &:active {
+    background-color: rgba(0,0,0,.12);
+    color: rgba(0,0,0,.26);
+    box-shadow: none;
+    cursor: default;
+  }
+}
+
+.build-android, .build-core, .build-ios {
+  background-repeat: no-repeat;
+  padding-left: (@icon-size-half + @gutter-half);
+  margin: 0px @gutter-quarter;
+  background-position-y: center;
+  background-position-x: @gutter-quarter;
+  background-size: @icon-size-half;
+  text-transform: none;
+}
+
+.build-android {
+  background-image: url(/images/android-icon-green.svg);
+}
+
+.build-ios {
+  background-image: url(/images/ios-icon.svg);
+}
+
+.build-core {
+  background-image: url(/images/go.png);
 }

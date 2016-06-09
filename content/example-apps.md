@@ -3,48 +3,31 @@ title: Example Apps
 toc: true
 = yaml =
 
-# Vanadium Chat
+# Physical Lock
 
-* Repo: https://github.com/vanadium/chat
-* Issues: https://github.com/vanadium/chat/issues
+* Repo: https://github.com/vanadium/physical-lock
 
-[Vanadium Chat][chat] is a peer-to-peer chat application that demonstrates
-common usage patterns for the Vanadium libraries.
+[Physical Lock][lock] defines the software for building a secure physical lock
+using the Vanadium stack, along with a commmand-line tool for interacting with
+the lock.
+The software runs on a Raspberry Pi and interacts with the locks's switches and
+sensors using GPIO. It runs a Vanadium RPC service that allows clients to send
+lock and unlock requests.
 
-There are currently two clients: a [web client] and a Go-based shell client.
+Key distinguishing aspects:
+* *Decentralized:* There is no single authority on all the locks, no cloud server
+that controls access to all locks from a particular manufacturer. All secrets and
+credentials pertaining to a particular lock are solely held by the lock and its
+clients. Huge compute farms run by hackers all over the world have no single
+point of attack that can compromise the security of multiple locks.
+* *No Internet Connectivity Required:* The lock does not require internet
+connectivity to function. When you’re right in front of the device, you can
+communicate with it directly without going through the cloud or a third-party
+service.
+* *Audited:* The lock can keep track of who opened the door, when and how they
+got access.
 
-For more information, see the [README][chat-readme].
+For more information, see the [README][lock-readme].
 
-# PipeToBrowser
-
-* Repo: https://github.com/vanadium/pipe2browser
-* Issues: https://github.com/vanadium/pipe2browser/issues
-
-[PipeToBrowser][p2b] (P2B) is a Vanadium application that allows users to pipe
-anything from a shell to the browser using regular shell piping functionality.
-Piped data is displayed in a formatted way by a graphical viewer. Users can also
-send or redirect pipes to other users of P2B.
-
-For example, one can pipe a text log file and view it in a sortable, filterable,
-paged DataGrid in the browser:
-
-    $ tail -n 100 logfile.txt | p2b google/p2b/myInstance/vlog
-
-As another example, one can pipe an image to someone else's browser:
-
-    $ cat cat.png | p2b google/p2b/myFriendsInstance/image
-
-P2B supports several built-in plugins such as console, image viewer, log viewer,
-git status viewer, and `dev/null`. Users can create their own plugins as well.
-
-For more information, see the [README][p2b-readme] as well as the help page
-inside a running instance of the P2B application.
-
-[todos]: https://github.com/vanadium/todos
-[syncbase]: /concepts/syncbase-overview.html
-[todos-readme]: https://github.com/vanadium/todos/blob/master/README.md
-[chat]: https://github.com/vanadium/chat
-[web client]: https://chat.v.io
-[chat-readme]: https://github.com/vanadium/chat/blob/master/README.md
-[p2b]: https://github.com/vanadium/pipe2browser
-[p2b-readme]: https://github.com/vanadium/pipe2browser/blob/master/README.md
+[lock]: https://github.com/vanadium/physical-lock
+[lock-readme]: https://github.com/vanadium/physical-lock/blob/master/README.md

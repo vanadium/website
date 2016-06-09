@@ -4,14 +4,13 @@ layout: syncbase
 toc: false
 = yaml =
 
-Syncbase is a storage system for developers that makes it easy to synchronize
-app data between devices. It works even when devices are not connected to the
-Internet. Syncbase runs on both Android and iOS.
+Syncbase is a mobile database that supports peer-to-peer synchronization.
+It works just as well when devices are not connected to the Internet.
+Syncbase runs on both Android and iOS (coming soon).
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/2cHzd8pBYmU" frameborder="0" allowfullscreen></iframe>
+<div class='embed-container'><iframe src='https://www.youtube.com/embed/2cHzd8pBYmU' frameborder='0' allowfullscreen></iframe></div>
 
-<figcaption>Syncbase's easy-to-use API and peer-to-peer synchronization make
-developing offline-first mobile apps a breeze.</figcaption>
+<figcaption>Syncbase Overview</figcaption>
 
 # Why use Syncbase?
 

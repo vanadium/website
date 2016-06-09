@@ -65,3 +65,15 @@ nav {
     display: none;
   }
 }
+
+&::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: @color-accent-A200;
+  font-size: @code-font-size;
+  font-weight: 500;
+  padding: 1px @gutter-quarter;
+  border-bottom-left-radius: 4px;
+  content: "Developer Preview";
+}

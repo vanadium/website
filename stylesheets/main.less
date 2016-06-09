@@ -224,7 +224,7 @@ main {
 .toc {
   @import "toc";
 
-  @media (min-width: 1100px) {
+  @media (min-width: (@main-max-width + 2 * @sidebar-width)) {
     position: fixed;
     top: @header-height;
     right: 0;

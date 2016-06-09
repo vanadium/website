@@ -28,8 +28,8 @@ used to initialize Syncbase and get a reference to the app's database.
 ```
 DatabaseOptions dbOpt = new DatabaseOptions();
 
-dbOpt.cloudSyncbaseAddress = '<Your Cloud Syncbase Address>';
-dbOpt.cloudSyncbaseBlessing = '<Your Cloud Syncbase Blessing>';
+dbOpt.cloudSyncbaseAddress = "<Your Cloud Syncbase Address>";
+dbOpt.cloudSyncbaseBlessing = "<Your Cloud Syncbase Blessing>";
 
 Database db = Syncbase.getDatabase();
 ```

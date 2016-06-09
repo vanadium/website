@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  {{> partials/head }}
+
+  <body data-pathname="{{ page.url }}" class="home-layout not-scrolled">
+    {{> partials/home_header }}
+    <main>
+      {{{ yield }}}
+    </main>
+
+    {{> partials/footer }}
+  </body>
+</html>

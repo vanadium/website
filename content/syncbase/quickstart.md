@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         {{/ helpers.codedim}}
         Syncbase.DatabaseOptions options = new Syncbase.DatabaseOptions();
-        // dbOpt.cloudSyncbaseAddress = '<Your Cloud Syncbase Address>';
-        // dbOpt.cloudSyncbaseBlessing = '<Your Cloud Syncbase Blessing>';
+        // dbOpt.cloudSyncbaseAddress = "<Your Cloud Syncbase Address>";
+        // dbOpt.cloudSyncbaseBlessing = "<Your Cloud Syncbase Blessing>";
 
         Syncbase.database(new Syncbase.DatabaseCallback() {
             @Override
