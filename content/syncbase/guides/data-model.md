@@ -5,6 +5,29 @@ sort: 1
 toc: true
 = yaml =
 
+{{# helpers.hidden }}
+<!-- @setupEnvironment @test -->
+```
+export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
+cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
+cat - <<EOF >> $PROJECT_DIR/app/build.gradle
+dependencies {
+  compile 'io.v:syncbase:0.1.4'
+}
+EOF
+cat - <<EOF > $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+package io.v.syncbase.example;
+import io.v.syncbase.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+public class DataModel {
+  Database db;
+  void main() {
+EOF
+```
+{{/ helpers.hidden }}
+
 # Introduction
 Syncbase is a key-value storage system that handles both structured data and
 blobs. The data is organized by the following hierarchy:
@@ -25,13 +48,20 @@ create, watch and share collections, and to perform batch operations.
 There is a pre-configured database for each app. `Syncbase.getDatabase()` is
 used to initialize Syncbase and get a reference to the app's database.
 
+<!-- @createDatabase @test -->
 ```
-DatabaseOptions dbOpt = new DatabaseOptions();
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+Syncbase.DatabaseOptions options = new Syncbase.DatabaseOptions();
+// dbOpt.cloudSyncbaseAddress = "<Your Cloud Syncbase Address>";
+// dbOpt.cloudSyncbaseBlessing = "<Your Cloud Syncbase Blessing>";
 
-dbOpt.cloudSyncbaseAddress = "<Your Cloud Syncbase Address>";
-dbOpt.cloudSyncbaseBlessing = "<Your Cloud Syncbase Blessing>";
-
-Database db = Syncbase.getDatabase();
+Syncbase.database(new Syncbase.DatabaseCallback() {
+  @Override
+  public void onSuccess(final Database db) {
+    // Use database to interact with Syncbase.
+  }
+}, options);
+EOF
 ```
 
 Other database options include ability to set the directory where data files
@@ -66,16 +96,19 @@ they should use a predictable name (example: "preferences"). Collection names ar
 restricted to alphanumeric characters plus underscore and can have a maximum
 length of 64 bytes.
 
+<!-- @createCollection @test -->
 ```
-UUID collectionName = Syncbase.getUUID();
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+String collectionName = UUID.randomUUID().toString();
 Collection collection = db.collection(collectionName);
 
-UUID rowKey = Syncbase.getUUID();
+String rowKey = UUID.randomUUID().toString();
 collection.put(rowKey, "myValue");
 
 String myValue = collection.get(rowKey, String.class);
 
 collection.delete(rowKey);
+EOF
 ```
 
 As mentioned earlier, collections are synced across user's devices by default
@@ -113,22 +146,25 @@ Syncbase supports [POJO](https://en.wikipedia.org/wiki/Plain_Old_Java_Object)
 as values and takes case of serialization. POJO classes must have an empty
 constructor.
 
+<!-- @addPojoToCollection @test -->
 ```
-public class MyPojo {
-    String foo;
-    Integer bar;
-    List<MyPojo> baz;
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+class MyPojo {
+  String foo;
+  Integer bar;
+  List<MyPojo> baz;
 
-    public MyPojo() {
-        foo = null;
-        bar = null;
-        baz = Lists.newArrayList();
-    }
+  public MyPojo() {
+    foo = null;
+    bar = null;
+    baz = new ArrayList<MyPojo>();
+  }
 }
 
 MyPojo pojoIn = new MyPojo();
-collection.put('myKey', pojo);
-MyPojo pojoOut = collection.get('myKey', MyPojo.class);
+collection.put("myKey", pojoIn);
+MyPojo pojoOut = collection.get("myKey", MyPojo.class);
+EOF
 ```
 
 {{# helpers.info }}
@@ -210,3 +246,14 @@ The portfolio can be browsed while offline.  Some non-critical data
 There is no sharing between user accounts.
 
 [Design Doc](/syncbase/designdocs/brokerage.html)
+
+{{# helpers.hidden }}
+<!-- @compileSnippets_mayTakeMinutes @test -->
+```
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+  }
+}
+EOF
+cd $PROJECT_DIR && ./gradlew assembleRelease
+```
+{{/ helpers.hidden }}
