@@ -107,6 +107,7 @@ syncbaseAndroidQuickstart = syncbase/quickstart
 syncbaseAndroidFirstApp   = syncbase/first-app
 syncbaseAndroidDataModel  = syncbase/guides/data-model
 syncbaseAndroidDataFlow   = syncbase/guides/data-flow
+syncbaseAndroidDataSync   = syncbase/guides/synchronization
 
 # Scripts that 'complete' the named tutorials, creating all relevant files
 # (code, credentials, etc.) but skipping ephemeral steps like starting servers,
@@ -388,7 +389,8 @@ depsOneBigSyncbaseAndroidTest = \
 	content/$(syncbaseAndroidQuickstart).md \
 	content/$(syncbaseAndroidFirstApp).md \
 	content/$(syncbaseAndroidDataModel).md \
-	content/$(syncbaseAndroidDataFlow).md
+	content/$(syncbaseAndroidDataFlow).md \
+	content/$(syncbaseAndroidDataSync).md
 
 .PHONY: test
 test: test-site test-tutorials-core test-tutorials-java test-syncbase-android
@@ -420,7 +422,7 @@ test-tutorials-java: build
 # Test Syncbase quickstart, guides and tutorials for Android.
 # Called from v.io/x/devtools/jiri-test/internal/test/website.go.
 test-syncbase-android: build
-	$(MDRIP) --blockTimeOut 10m --subshell test $(depsOneBigSyncbaseAndroidTest)
+	$(MDRIP) --blockTimeOut 15m --subshell test $(depsOneBigSyncbaseAndroidTest)
 
 # Test tutorials against fresh external install.
 #

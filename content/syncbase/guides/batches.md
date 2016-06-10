@@ -63,17 +63,17 @@ automatically.
 
 ```Java
 db.runInBatch(new Database.BatchOperation() {
-    @Override
-    public void run(BatchDatabase batchDb) {
-        Collection c1 = batchDb.collection("collection1");
-        Collection c2 = batchDb.collection("collection2");
+  @Override
+  public void run(BatchDatabase batchDb) {
+    Collection c1 = batchDb.collection("collection1");
+    Collection c2 = batchDb.collection("collection2");
 
-        c1.put("myKey", "myValue");
-        c2.put("myKey", "myValue");
+    c1.put("myKey", "myValue");
+    c2.put("myKey", "myValue");
 
-        // No need to commit. RunInBatch will commit and retry if necessary.
-    }
-});
+    // No need to commit. RunInBatch will commit and retry if necessary.
+  }
+}, new Database.BatchOptions());
 ```
 
 {{# helpers.warning }}
@@ -88,7 +88,7 @@ obtained from `BatchDatabase`.
 
 ```Java
 // WRONG: c1 is NOT part of the batch.
-Collection c1 = db.collection("collection1");
+final Collection c1 = db.collection("collection1");
 {{# helpers.codedim }}
 db.runInBatch(new Database.BatchOperation() {
     @Override
@@ -103,7 +103,7 @@ db.runInBatch(new Database.BatchOperation() {
         {{# helpers.codedim }}
         // No need to commit. RunInBatch will commit and retry if necessary.
     }
-});
+}, new Database.BatchOptions());
 {{/ helpers.codedim }}
 ```
 
@@ -113,7 +113,7 @@ db.runInBatch(new Database.BatchOperation() {
 to the developers to manage themselves.
 
 ```Java
-BatchDatabase batchDb = db.beginBatch();
+BatchDatabase batchDb = db.beginBatch(new Database.BatchOptions());
 
 Collection c1 = batchDb.collection("collection1");
 Collection c2 = batchDb.collection("collection2");
@@ -122,7 +122,6 @@ c1.put("myKey", "myValue");
 c2.put("myKey", "myValue");
 
 batchDb.commit();
-
 ```
 
 {{# helpers.warning }}
@@ -137,7 +136,7 @@ committed or aborted will throw exceptions.
 // WRONG: c1 is NOT part of the batch.
 Collection c1 = db.collection("collection1");
 {{# helpers.codedim }}
-BatchDatabase batchDb = db.beginBatch();
+BatchDatabase batchDb = db.beginBatch(new Database.BatchOptions());
 
 // c2 is part of the batch.
 Collection c2 = batchDb.collection("collection2");

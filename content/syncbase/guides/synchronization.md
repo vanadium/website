@@ -5,6 +5,29 @@ sort: 3
 toc: true
 = yaml =
 
+{{# helpers.hidden }}
+<!-- @setupEnvironment @test -->
+```
+export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
+cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
+cat - <<EOF >> $PROJECT_DIR/app/build.gradle
+dependencies {
+  compile 'io.v:syncbase:0.1.4'
+}
+EOF
+cat - <<EOF > $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+package io.v.syncbase.example;
+import io.v.syncbase.*;
+import java.util.Iterator;
+public class DataSync {
+  Database db;
+  User userToInvite;
+  User userToRemove;
+  void main() {
+EOF
+```
+{{/ helpers.hidden }}
+
 # Introduction
 
 Syncbase's sync protocol is peer-to-peer whereas most other sync systems require
@@ -53,23 +76,32 @@ syncgroup, eject existing members of the syncgroup or change their access level.
 
 On the inviter side, we just need to invite a user to join the collection's
 syncgroup:
+<!-- @inviteUser @test -->
 ```
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
 Collection collectionToShare = db.collection("myCollection");
 
-User userToInvite = new User("<email-address>");
-
-collectionToShare.getSyncgroup().inviteUser(userToInvite, AccessLevel.READ);
+collectionToShare.getSyncgroup().inviteUser(userToInvite, AccessList.AccessLevel.READ);
+EOF
 ```
 
 On the invitee side, we need to handle invite requests by registering a handler:
+<!-- @addInviteHandler @test -->
 ```
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
 db.addSyncgroupInviteHandler(new Database.SyncgroupInviteHandler() {
-    @Override
-    public void onInvite(SyncgroupInvite invite) {
-        // Prompt the user if desired then accept or reject the invite.
-        db.acceptSyncgroupInvite(invite);
-    }
-});
+  @Override
+  public void onInvite(SyncgroupInvite invite) {
+    // Prompt the user if desired then accept or reject the invite.
+    db.acceptSyncgroupInvite(invite, new Database.AcceptSyncgroupInviteCallback() {
+      @Override
+      public void onSuccess(Syncgroup sg) {
+        // Accepting invitation was successful.
+      }
+    });
+  }
+}, new Database.AddSyncgroupInviteHandlerOptions());
+EOF
 ```
 
 {{# helpers.info }}
@@ -91,12 +123,13 @@ the target user has not accepted the invitation yet, the invite will simply
 disappear. Otherwise, the shared collection on target user's database will
 become read-only and will no longer sync and receive updates.
 
+<!-- @unshareCollection @test -->
 ```
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
 Collection sharedCollection = db.collection("myCollection");
 
-User userToRemove = new User("<email-address>");
-
 sharedCollection.getSyncgroup().ejectUser(userToRemove);
+EOF
 ```
 
 ## Updating Access Level
@@ -109,11 +142,14 @@ update their access without triggering a new invitation.
 `db.getSyncgroups()` can be used to list all syncgroups. This list includes
 pre-created syncgroups for collections and other syncgroups created or joined.
 
+<!-- @getAllSyncgroups @test -->
 ```Java
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
 Iterator<Syncgroup> allSyncgroups = db.getSyncgroups();
 while(allSyncgroups.hasNext()) {
     Syncgroup sg = allSyncgroups.next();
 }
+EOF
 ```
 
 # Summary
@@ -126,3 +162,14 @@ syncgroup.
 * Access-level can be one of read-only, read-write, or read-write-admin.
 
 [Data Flow]: /syncbase/guides/data-flow.html
+
+{{# helpers.hidden }}
+<!-- @compileSnippets_mayTakeMinutes @test -->
+```
+cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+  }
+}
+EOF
+cd $PROJECT_DIR && ./gradlew assembleRelease
+```
+{{/ helpers.hidden }}
