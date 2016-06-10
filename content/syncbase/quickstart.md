@@ -22,7 +22,6 @@ cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 # Setup
 This tutorial uses Android Studio, but feel free to use your IDE of choice.
 
-## Create the Project
 We will start by creating an empty project in Android Studio
 `File -> New -> Project`.
 Select `API 21` or above for the Minimum SDK and pick `Empty Activity` as the
