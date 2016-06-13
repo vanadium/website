@@ -9,13 +9,14 @@ toc: true
 <!-- @setupEnvironment @test -->
 ```
 export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
+export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
   compile 'io.v:syncbase:0.1.4'
 }
 EOF
-cat - <<EOF > $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+cat - <<EOF > $FILE
 package io.v.syncbase.example;
 import io.v.syncbase.*;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ used to initialize Syncbase and get a reference to the app's database.
 
 <!-- @createDatabase @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+cat - <<EOF >> $FILE
 Syncbase.DatabaseOptions options = new Syncbase.DatabaseOptions();
 // dbOpt.cloudSyncbaseAddress = "<Your Cloud Syncbase Address>";
 // dbOpt.cloudSyncbaseBlessing = "<Your Cloud Syncbase Blessing>";
@@ -98,7 +99,7 @@ length of 64 bytes.
 
 <!-- @createCollection @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+cat - <<EOF >> $FILE
 String collectionName = UUID.randomUUID().toString();
 Collection collection = db.collection(collectionName);
 
@@ -148,7 +149,7 @@ constructor.
 
 <!-- @addPojoToCollection @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+cat - <<EOF >> $FILE
 class MyPojo {
   String foo;
   Integer bar;
@@ -250,7 +251,7 @@ There is no sharing between user accounts.
 {{# helpers.hidden }}
 <!-- @compileSnippets_mayTakeMinutes @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
+cat - <<EOF >> $FILE
   }
 }
 EOF

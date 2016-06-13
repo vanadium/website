@@ -108,6 +108,7 @@ syncbaseAndroidFirstApp   = syncbase/first-app
 syncbaseAndroidDataModel  = syncbase/guides/data-model
 syncbaseAndroidDataFlow   = syncbase/guides/data-flow
 syncbaseAndroidDataSync   = syncbase/guides/synchronization
+syncbaseAndroidBatches    = syncbase/guides/batches
 
 # Scripts that 'complete' the named tutorials, creating all relevant files
 # (code, credentials, etc.) but skipping ephemeral steps like starting servers,
@@ -381,16 +382,13 @@ depsOneBigCoreTutorialTest = \
 
 # An ordering that lets us test all the Java tutorials faster than running the
 # individual tests in sequence.
-depsOneBigJavaTutorialTest = \
-	content/$(tutJavaFortune).md \
-	content/$(tutJavaAndroid).md
-
 depsOneBigSyncbaseAndroidTest = \
 	content/$(syncbaseAndroidQuickstart).md \
 	content/$(syncbaseAndroidFirstApp).md \
 	content/$(syncbaseAndroidDataModel).md \
 	content/$(syncbaseAndroidDataFlow).md \
-	content/$(syncbaseAndroidDataSync).md
+	content/$(syncbaseAndroidDataSync).md \
+	content/$(syncbaseAndroidBatches).md
 
 .PHONY: test
 test: test-site test-tutorials-core test-tutorials-java test-syncbase-android
@@ -445,3 +443,30 @@ test-tutorials-external: build
 .PHONY: test-tutorials-no-install
 test-tutorials-no-install: build
 	$(MDRIP) --subshell test $(depsOneBigCoreTutorialTest)
+
+# Used to upgrade all occurrences of
+# dependencies {
+#  compile 'io.v:syncbase:<version>'
+# }
+# to the constant $SYNCBASE_ANDROID_VERSION defined below.
+#
+# This target should be used as part of the release process to update
+# the website to the stable release of Syncbase Android.
+#
+# Please run the `test-syncbase-android` after upgrade and fix
+# any breaking API changes in the tutorials and code snippets before
+# committing and submitting the changes.
+#
+# Example flow:
+#
+# # Change SYNCBASE_ANDROID_VERSION to the newest version.
+# make upgrade-syncbase-android
+# make test-syncbase-android
+# git stage .
+# git commit -m "Upgrading Syncbase Android Version"
+# jiri cl mail
+.PHONY: upgrade-syncbase-android
+# Change this to the desired version before running the target.
+SYNCBASE_ANDROID_VERSION=0.1.4
+upgrade-syncbase-android:
+	find content/syncbase -type f -exec sed -i "s/\(compile 'io.v:syncbase:\)\(.*\)'/\1$(SYNCBASE_ANDROID_VERSION)'/g" {} \;

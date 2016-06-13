@@ -9,13 +9,14 @@ toc: true
 <!-- @setupEnvironment @test -->
 ```
 export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
+export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
   compile 'io.v:syncbase:0.1.4'
 }
 EOF
-cat - <<EOF > $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+cat - <<EOF > $FILE
 package io.v.syncbase.example;
 import io.v.syncbase.*;
 import java.util.Iterator;
@@ -78,7 +79,7 @@ On the inviter side, we just need to invite a user to join the collection's
 syncgroup:
 <!-- @inviteUser @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+cat - <<EOF >> $FILE
 Collection collectionToShare = db.collection("myCollection");
 
 collectionToShare.getSyncgroup().inviteUser(userToInvite, AccessList.AccessLevel.READ);
@@ -88,7 +89,7 @@ EOF
 On the invitee side, we need to handle invite requests by registering a handler:
 <!-- @addInviteHandler @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+cat - <<EOF >> $FILE
 db.addSyncgroupInviteHandler(new Database.SyncgroupInviteHandler() {
   @Override
   public void onInvite(SyncgroupInvite invite) {
@@ -125,7 +126,7 @@ become read-only and will no longer sync and receive updates.
 
 <!-- @unshareCollection @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+cat - <<EOF >> $FILE
 Collection sharedCollection = db.collection("myCollection");
 
 sharedCollection.getSyncgroup().ejectUser(userToRemove);
@@ -144,7 +145,7 @@ pre-created syncgroups for collections and other syncgroups created or joined.
 
 <!-- @getAllSyncgroups @test -->
 ```Java
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+cat - <<EOF >> $FILE
 Iterator<Syncgroup> allSyncgroups = db.getSyncgroups();
 while(allSyncgroups.hasNext()) {
     Syncgroup sg = allSyncgroups.next();
@@ -166,7 +167,7 @@ syncgroup.
 {{# helpers.hidden }}
 <!-- @compileSnippets_mayTakeMinutes @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
+cat - <<EOF >> $FILE
   }
 }
 EOF

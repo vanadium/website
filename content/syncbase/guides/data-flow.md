@@ -9,13 +9,14 @@ toc: true
 <!-- @setupEnvironment @test -->
 ```
 export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
+export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataFlow.java
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
   compile 'io.v:syncbase:0.1.4'
 }
 EOF
-cat - <<EOF > $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataFlow.java
+cat - <<EOF > $FILE
 package io.v.syncbase.example;
 import io.v.syncbase.*;
 import java.util.HashMap;
@@ -60,7 +61,7 @@ from. UI actions such as adding new task or deleting one simply do a `put` or
 
 <!-- @addWatchHandler @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataFlow.java
+cat - <<EOF >> $FILE
 db.addWatchChangeHandler(new Database.WatchChangeHandler() {
 
   @Override
@@ -95,7 +96,7 @@ EOF
 {{# helpers.hidden }}
 <!-- @closeMainFunction @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataFlow.java
+cat - <<EOF >> $FILE
   }
 EOF
 ```
@@ -104,7 +105,7 @@ EOF
 Modeling our in-memory state as a map of Todolist-Id to a map of (Task-Id, Task)
 <!-- @updateState @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataFlow.java
+cat - <<EOF >> $FILE
 HashMap<String, Map<String, Task>> state = new HashMap<String, Map<String, Task>>();
 
 // Update the state based on the changes.
@@ -149,7 +150,7 @@ the UI renders from.
 {{# helpers.hidden }}
 <!-- @compileSnippets_mayTakeMinues @test -->
 ```
-cat - <<EOF >> $PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataFlow.java
+cat - <<EOF >> $FILE
 }
 EOF
 cd $PROJECT_DIR && ./gradlew assembleRelease

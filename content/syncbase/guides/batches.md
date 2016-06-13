@@ -5,6 +5,27 @@ sort: 4
 toc: true
 = yaml =
 
+{{# helpers.hidden }}
+<!-- @setupEnvironment @test -->
+```
+export PROJECT_DIR=$(mktemp -d "${TMPDIR:-/tmp}/tmp.XXXXXXXXXX")
+export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/Batches.java
+cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
+cat - <<EOF >> $PROJECT_DIR/app/build.gradle
+dependencies {
+  compile 'io.v:syncbase:0.1.4'
+}
+EOF
+cat - <<EOF > $FILE
+package io.v.syncbase.example;
+import io.v.syncbase.*;
+public class Batches {
+  Database db;
+  void main() {
+EOF
+```
+{{/ helpers.hidden }}
+
 # Introduction
 
 A batch is a group of read and write operations that are logically related.
@@ -47,7 +68,6 @@ Batches are not limited to the data within a collection. If a batch contains
 data from multiple collections, peers will receive only the parts of the batch
 they are allowed to see.
 
-
 # Using Batches
 
 `BatchDatabase` is the entry point to the batch API. `BatchDatabase` is similar to
@@ -61,7 +81,9 @@ part of the batch.
 It detects *concurrent batch* errors and handles retries and commit/aborts
 automatically.
 
+<!-- @runInBatch @test -->
 ```Java
+cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 db.runInBatch(new Database.BatchOperation() {
   @Override
   public void run(BatchDatabase batchDb) {
@@ -74,6 +96,7 @@ db.runInBatch(new Database.BatchOperation() {
     // No need to commit. RunInBatch will commit and retry if necessary.
   }
 }, new Database.BatchOptions());
+EOF
 ```
 
 {{# helpers.warning }}
@@ -86,7 +109,17 @@ obtained from `BatchDatabase`.
 **The following code snippet demonstrates the *WRONG* way of using batches.**
 {{/ helpers.warning }}
 
+{{# helpers.hidden }}
+<!-- @newScopeStart @test -->
+```
+cat - <<EOF >> $FILE
+{
+EOF
+```
+{{/ helpers.hidden }}
+<!-- @runInBatchWrong @test -->
 ```Java
+cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 // WRONG: c1 is NOT part of the batch.
 final Collection c1 = db.collection("collection1");
 {{# helpers.codedim }}
@@ -105,14 +138,33 @@ db.runInBatch(new Database.BatchOperation() {
     }
 }, new Database.BatchOptions());
 {{/ helpers.codedim }}
+EOF
 ```
+{{# helpers.hidden }}
+<!-- @newScopeEnd @test -->
+```
+cat - <<EOF >> $FILE
+}
+EOF
+```
+{{/ helpers.hidden }}
 
 ### BeginBatch
 `BeginBatch` is an alternative approach to starting a batch operation. Unlike
 `RunInBatch`, it does not manage retries and commit/aborts. They are left
 to the developers to manage themselves.
 
+{{# helpers.hidden }}
+<!-- @newScopeStart @test -->
+```
+cat - <<EOF >> $FILE
+{
+EOF
+```
+{{/ helpers.hidden }}
+<!-- @beginBatch @test -->
 ```Java
+cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 BatchDatabase batchDb = db.beginBatch(new Database.BatchOptions());
 
 Collection c1 = batchDb.collection("collection1");
@@ -122,7 +174,16 @@ c1.put("myKey", "myValue");
 c2.put("myKey", "myValue");
 
 batchDb.commit();
+EOF
 ```
+{{# helpers.hidden }}
+<!-- @newScopeEnd @test -->
+```
+cat - <<EOF >> $FILE
+}
+EOF
+```
+{{/ helpers.hidden }}
 
 {{# helpers.warning }}
 ## Warning
@@ -132,7 +193,17 @@ committed or aborted will throw exceptions.
 **The following code snippet demonstrates the *WRONG* way of using batches.**
 {{/ helpers.warning }}
 
+{{# helpers.hidden }}
+<!-- @newScopeStart @test -->
+```
+cat - <<EOF >> $FILE
+{
+EOF
+```
+{{/ helpers.hidden }}
+<!-- @beginBatch @test -->
 ```Java
+cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 // WRONG: c1 is NOT part of the batch.
 Collection c1 = db.collection("collection1");
 {{# helpers.codedim }}
@@ -151,8 +222,16 @@ batchDb.commit();
 
 // WRONG: Throws exception since c2 is from an already committed batch.
 c2.put("myKey", "myValue");
-
+EOF
 ```
+{{# helpers.hidden }}
+<!-- @newScopeEnd @test -->
+```
+cat - <<EOF >> $FILE
+}
+EOF
+```
+{{/ helpers.hidden }}
 
 # Summary
 
@@ -161,3 +240,14 @@ c2.put("myKey", "myValue");
 get the added benefit of automatic retries and commit/abort.
 * Ensure all collection references are obtained from `BatchDatabase` otherwise
 mutations may not be part of a batch.
+
+{{# helpers.hidden }}
+<!-- @compileSnippets_mayTakeMinutes @test -->
+```
+cat - <<EOF >> $FILE
+  }
+}
+EOF
+cd $PROJECT_DIR && ./gradlew assembleRelease
+```
+{{/ helpers.hidden }}
