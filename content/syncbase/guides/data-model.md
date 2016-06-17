@@ -38,9 +38,11 @@ which may contain any number of collections.
 * [Collection](#collections): A collection is a set of key-value pairs
 (rows). Collections are the unit of access control and sharing.
 * [Row](#rows): Each row contains a single key-value pair. Keys are strings and
-the values can be both [structured data](#structured-data) and [blobs](#blobs).
-Values in the rows of a collection can be heterogeneous or based on a
-pre-defined [schema](#schema).
+the values are designed for both [structured data](#structured-data) and
+blobs<sup>\*</sup>. Values in the rows of a collection can be heterogeneous
+or based on a pre-defined [schema](#schema).
+
+<sup>\*</sup>blobs are on our [roadmap](/community/roadmap.html).
 
 # Database
 Database is the entry point to the Syncbase API and provides functionality to
@@ -84,7 +86,8 @@ The sharing mechanism is based on *Syncgroups*. Each collection has a default
 Syncgroup that is used to sync data to the user's other devices. By inviting
 other users to join this pre-defined Syncgroup, one can share the collection
 with others. When inviting others to join a collection's Syncgroup, one can
-specify different levels of access such as `Read`, `ReadWrite` or `ReadWriteAdmin`.
+specify different levels of access such as `Read`, `ReadWrite` or
+`ReadWriteAdmin`.
 
 Collections created by all users live in the same namespace. To avoid collisions,
 the system automatically prepends the user's identity (blessing) to the
@@ -93,8 +96,8 @@ The user might use one device while offline and then switch to another device
 while still offline. When those two devices sync with each other, should the
 Collections merge or stay separate? If the developer wants them to stay separate,
 the collection IDs should include a UUID. If the developer wants them to merge,
-they should use a predictable name (example: "preferences"). Collection names are
-restricted to alphanumeric characters plus underscore and can have a maximum
+they should use a predictable name (example: "preferences"). Collection names
+are restricted to alphanumeric characters plus underscore and can have a maximum
 length of 64 bytes.
 
 <!-- @createCollection @test -->
@@ -168,45 +171,6 @@ MyPojo pojoOut = collection.get("myKey", MyPojo.class);
 EOF
 ```
 
-{{# helpers.info }}
-### Query support is an upcoming feature
-Syncbase has support for querying values in structured data. For
-example, one could find all the `MyPojo` objects that have the value `bar > 10`.
-This feature is currently not exposed in the API, but might be in the
-future.
-{{/ helpers.info }}
-
-## Blobs
-
-{{# helpers.info }}
-### Blob support is an upcoming feature
-This feature is currently not exposed in the API, but will be in the
-future.
-{{/ helpers.info }}
-
-Syncbase has strong support for blobs. Blobs support a streaming upload/download
-API rather than the all-at-once operations of the structured data. Syncbase
-understands references to blobs in the structured data, making it possible to
-implement automatic caching and garbage collection of the blobs. Blob references
-implicitly grant access to blobs in a manner similar to a
-[capability](https://en.wikipedia.org/wiki/Capability-based_security).
-
-Blob references can be stored as values in the key-value store. There is an API
-for apps to specify per-device caching policies so that not all blobs need to be
-in all devices. It is the responsibility of Syncbase to watch for BlobRefs in
-the structured storage and cache the right blobs on each device.
-
-# Schema
-
-{{# helpers.info }}
-### Schema support is an upcoming feature
-This feature is currently not exposed in the API, but will be in the
-future.
-{{/ helpers.info }}
-
-To support stronger data integrity, collections can be tied to a data schema, and
-Syncbase will ensure all written values match that schema or write will fail.
-
 # Example Models
 
 To validate the Syncbase data model, we wrote design docs for a wide variety of
@@ -234,7 +198,8 @@ application to support games (e.g., Hearts, Solitaire, etc.).
 ## SyncSlides
 
 Peer-to-peer slide presentation.  Allows audience to ask questions.
-Presenter can delegate control of the presentation to an audience member temporarily.
+Presenter can delegate control of the presentation to an audience member
+temporarily.
 
 [Design Doc](/syncbase/designdocs/syncslides.html)
 
