@@ -121,7 +121,7 @@ line will inspect your currently installed packages, and if any additional
 packages need to be installed, it will print a command that will install them.
 Note that the printed command may need to be run as root.
 
-<!-- @packagesBaseProfile -->
+<!-- @packagesBaseProfile @test -->
 ```
 # Print the package installation command.
 jiri profile os-packages v23:base
