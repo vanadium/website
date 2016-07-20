@@ -127,7 +127,7 @@ Note that the printed command may need to be run as root.
 jiri profile os-packages v23:base
 
 # Run the package installation command as root.
-if [ -z "$(jiri profile os-packages v23:base)" ]; then
+if [ -n "$(jiri profile os-packages v23:base)" ]; then
   sudo $(jiri profile os-packages v23:base)
 fi
 ```
