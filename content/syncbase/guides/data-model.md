@@ -13,18 +13,22 @@ export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataModel.java
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
-  compile 'io.v:syncbase:0.1.4'
+  compile 'io.v:syncbase:0.1.7'
 }
 EOF
 cat - <<EOF > $FILE
 package io.v.syncbase.example;
-import io.v.syncbase.*;
+import io.v.syncbase.Collection;
+import io.v.syncbase.Database;
+import io.v.syncbase.Syncbase;
+import io.v.syncbase.exception.SyncbaseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 public class DataModel {
   Database db;
-  void main() {
+  void main() throws SyncbaseException {
 EOF
 ```
 {{/ helpers.hidden }}
@@ -34,7 +38,9 @@ Syncbase is a key-value storage system that handles both structured data and
 blobs. The data is organized by the following hierarchy:
 
 * [Database](#database): An app is pre-configured to have a single database
-which may contain any number of collections.
+which may contain any number of collections. When configured with a cloud, the
+database also comes with a `userdata` collection, synced across the same user's
+devices.
 * [Collection](#collections): A collection is a set of key-value pairs
 (rows). Collections are the unit of access control and sharing.
 * [Row](#rows): Each row contains a single key-value pair. Keys are strings and
@@ -48,22 +54,16 @@ or based on a pre-defined [schema](#schema).
 Database is the entry point to the Syncbase API and provides functionality to
 create, watch and share collections, and to perform batch operations.
 
-There is a pre-configured database for each app. `Syncbase.getDatabase()` is
-used to initialize Syncbase and get a reference to the app's database.
+There is a pre-configured database for each app. `Syncbase.database()` is
+used to get a reference to the app's database. This may be called any number of
+times after initializing Syncbase and logging in.
 
 <!-- @createDatabase @test -->
 ```
 cat - <<EOF >> $FILE
-Syncbase.DatabaseOptions options = new Syncbase.DatabaseOptions();
-// dbOpt.cloudSyncbaseAddress = "<Your Cloud Syncbase Address>";
-// dbOpt.cloudSyncbaseBlessing = "<Your Cloud Syncbase Blessing>";
 
-Syncbase.database(new Syncbase.DatabaseCallback() {
-  @Override
-  public void onSuccess(final Database db) {
-    // Use database to interact with Syncbase.
-  }
-}, options);
+// After Syncbase.init and login...
+Database database = Syncbase.database();
 EOF
 ```
 
@@ -91,20 +91,12 @@ specify different levels of access such as `Read`, `ReadWrite` or
 
 Collections created by all users live in the same namespace. To avoid collisions,
 the system automatically prepends the user's identity (blessing) to the
-Collection ID. The developer still needs to think about collisions, however.
-The user might use one device while offline and then switch to another device
-while still offline. When those two devices sync with each other, should the
-Collections merge or stay separate? If the developer wants them to stay separate,
-the collection IDs should include a UUID. If the developer wants them to merge,
-they should use a predictable name (example: "preferences"). Collection names
-are restricted to alphanumeric characters plus underscore and can have a maximum
-length of 64 bytes.
+Collection ID as well as adds a UUID to each collection name.
 
 <!-- @createCollection @test -->
 ```
 cat - <<EOF >> $FILE
-String collectionName = UUID.randomUUID().toString();
-Collection collection = db.collection(collectionName);
+Collection collection = db.createCollection();
 
 String rowKey = UUID.randomUUID().toString();
 collection.put(rowKey, "myValue");
@@ -118,7 +110,23 @@ EOF
 As mentioned earlier, collections are synced across user's devices by default
 but one can set `withoutSyncgroup` to `false` on
 `CollectionOptions` to make a local-only collection that will not sync with
-any other peer.
+any other peer. The `CollectionOptions` also allow a collection name prefix to
+be specified to help differentiate between different types of collections. One
+can also access the database's `userdata` collection.
+
+<!-- @userdataCollection @test -->
+```
+cat - <<EOF >> $FILE
+Collection userdata = db.getUserdataCollection();
+
+Database.CollectionOptions options =
+    new Database.CollectionOptions()
+        .setWithoutSyncgroup(true)
+        .setPrefix("restaurants");
+Collection prefixedCollection = db.createCollection(options);
+
+EOF
+```
 
 [Collection API reference](/syncbase/api-reference.html#collection)
 

@@ -13,15 +13,19 @@ export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/Batches.java
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
-  compile 'io.v:syncbase:0.1.4'
+  compile 'io.v:syncbase:0.1.7'
 }
 EOF
 cat - <<EOF > $FILE
 package io.v.syncbase.example;
-import io.v.syncbase.*;
+import io.v.syncbase.Collection;
+import io.v.syncbase.BatchDatabase;
+import io.v.syncbase.Database;
+import io.v.syncbase.Syncbase;
+import io.v.syncbase.exception.SyncbaseException;
 public class Batches {
   Database db;
-  void main() {
+  void main() throws SyncbaseException {
 EOF
 ```
 {{/ helpers.hidden }}
@@ -86,9 +90,9 @@ automatically.
 cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 db.runInBatch(new Database.BatchOperation() {
   @Override
-  public void run(BatchDatabase batchDb) {
-    Collection c1 = batchDb.collection("collection1");
-    Collection c2 = batchDb.collection("collection2");
+  public void run(BatchDatabase batchDb) throws SyncbaseException {
+    Collection c1 = batchDb.createCollection();
+    Collection c2 = batchDb.createCollection();
 
     c1.put("myKey", "myValue");
     c2.put("myKey", "myValue");
@@ -121,13 +125,12 @@ EOF
 ```Java
 cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 // WRONG: c1 is NOT part of the batch.
-final Collection c1 = db.collection("collection1");
+final Collection c1 = db.createCollection();
 {{# helpers.codedim }}
 db.runInBatch(new Database.BatchOperation() {
     @Override
-    public void run(BatchDatabase batchDb) {
-
-        Collection c2 = batchDb.collection("collection2");
+    public void run(BatchDatabase batchDb) throws SyncbaseException {
+        Collection c2 = batchDb.createCollection();
         {{/ helpers.codedim }}
         // WRONG: Only mutations on c2 are atomic since c1 reference
         // was obtained from Database and not BatchDatabase.
@@ -167,8 +170,8 @@ EOF
 cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 BatchDatabase batchDb = db.beginBatch(new Database.BatchOptions());
 
-Collection c1 = batchDb.collection("collection1");
-Collection c2 = batchDb.collection("collection2");
+Collection c1 = batchDb.createCollection();
+Collection c2 = batchDb.createCollection();
 
 c1.put("myKey", "myValue");
 c2.put("myKey", "myValue");
@@ -205,12 +208,12 @@ EOF
 ```Java
 cat - <<EOF | sed 's/{{.*}}//' >> $FILE
 // WRONG: c1 is NOT part of the batch.
-Collection c1 = db.collection("collection1");
+Collection c1 = db.createCollection();
 {{# helpers.codedim }}
 BatchDatabase batchDb = db.beginBatch(new Database.BatchOptions());
 
 // c2 is part of the batch.
-Collection c2 = batchDb.collection("collection2");
+Collection c2 = batchDb.createCollection();
 {{/ helpers.codedim }}
 
 // WRONG: Only mutations on c2 are atomic since c1 reference was obtained

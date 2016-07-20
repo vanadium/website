@@ -13,18 +13,25 @@ export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataSync.java
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
-  compile 'io.v:syncbase:0.1.4'
+  compile 'io.v:syncbase:0.1.7'
 }
 EOF
 cat - <<EOF > $FILE
 package io.v.syncbase.example;
-import io.v.syncbase.*;
+import io.v.syncbase.AccessList;
+import io.v.syncbase.Collection;
+import io.v.syncbase.Database;
+import io.v.syncbase.Syncbase;
+import io.v.syncbase.Syncgroup;
+import io.v.syncbase.SyncgroupInvite;
+import io.v.syncbase.User;
+import io.v.syncbase.exception.SyncbaseException;
 import java.util.Iterator;
 public class DataSync {
   Database db;
   User userToInvite;
   User userToRemove;
-  void main() {
+  void main() throws SyncbaseException {
 EOF
 ```
 {{/ helpers.hidden }}
@@ -80,7 +87,7 @@ syncgroup:
 <!-- @inviteUser @test -->
 ```
 cat - <<EOF >> $FILE
-Collection collectionToShare = db.collection("myCollection");
+Collection collectionToShare = db.createCollection();
 
 collectionToShare.getSyncgroup().inviteUser(userToInvite, AccessList.AccessLevel.READ);
 EOF
@@ -99,9 +106,19 @@ db.addSyncgroupInviteHandler(new Database.SyncgroupInviteHandler() {
       public void onSuccess(Syncgroup sg) {
         // Accepting invitation was successful.
       }
+
+      @Override
+      public void onFailure(Throwable t) {
+        // Accepting invitation was unsuccessful.
+      }
     });
   }
-}, new Database.AddSyncgroupInviteHandlerOptions());
+
+  @Override
+  public void onError(Throwable t) {
+    // Invite handler error.
+  }
+});
 EOF
 ```
 
@@ -127,7 +144,7 @@ become read-only and will no longer sync and receive updates.
 <!-- @unshareCollection @test -->
 ```
 cat - <<EOF >> $FILE
-Collection sharedCollection = db.collection("myCollection");
+Collection sharedCollection = db.createCollection();
 
 sharedCollection.getSyncgroup().ejectUser(userToRemove);
 EOF

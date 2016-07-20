@@ -13,19 +13,24 @@ export FILE=$PROJECT_DIR/app/src/main/java/io/v/syncbase/example/DataFlow.java
 cp -r $JIRI_ROOT/website/tools/android_project_stubs/example/* $PROJECT_DIR
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
-  compile 'io.v:syncbase:0.1.4'
+  compile 'io.v:syncbase:0.1.7'
 }
 EOF
 cat - <<EOF > $FILE
 package io.v.syncbase.example;
-import io.v.syncbase.*;
+import io.v.syncbase.Collection;
+import io.v.syncbase.Database;
+import io.v.syncbase.Syncbase;
+import io.v.syncbase.WatchChange;
+import io.v.syncbase.exception.SyncbaseException;
+import android.util.Log;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 public class DataFlow {
   Database db;
   class Task {}
-  void main() {
+  void main() throws SyncbaseException {
 EOF
 ```
 {{/ helpers.hidden }}
@@ -66,7 +71,6 @@ db.addWatchChangeHandler(new Database.WatchChangeHandler() {
 
   @Override
   public void onInitialState(Iterator<WatchChange> values) {
-
     // onInitialState is called with all of existing data in Syncbase.
     // Although the value type is WatchChange, since this is existing
     // data, there will not be any values with ChangeType == DELETE_CHANGE
@@ -79,7 +83,6 @@ db.addWatchChangeHandler(new Database.WatchChangeHandler() {
 
   @Override
   public void onChangeBatch(Iterator<WatchChange> changes) {
-
     // onChangeBatch is called whenever changes are made to the data.
     // Changes that are part of the same batch are presented together,
     // otherwise changes iterator may only contain a single change.
@@ -89,7 +92,12 @@ db.addWatchChangeHandler(new Database.WatchChangeHandler() {
 
     // Trigger UI update
   }
-}, new Database.AddWatchChangeHandlerOptions());
+
+  @Override
+  public void onError(Throwable t) {
+    // Handle error
+  }
+});
 EOF
 ```
 
@@ -110,23 +118,23 @@ HashMap<String, Map<String, Task>> state = new HashMap<String, Map<String, Task>
 
 // Update the state based on the changes.
 void updateState(WatchChange change) {
-
+  try {
     String collectionId = change.getCollectionId().encode();
     String rowKey = change.getRowKey();
 
     if(change.getChangeType() == WatchChange.ChangeType.PUT) {
-
       if(!state.containsKey(collectionId)) {
         state.put(collectionId, new HashMap<String, Task>());
       }
-      Task rowValue = (Task)change.getValue();
+      Task rowValue = change.getValue(Task.class);
       state.get(collectionId).put(rowKey, rowValue);
 
     } else if(change.getChangeType() == WatchChange.ChangeType.DELETE) {
-
       state.get(collectionId).remove(rowKey);
-
     }
+  } catch (SyncbaseException e) {
+    Log.e("DataFlowExample", "update state error", e);
+  }
 }
 EOF
 ```

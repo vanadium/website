@@ -35,7 +35,7 @@ To install the library, add the following to your `build.gradle` file.
 ```
 cat - <<EOF >> $PROJECT_DIR/app/build.gradle
 dependencies {
-  compile 'io.v:syncbase:0.1.4'
+  compile 'io.v:syncbase:0.1.7'
 }
 EOF
 ```
@@ -62,38 +62,60 @@ cat - <<EOF | sed 's/{{.*}}//' > $PROJECT_DIR/app/src/main/java/io/v/syncbase/ex
 {{# helpers.codedim}}
 package io.v.syncbase.example;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 {{/ helpers.codedim}}
-import io.v.syncbase.*;
+import io.v.syncbase.Collection;
+import io.v.syncbase.Syncbase;
+import io.v.syncbase.exception.SyncbaseException;
 
 {{# helpers.codedim}}
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "QuickStart";
+
+    // Note: Replace CLOUD_NAME and CLOUD_ADMIN with your cloud syncbase name
+    // and blessing from https://sb-allocator.v.io
+    private static final String CLOUD_NAME = "<cloud name>";
+    private static final String CLOUD_ADMIN = "<cloud admin>";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        {{/ helpers.codedim}}
-        Syncbase.DatabaseOptions options = new Syncbase.DatabaseOptions();
-        // dbOpt.cloudSyncbaseAddress = "<Your Cloud Syncbase Address>";
-        // dbOpt.cloudSyncbaseBlessing = "<Your Cloud Syncbase Blessing>";
-
-        Syncbase.database(new Syncbase.DatabaseCallback() {
-            @Override
-            public void onSuccess(final Database db) {
-
-                // Use database to interact with Syncbase.
-
-                Collection collection = db.collection("myCollection");
-
-                collection.put("myKey", "myValue");
-
-                String value = collection.get("myKey", String.class);
-            }
-        }, options);
-        {{# helpers.codedim}}
-
         setContentView(R.layout.activity_main);
+        {{/ helpers.codedim}}
+        try {
+            String rootDir = getDir("syncbase", Context.MODE_PRIVATE).getAbsolutePath();
+            Syncbase.Options options =
+                    Syncbase.Options.cloudBuilder(rootDir, CLOUD_NAME, CLOUD_ADMIN)
+                            .build();
+            Syncbase.init(options);
+        } catch (SyncbaseException e) {
+            Log.e(TAG, "Syncbase failed to initialize", e);
+        }
+
+        Syncbase.loginAndroid(this, new Syncbase.LoginCallback() {
+            @Override
+            public void onSuccess() {
+                Log.i(TAG, "Syncbase is ready");
+
+                // Interact with syncbase!
+                try {
+                    Collection collection = Syncbase.database().createCollection();
+                    collection.put("myKey", "myValue");
+                    String value = collection.get("myKey", String.class);
+                } catch (SyncbaseException e) {
+                    Log.e(TAG, "Syncbase error", e);
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "Syncbased failed to login", e);
+            }
+        });
+        {{# helpers.codedim}}
     }
 }
 {{/ helpers.codedim}}

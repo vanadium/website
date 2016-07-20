@@ -382,6 +382,7 @@ depsOneBigCoreTutorialTest = \
 
 # An ordering that lets us test all the Java tutorials faster than running the
 # individual tests in sequence.
+# depsOneBigSyncbaseAndroidTest = content/$(syncbaseAndroidDataSync).md
 depsOneBigSyncbaseAndroidTest = \
 	content/$(syncbaseAndroidQuickstart).md \
 	content/$(syncbaseAndroidFirstApp).md \
@@ -467,6 +468,6 @@ test-tutorials-no-install: build
 # jiri cl mail
 .PHONY: upgrade-syncbase-android
 # Change this to the desired version before running the target.
-SYNCBASE_ANDROID_VERSION=0.1.4
+SYNCBASE_ANDROID_VERSION=0.1.7
 upgrade-syncbase-android:
 	find content/syncbase -type f -exec sed -i "s/\(compile 'io.v:syncbase:\)\(.*\)'/\1$(SYNCBASE_ANDROID_VERSION)'/g" {} \;
