@@ -89,6 +89,8 @@ tutCleanup     = tutorials/cleanup
 tutWipeSlate   = tutorials/wipe-slate
 tutHello       = tutorials/hello-world
 tutBasics      = tutorials/basics
+tutSyncbaseLocalPersist    = tutorials/syncbase/localPersist
+tutSyncbaseSync  = tutorials/syncbase/sync
 tutPrincipals  = tutorials/security/principals-and-blessings
 tutPermsAuth   = tutorials/security/permissions-authorizer
 tutCaveats1st  = tutorials/security/first-party-caveats
@@ -118,6 +120,8 @@ completer = public/sh/tut-completer
 completerScripts = \
 	$(completer)-hello-world.sh \
 	$(completer)-basics.sh \
+	$(completer)-syncbase-local-persist.sh \
+	$(completer)-syncbase-sync.sh \
 	$(completer)-permissions-authorizer.sh \
 	$(completer)-custom-authorizer.sh \
 	$(completer)-suffix-part1.sh \
@@ -133,7 +137,8 @@ setupScripts = \
 	$(scenario)-b-setup.sh \
 	$(scenario)-c-setup.sh \
 	$(scenario)-d-setup.sh \
-	$(scenario)-e-setup.sh
+	$(scenario)-e-setup.sh \
+	$(scenario)-f-setup.sh
 
 depsCommon = \
 	content/$(tutSetup).md \
@@ -268,6 +273,24 @@ $(completer)-basics.sh: $(depsBasics) | $(MDRIP)
 $(scenario)-b-setup.sh: $(completer)-basics.sh
 	cp $^ $@
 
+depsSyncbaseLocalPersist = $(depsBasics) content/$(tutSyncbaseLocalPersist).md
+.PHONY: test-syncbase-local-persist
+test-syncbase-local-persist: $(depsSyncbaseLocalPersist) | $(MDRIP)
+	$(MDRIP) --subshell test $^
+$(completer)-syncbase-local-persist.sh: $(depsSyncbaseLocalPersist) | $(MDRIP)
+	mkdir -p $(@D)
+	$(MDRIP) --preambled 0 completer $^ > $@
+$(scenario)-f-setup.sh: $(completer)-syncbase-local-persist.sh
+	cp $^ $@
+
+depsSyncbaseSync = $(depsSyncbaseLocalPersist) content/$(tutSyncbaseSync).md
+.PHONY: test-syncbase-sync
+test-syncbase-sync: $(depsSyncbaseSync) | $(MDRIP)
+	$(MDRIP) --subshell test $^
+$(completer)-syncbase-sync.sh: $(depsSyncbaseSync) | $(MDRIP)
+	mkdir -p $(@D)
+	$(MDRIP) --preambled 0 completer $^ > $@
+
 depsPrincipals = $(depsBasics) content/$(tutPrincipals).md
 .PHONY: test-principals
 test-principals: $(depsPrincipals) | $(MDRIP)
@@ -378,7 +401,12 @@ depsOneBigCoreTutorialTest = \
 	content/$(tutPrincipals).md \
 	content/$(tutPermsAuth).md \
 	content/$(tutSuffixPart1).md \
-	content/$(tutSuffixPart2).md
+	content/$(tutSuffixPart2).md \
+	content/$(tutWipeSlate).md \
+	content/$(tutBasics).md \
+	content/$(tutSyncbaseLocalPersist).md \
+	content/$(tutSyncbaseSync).md \
+
 
 # An ordering that lets us test all the Java tutorials faster than running the
 # individual tests in sequence.

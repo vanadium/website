@@ -12,6 +12,10 @@ title: Tutorials
   {{# content.tutorials.naming }}
   * [{{ title }}]({{ url }})
   {{/ content.tutorials.naming }}
+* [Syncbase Basics](/tutorials/syncbase/)
+  {{# content.tutorials.syncbase }}
+  * [{{ title }}]({{ url }})
+  {{/ content.tutorials.syncbase }}
 * [Java](/tutorials/java/)
   {{# content.tutorials.java }}
   * [{{ title }}]({{ url }})
