@@ -317,8 +317,10 @@ EOF
 {{# helpers.hidden}}
 <!-- @removeCodeDimMarkup @test @completer -->
 ```
-sed -i 's/{{.*}}//' $V_TUT/src/fortune/server/main.go
-sed -i 's/{{.*}}//' $V_TUT/src/fortune/service/service.go
+sed 's/{{.*}}//' $V_TUT/src/fortune/server/main.go > $V_TUT/src/fortune/server/main.go.new
+mv $V_TUT/src/fortune/server/main.go.new $V_TUT/src/fortune/server/main.go
+sed 's/{{.*}}//' $V_TUT/src/fortune/service/service.go > $V_TUT/src/fortune/service/service.go.new
+mv $V_TUT/src/fortune/service/service.go.new $V_TUT/src/fortune/service/service.go
 ```
 {{/ helpers.hidden}}
 
