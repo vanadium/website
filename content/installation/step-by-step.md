@@ -149,7 +149,7 @@ code under the `JIRI_ROOT` directory, and then runs the standard `go` tool.
 <!-- @installVanadiumBinaries @test -->
 ```
 # Install specific tools needed for the tutorials.
-jiri go install v.io/x/ref/cmd/... v.io/x/ref/services/agent/... v.io/x/ref/services/mounttable/...
+jiri go install v.io/x/ref/cmd/... v.io/x/ref/services/agent/... v.io/x/ref/services/mounttable/... v.io/x/ref/services/syncbase/...
 ```
 
 # Verifying installation
